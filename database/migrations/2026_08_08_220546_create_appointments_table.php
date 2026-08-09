@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->dateTime('end_time');
             $table->string('status')->default('pending'); 
             $table->decimal('price_at_booking', 8, 2); 
-            $table->date('date')->after('service_id');
+            $table->date('date');
             $table->timestamps();
         });
     }
