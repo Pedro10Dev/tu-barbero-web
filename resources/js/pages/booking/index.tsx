@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Head, useForm } from '@inertiajs/react';
+import Navbar from '@/components/navbar';
+import Footer from '@/components/footer';
 
 interface Service {
     id: number;
@@ -68,7 +70,10 @@ export default function Index({ services = [], barbers = [] }: Props) {
     };
 
     return (
+       <>
+        <Navbar />
         <div className="min-h-screen bg-zinc-950 px-4 py-12 text-zinc-100 sm:px-6 lg:px-8">
+          
             <Head title="Reservar Cita - Barbería" />
 
             <div className="mx-auto max-w-3xl">
@@ -506,5 +511,7 @@ export default function Index({ services = [], barbers = [] }: Props) {
                 </form>
             </div>
         </div>
+        <Footer />
+        </>
     );
 }
