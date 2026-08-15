@@ -1,47 +1,4 @@
-import { queryParams, type RouteQueryOptions, type RouteDefinition } from './../../wayfinder'
-/**
-* @see \App\Http\Controllers\BookingController::index
- * @see app/Http/Controllers/BookingController.php:19
- * @route '/'
- */
-export const index = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: index.url(options),
-    method: 'get',
-})
-
-index.definition = {
-    methods: ["get","head"],
-    url: '/',
-} satisfies RouteDefinition<["get","head"]>
-
-/**
-* @see \App\Http\Controllers\BookingController::index
- * @see app/Http/Controllers/BookingController.php:19
- * @route '/'
- */
-index.url = (options?: RouteQueryOptions) => {
-    return index.definition.url + queryParams(options)
-}
-
-/**
-* @see \App\Http\Controllers\BookingController::index
- * @see app/Http/Controllers/BookingController.php:19
- * @route '/'
- */
-index.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
-    url: index.url(options),
-    method: 'get',
-})
-/**
-* @see \App\Http\Controllers\BookingController::index
- * @see app/Http/Controllers/BookingController.php:19
- * @route '/'
- */
-index.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
-    url: index.url(options),
-    method: 'head',
-})
-
+import { queryParams, type RouteQueryOptions, type RouteDefinition, type RouteFormDefinition } from './../../wayfinder'
 /**
 * @see \App\Http\Controllers\BookingController::availability
  * @see app/Http/Controllers/BookingController.php:28
@@ -85,6 +42,41 @@ availability.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     method: 'head',
 })
 
+    /**
+* @see \App\Http\Controllers\BookingController::availability
+ * @see app/Http/Controllers/BookingController.php:28
+ * @route '/api/booking/availability'
+ */
+    const availabilityForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: availability.url(options),
+        method: 'get',
+    })
+
+            /**
+* @see \App\Http\Controllers\BookingController::availability
+ * @see app/Http/Controllers/BookingController.php:28
+ * @route '/api/booking/availability'
+ */
+        availabilityForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: availability.url(options),
+            method: 'get',
+        })
+            /**
+* @see \App\Http\Controllers\BookingController::availability
+ * @see app/Http/Controllers/BookingController.php:28
+ * @route '/api/booking/availability'
+ */
+        availabilityForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: availability.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    availability.form = availabilityForm
 /**
 * @see \App\Http\Controllers\BookingController::store
  * @see app/Http/Controllers/BookingController.php:46
@@ -119,8 +111,29 @@ store.post = (options?: RouteQueryOptions): RouteDefinition<'post'> => ({
     method: 'post',
 })
 
+    /**
+* @see \App\Http\Controllers\BookingController::store
+ * @see app/Http/Controllers/BookingController.php:46
+ * @route '/booking'
+ */
+    const storeForm = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+        action: store.url(options),
+        method: 'post',
+    })
+
+            /**
+* @see \App\Http\Controllers\BookingController::store
+ * @see app/Http/Controllers/BookingController.php:46
+ * @route '/booking'
+ */
+        storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => ({
+            action: store.url(options),
+            method: 'post',
+        })
+    
+    store.form = storeForm
 /**
- * @see routes/web.php:10
+ * @see routes/web.php:21
  * @route '/reserva-exitosa'
  */
 export const success = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -134,7 +147,7 @@ success.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
- * @see routes/web.php:10
+ * @see routes/web.php:21
  * @route '/reserva-exitosa'
  */
 success.url = (options?: RouteQueryOptions) => {
@@ -142,7 +155,7 @@ success.url = (options?: RouteQueryOptions) => {
 }
 
 /**
- * @see routes/web.php:10
+ * @see routes/web.php:21
  * @route '/reserva-exitosa'
  */
 success.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -150,16 +163,48 @@ success.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     method: 'get',
 })
 /**
- * @see routes/web.php:10
+ * @see routes/web.php:21
  * @route '/reserva-exitosa'
  */
 success.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     url: success.url(options),
     method: 'head',
 })
+
+    /**
+ * @see routes/web.php:21
+ * @route '/reserva-exitosa'
+ */
+    const successForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: success.url(options),
+        method: 'get',
+    })
+
+            /**
+ * @see routes/web.php:21
+ * @route '/reserva-exitosa'
+ */
+        successForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: success.url(options),
+            method: 'get',
+        })
+            /**
+ * @see routes/web.php:21
+ * @route '/reserva-exitosa'
+ */
+        successForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: success.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    success.form = successForm
 const booking = {
-    index: Object.assign(index, index),
-availability: Object.assign(availability, availability),
+    availability: Object.assign(availability, availability),
 store: Object.assign(store, store),
 success: Object.assign(success, success),
 }
