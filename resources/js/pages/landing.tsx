@@ -540,7 +540,7 @@ export default function Landing({ services = [] }: { services: any[] }) {
 
             {/* Sección de trabajos */}
             <section
-                id="galeria"
+                id="trabajos"
                 className="mx-auto max-w-7xl border-t border-white/5 px-6 py-24"
             >
                 <div className="mb-16 flex flex-col justify-between gap-6 md:flex-row md:items-end">

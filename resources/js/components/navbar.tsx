@@ -45,16 +45,22 @@ export default function Navbar() {
                 {/* Navegación de Escritorio */}
                 <nav className="hidden items-center gap-8 md:flex">
                     <a
-                        href="/#services"
+                        href="/#nosotros"
                         className="text-sm text-zinc-400 transition-colors hover:text-white"
                     >
-                        Servicios
+                        Nosotros
                     </a>
                     <a
                         href="/#barberos"
                         className="text-sm text-zinc-400 transition-colors hover:text-white"
                     >
                         Equipo
+                    </a>
+                    <a
+                        href="/#servicios"
+                        className="text-sm text-zinc-400 transition-colors hover:text-white"
+                    >
+                        Servicios
                     </a>
                     <a
                         href="/#trabajos"
