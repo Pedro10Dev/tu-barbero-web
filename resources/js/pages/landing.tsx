@@ -14,7 +14,7 @@ export default function Landing({ services = [] }: { services: any[] }) {
             <Navbar />
 
             {/* Hero Section */}
-            <main className="relative mx-auto flex min-h-[calc(100vh-80px)] max-w-7xl items-center px-6 py-12">
+            <main className="relative mx-auto flex min-h-[calc(100vh-80px)] max-w-7xl items-center px-6 pt-28 pb-12">
                 <div className="flex w-full flex-col-reverse items-center gap-12 md:grid md:grid-cols-12">
                     {/* Texto Principal */}
                     <div className="space-y-8 text-center md:col-span-7 md:text-left">

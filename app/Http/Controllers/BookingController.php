@@ -16,11 +16,19 @@ use Inertia\Inertia;
 class BookingController extends Controller
 {
     // 1. Mostrar la página principal de reservas (Frontend React)
-    public function index()
+    public function index(Request $request)
     {
+        $user = $request->user();
+        $clientProfile = $user ? ClientProfile::where('user_id', $user->id)->first() : null;
+
         return Inertia::render('booking/index', [
             'services' => Service::all(),
             'barbers' => BarberProfile::all(),
+            'authClient' => $user ? [
+                'name' => $user->name,
+                'email' => $user->email,
+                'phone' => $user->phone ?? ($clientProfile->phone ?? ''),
+            ] : null,
         ]);
     }
 
@@ -164,28 +172,25 @@ class BookingController extends Controller
 
     private function resolveClientProfile(string $email, string $name, string $phone, ?string $notes, ?int $userId): ClientProfile
     {
-        // 1. Si el usuario está autenticado y ya tiene perfil, actualizar y retornarlo
+        // 1. Si el usuario está autenticado, buscamos o actualizamos su perfil asociado
         if ($userId) {
-            $user = User::with('clientProfile')->find($userId);
-            if ($user?->clientProfile) {
-                return $user->clientProfile;
-            }
+            return ClientProfile::updateOrCreate(
+                ['user_id' => $userId],
+                [
+                    'full_name' => $name,
+                    'phone' => $phone,
+                    'notes' => $notes,
+                ]
+            );
         }
 
-        // 2. Si es invitado (o no tiene perfil), buscar por usuario existente con ese email o crearlo sin clave
-        $user = User::firstOrCreate(
-            ['email' => $email],
-            [
-                'name' => $name,
-                'password' => null, // Queda nulo hasta que decida registrarse
-                'role' => 'client',
-            ]
-        );
-
-        // 3. Obtener o crear el ClientProfile
+        // 2. Si es un invitado, gestionamos el perfil sin tocar la tabla `users`.
+        // Puedes buscar por correo o teléfono dentro de la misma tabla `client_profiles` 
+        // si necesitas evitar duplicados para invitados, o simplemente crearlo.
         return ClientProfile::updateOrCreate(
-            ['user_id' => $user->id],
+            ['phone' => $phone], // O el criterio que prefieras para identificar al cliente invitado
             [
+                'user_id' => null,
                 'full_name' => $name,
                 'phone' => $phone,
                 'notes' => $notes,

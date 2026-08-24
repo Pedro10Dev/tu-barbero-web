@@ -211,6 +211,77 @@ register.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     
     register.form = registerForm
 /**
+ * @see routes/web.php:11
+ * @route '/'
+ */
+export const landing = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: landing.url(options),
+    method: 'get',
+})
+
+landing.definition = {
+    methods: ["get","head"],
+    url: '/',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+ * @see routes/web.php:11
+ * @route '/'
+ */
+landing.url = (options?: RouteQueryOptions) => {
+    return landing.definition.url + queryParams(options)
+}
+
+/**
+ * @see routes/web.php:11
+ * @route '/'
+ */
+landing.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: landing.url(options),
+    method: 'get',
+})
+/**
+ * @see routes/web.php:11
+ * @route '/'
+ */
+landing.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: landing.url(options),
+    method: 'head',
+})
+
+    /**
+ * @see routes/web.php:11
+ * @route '/'
+ */
+    const landingForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+        action: landing.url(options),
+        method: 'get',
+    })
+
+            /**
+ * @see routes/web.php:11
+ * @route '/'
+ */
+        landingForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: landing.url(options),
+            method: 'get',
+        })
+            /**
+ * @see routes/web.php:11
+ * @route '/'
+ */
+        landingForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+            action: landing.url({
+                        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+                            _method: 'HEAD',
+                            ...(options?.query ?? options?.mergeQuery ?? {}),
+                        }
+                    }),
+            method: 'get',
+        })
+    
+    landing.form = landingForm
+/**
 * @see \App\Http\Controllers\BookingController::booking
  * @see app/Http/Controllers/BookingController.php:19
  * @route '/booking'
@@ -289,8 +360,7 @@ booking.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     
     booking.form = bookingForm
 /**
-* @see \Inertia\Controller::__invoke
- * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+ * @see routes/web.php:29
  * @route '/dashboard'
  */
 export const dashboard = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -304,8 +374,7 @@ dashboard.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see \Inertia\Controller::__invoke
- * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+ * @see routes/web.php:29
  * @route '/dashboard'
  */
 dashboard.url = (options?: RouteQueryOptions) => {
@@ -313,8 +382,7 @@ dashboard.url = (options?: RouteQueryOptions) => {
 }
 
 /**
-* @see \Inertia\Controller::__invoke
- * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+ * @see routes/web.php:29
  * @route '/dashboard'
  */
 dashboard.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -322,8 +390,7 @@ dashboard.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
     method: 'get',
 })
 /**
-* @see \Inertia\Controller::__invoke
- * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+ * @see routes/web.php:29
  * @route '/dashboard'
  */
 dashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -332,8 +399,7 @@ dashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
     /**
-* @see \Inertia\Controller::__invoke
- * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+ * @see routes/web.php:29
  * @route '/dashboard'
  */
     const dashboardForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -342,8 +408,7 @@ dashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
     })
 
             /**
-* @see \Inertia\Controller::__invoke
- * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+ * @see routes/web.php:29
  * @route '/dashboard'
  */
         dashboardForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -351,8 +416,7 @@ dashboard.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
             method: 'get',
         })
             /**
-* @see \Inertia\Controller::__invoke
- * @see vendor/inertiajs/inertia-laravel/src/Controller.php:13
+ * @see routes/web.php:29
  * @route '/dashboard'
  */
         dashboardForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

@@ -4,13 +4,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookingController;
 use App\Models\Service;
 use Inertia\Inertia;
+use App\Http\Middleware\RedirectClientsToLanding;
+use App\Http\Controllers\ClientProfileController;
 
 
 Route::get('/', function () {
     return Inertia::render('landing', [
         'services' => Service::all(),
     ]);
-});
+})->name('landing');
 
 
 Route::get('/booking', [BookingController::class, 'index'])->name('booking');
@@ -24,7 +26,21 @@ Route::get('/reserva-exitosa', function () {
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::inertia('dashboard', 'dashboard')->name('dashboard');
+    Route::get('/dashboard', function () {
+        $user = auth()->user();
+
+        // Si tu Enum es un backed enum (ej: string), evalúa su value o compara directo con el caso del Enum:
+        if ($user && $user->role->value === 'client') { // O prueba con: $user->role === UserRole::Client
+            return redirect()->route('landing');
+        }
+
+        return Inertia::render('dashboard');
+    })->name('dashboard');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/client/profile', [ClientProfileController::class, 'edit'])->name('client.profile.edit');
+    Route::patch('/client/profile', [ClientProfileController::class, 'update'])->name('client.profile.update');
 });
 
 require __DIR__ . '/settings.php';
