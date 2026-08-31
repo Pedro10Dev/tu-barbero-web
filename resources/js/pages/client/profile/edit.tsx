@@ -14,17 +14,28 @@ interface Props {
     };
 }
 
+const VALID_PREFIXES = ['0412', '0414', '0424', '0416', '0426'];
+
 export default function ClientProfileEdit({ user }: Props) {
     const { data, setData, patch, processing, errors, recentlySuccessful } =
         useForm({
-            name: user.name || '',
-            email: user.email || '',
-            phone: user.phone || '',
+            name: user?.name || '',
+            email: user?.email || '',
+            phone: user?.phone || '',
         });
+
+    // Derivamos el prefijo y el número directamente del estado de Inertia
+    const currentPhone = data.phone || '';
+    const hasValidPrefix = VALID_PREFIXES.includes(currentPhone.slice(0, 4));
+    const phonePrefix = hasValidPrefix ? currentPhone.slice(0, 4) : '0412';
+    const phoneNumber = hasValidPrefix ? currentPhone.slice(4) : currentPhone;
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        patch('/client/profile');
+
+        patch('/client/profile', {
+            preserveScroll: true,
+        });
     };
 
     return (
@@ -35,7 +46,7 @@ export default function ClientProfileEdit({ user }: Props) {
                 <div className="relative w-full max-w-xl rounded-3xl border border-zinc-800/80 bg-zinc-900/40 p-8 shadow-2xl backdrop-blur-xl">
                     <div className="mb-6 border-b border-zinc-800/80 pb-4">
                         <h1 className="text-xl font-bold tracking-tight text-white">
-                           Información Personal 
+                            Información Personal
                         </h1>
                         <p className="mt-1 text-xs text-zinc-400">
                             Actualiza tus datos personales de contacto.
@@ -98,16 +109,47 @@ export default function ClientProfileEdit({ user }: Props) {
                                 <Phone className="h-3.5 w-3.5 text-zinc-500" />{' '}
                                 Teléfono de Contacto
                             </Label>
-                            <Input
-                                id="phone"
-                                type="tel"
-                                value={data.phone}
-                                onChange={(e) =>
-                                    setData('phone', e.target.value)
-                                }
-                                placeholder="Ej: 04141234567"
-                                className="h-11 rounded-xl border-zinc-800 bg-zinc-950/60 text-sm text-zinc-100 transition-all focus:border-zinc-500 focus:ring-zinc-500"
-                            />
+
+                            <div className="flex gap-2">
+                                <select
+                                    value={phonePrefix}
+                                    onChange={(e) =>
+                                        setData(
+                                            'phone',
+                                            `${e.target.value}${phoneNumber}`,
+                                        )
+                                    }
+                                    className="h-11 rounded-xl border border-zinc-800 bg-zinc-950/60 px-3 py-2 text-sm text-zinc-100 transition-all focus:border-zinc-500 focus:ring-zinc-500"
+                                >
+                                    <option value="0412">0412</option>
+                                    <option value="0414">0414</option>
+                                    <option value="0424">0424</option>
+                                    <option value="0416">0416</option>
+                                    <option value="0426">0426</option>
+                                </select>
+
+                                <Input
+                                    id="phone"
+                                    type="text"
+                                    inputMode="numeric"
+                                    maxLength={7}
+                                    value={phoneNumber}
+                                    onChange={(e) => {
+                                        const numericValue =
+                                            e.currentTarget.value.replace(
+                                                /\D/g,
+                                                '',
+                                            );
+                                        setData(
+                                            'phone',
+                                            `${phonePrefix}${numericValue}`,
+                                        );
+                                    }}
+                                    placeholder="1234567"
+                                    className="h-11 rounded-xl border-zinc-800 bg-zinc-950/60 text-sm text-zinc-100 transition-all focus:border-zinc-500 focus:ring-zinc-500"
+                                />
+                            </div>
+
                             {errors.phone && (
                                 <p className="text-xs text-red-400">
                                     {errors.phone}

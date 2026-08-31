@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Head, useForm, usePage } from '@inertiajs/react';
 import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 interface Service {
     id: number;
@@ -448,10 +450,10 @@ export default function BookingIndex() {
 
                                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                         <div>
-                                            <label className="mb-1 block text-xs font-semibold tracking-wider text-zinc-400 uppercase">
+                                            <Label className="mb-1 block text-xs font-semibold tracking-wider text-zinc-400 uppercase">
                                                 Correo Electrónico
-                                            </label>
-                                            <input
+                                            </Label>
+                                            <Input
                                                 type="email"
                                                 placeholder="correo@ejemplo.com"
                                                 value={data.client_email}
@@ -462,7 +464,7 @@ export default function BookingIndex() {
                                                     )
                                                 }
                                                 disabled={!!authClient}
-                                                className={`w-full rounded-xl border border-zinc-800 bg-zinc-900/60 p-3.5 text-sm text-white focus:border-zinc-500 focus:outline-none ${
+                                                className={`h-11 w-full rounded-xl border border-zinc-800 bg-zinc-900/60 px-3 text-sm text-white focus:border-zinc-500 focus:outline-none ${
                                                     authClient
                                                         ? 'cursor-not-allowed bg-zinc-950/40 opacity-60'
                                                         : ''
@@ -475,26 +477,121 @@ export default function BookingIndex() {
                                             )}
                                         </div>
                                         <div>
-                                            <label className="mb-1 block text-xs font-semibold tracking-wider text-zinc-400 uppercase">
+                                            <Label
+                                                htmlFor="client_phone"
+                                                className="mb-1 block text-xs font-semibold tracking-wider text-zinc-400 uppercase"
+                                            >
                                                 Teléfono
-                                            </label>
-                                            <input
-                                                type="tel"
-                                                placeholder="+58 412 0000000"
-                                                value={data.client_phone}
-                                                onChange={(e) =>
-                                                    setData(
-                                                        'client_phone',
-                                                        e.target.value,
-                                                    )
-                                                }
-                                                disabled={!!authClient}
-                                                className={`w-full rounded-xl border border-zinc-800 bg-zinc-900/60 p-3.5 text-sm text-white focus:border-zinc-500 focus:outline-none ${
-                                                    authClient
-                                                        ? 'cursor-not-allowed bg-zinc-950/40 opacity-60'
-                                                        : ''
-                                                }`}
-                                            />
+                                            </Label>
+
+                                            {authClient ? (
+                                                // Si está autenticado y está desactivado, mostramos el input bloqueado con el formato actual
+                                                <Input
+                                                    id="client_phone"
+                                                    type="text"
+                                                    value={data.client_phone}
+                                                    disabled
+                                                    className="h-11 w-full cursor-not-allowed rounded-xl border border-zinc-800 bg-zinc-950/40 px-3 text-sm text-white opacity-60"
+                                                />
+                                            ) : (
+                                                // Si no está autenticado, mostramos el select de prefijo y el input de 7 dígitos
+                                                (() => {
+                                                    const currentPhone =
+                                                        data.client_phone || '';
+                                                    const VALID_PREFIXES = [
+                                                        '0412',
+                                                        '0414',
+                                                        '0424',
+                                                        '0416',
+                                                        '0426',
+                                                    ];
+                                                    const hasValidPrefix =
+                                                        VALID_PREFIXES.includes(
+                                                            currentPhone.slice(
+                                                                0,
+                                                                4,
+                                                            ),
+                                                        );
+                                                    const phonePrefix =
+                                                        hasValidPrefix
+                                                            ? currentPhone.slice(
+                                                                  0,
+                                                                  4,
+                                                              )
+                                                            : '0412';
+                                                    const phoneNumber =
+                                                        hasValidPrefix
+                                                            ? currentPhone.slice(
+                                                                  4,
+                                                              )
+                                                            : currentPhone;
+
+                                                    return (
+                                                        <div className="flex gap-2">
+                                                            <select
+                                                                value={
+                                                                    phonePrefix
+                                                                }
+                                                                disabled={
+                                                                    !!authClient
+                                                                }
+                                                                onChange={(e) =>
+                                                                    setData(
+                                                                        'client_phone',
+                                                                        `${e.target.value}${phoneNumber}`,
+                                                                    )
+                                                                }
+                                                                className="h-11 rounded-xl border border-zinc-800 bg-zinc-900/60 px-3 py-2 text-sm text-zinc-100 transition-all focus:border-zinc-500 focus:ring-zinc-500"
+                                                            >
+                                                                <option value="0412">
+                                                                    0412
+                                                                </option>
+                                                                <option value="0414">
+                                                                    0414
+                                                                </option>
+                                                                <option value="0424">
+                                                                    0424
+                                                                </option>
+                                                                <option value="0416">
+                                                                    0416
+                                                                </option>
+                                                                <option value="0426">
+                                                                    0426
+                                                                </option>
+                                                            </select>
+
+                                                            <Input
+                                                                id="client_phone"
+                                                                type="text"
+                                                                inputMode="numeric"
+                                                                maxLength={7}
+                                                                value={
+                                                                    phoneNumber
+                                                                }
+                                                                disabled={
+                                                                    !!authClient
+                                                                }
+                                                                onChange={(
+                                                                    e,
+                                                                ) => {
+                                                                    const numericValue =
+                                                                        e.currentTarget.value.replace(
+                                                                            /\D/g,
+                                                                            '',
+                                                                        );
+                                                                    setData(
+                                                                        'client_phone',
+                                                                        `${phonePrefix}${numericValue}`,
+                                                                    );
+                                                                }}
+                                                                placeholder="1234567"
+                                                                className="h-11 w-full rounded-xl border border-zinc-800 bg-zinc-900/60 text-sm text-white transition-all focus:border-zinc-500 focus:outline-none"
+                                                            />
+                                                        </div>
+                                                    );
+                                                })()
+                                            )}
+
                                             {errors.client_phone && (
                                                 <p className="mt-1 text-xs text-red-400">
                                                     {errors.client_phone}

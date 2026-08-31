@@ -6,6 +6,7 @@ use App\Models\Service;
 use Inertia\Inertia;
 use App\Http\Middleware\RedirectClientsToLanding;
 use App\Http\Controllers\ClientProfileController;
+use App\Http\Controllers\Auth\SocialController;
 
 
 Route::get('/', function () {
@@ -38,9 +39,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 });
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/client/profile', [ClientProfileController::class, 'edit'])->name('client.profile.edit');
     Route::patch('/client/profile', [ClientProfileController::class, 'update'])->name('client.profile.update');
 });
+
+Route::get('/auth/google', [SocialController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/auth/google/callback', [SocialController::class, 'handleGoogleCallback']);
+
+
 
 require __DIR__ . '/settings.php';

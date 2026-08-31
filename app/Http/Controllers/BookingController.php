@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use App\Models\BarberProfile;
-use App\Models\ClientProfile;
 use App\Models\Service;
 use App\Models\User;
 use Carbon\Carbon;
-use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -19,7 +17,6 @@ class BookingController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $clientProfile = $user ? ClientProfile::where('user_id', $user->id)->first() : null;
 
         return Inertia::render('booking/index', [
             'services' => Service::all(),
@@ -27,7 +24,7 @@ class BookingController extends Controller
             'authClient' => $user ? [
                 'name' => $user->name,
                 'email' => $user->email,
-                'phone' => $user->phone ?? ($clientProfile->phone ?? ''),
+                'phone' => $user->phone ?? '', // El teléfono ahora vive directamente en users
             ] : null,
         ]);
     }
@@ -75,25 +72,21 @@ class BookingController extends Controller
             ]);
         }
 
-        DB::transaction(function () use ($validated, $service, $startDateTime, $endDateTime, $request) {
-            // Buscar o crear el perfil del cliente por email
-            $clientProfile = $this->resolveClientProfile(
-                $validated['client_email'],
-                $validated['client_name'],
-                $validated['client_phone'],
-                $validated['notes'] ?? null,
-                $request->user()?->id
-            );
+        $user = $request->user();
 
-            // Crear la cita
+        DB::transaction(function () use ($validated, $service, $startDateTime, $endDateTime, $user) {
+            // Crear la cita vinculando directamente al usuario (si existe) o guardando datos de invitado
             Appointment::create([
-                'client_profile_id' => $clientProfile->id,
+                'user_id' => $user ? $user->id : null,
+                'guest_name' => $user ? $user->name : $validated['client_name'],
+                'guest_phone' => $user ? $user->phone : $validated['client_phone'],
                 'barber_profile_id' => $validated['barber_profile_id'],
                 'service_id' => $service->id,
                 'start_time' => $startDateTime,
                 'end_time' => $endDateTime,
                 'status' => 'pending',
                 'price_at_booking' => $service->price,
+                'notes' => $validated['notes'] ?? null, // Las notas van directamente en la cita
             ]);
         });
 
@@ -106,53 +99,39 @@ class BookingController extends Controller
     private function calculateAvailableSlots(string $date, int $serviceId, int $barberId): array
     {
         $service = Service::find($serviceId);
-        // Usamos duration_minutes de la tabla services. Fallback a 30 si no existe.
         $duration = ($service && isset($service->duration_minutes)) ? $service->duration_minutes : 30;
 
-        // Horario comercial genérico (09:00 a 18:00)
         $workStart = Carbon::parse("{$date} 09:00:00");
         $workEnd = Carbon::parse("{$date} 18:00:00");
 
-        // 1. OBTENER CITAS EXISTENTES (Adaptado a tus columnas DATETIME)
-        // Buscamos citas que EMPIECEN en la fecha seleccionada ('start_time')
-        // y que estén confirmadas o pendientes ('status').
         $existingAppointments = Appointment::where('barber_profile_id', $barberId)
-            ->whereDate('start_time', $date) // Buscamos en la columna datetime 'start_time'
-            ->whereIn('status', ['pending', 'confirmed']) // Usamos la columna 'status' real
+            ->whereDate('start_time', $date)
+            ->whereIn('status', ['pending', 'confirmed'])
             ->get();
 
         $availableSlots = [];
         $currentSlot = $workStart->copy();
 
-        // 2. GENERAR BLOQUES DINÁMICAMENTE
-        // El intervalo de generación es cada 30 min (independiente de la duración del servicio)
         while ($currentSlot->copy()->addMinutes($duration)->lte($workEnd)) {
             $slotStart = $currentSlot->copy();
             $slotEnd = $slotStart->copy()->addMinutes($duration);
 
-            // Omitir si es hoy y la hora ya pasó
             if ($date === today()->toDateString() && $slotStart->isPast()) {
                 $currentSlot->addMinutes(30);
                 continue;
             }
 
-            // 3. VERIFICAR SI EL BLOQUE ESTÁ OCUPADO (Comparación de Datetimes)
             $isOccupied = $existingAppointments->contains(function ($appointment) use ($slotStart, $slotEnd) {
-                // Como start_time y end_time ya son DATETIME en la base de datos,
-                // Carbon los parsea automáticamente.
                 $appStart = Carbon::parse($appointment->start_time);
                 $appEnd = Carbon::parse($appointment->end_time);
 
-                // Lógica de solapamiento estándar
                 return $slotStart->lt($appEnd) && $slotEnd->gt($appStart);
             });
 
             if (!$isOccupied) {
-                // Guardamos solo la hora en formato H:i (ej: 09:30)
                 $availableSlots[] = $slotStart->format('H:i');
             }
 
-            // Avanzar el puntero para generar el siguiente slot
             $currentSlot->addMinutes(30);
         }
 
@@ -168,33 +147,5 @@ class BookingController extends Controller
                     ->where('end_time', '>', $start);
             })
             ->exists();
-    }
-
-    private function resolveClientProfile(string $email, string $name, string $phone, ?string $notes, ?int $userId): ClientProfile
-    {
-        // 1. Si el usuario está autenticado, buscamos o actualizamos su perfil asociado
-        if ($userId) {
-            return ClientProfile::updateOrCreate(
-                ['user_id' => $userId],
-                [
-                    'full_name' => $name,
-                    'phone' => $phone,
-                    'notes' => $notes,
-                ]
-            );
-        }
-
-        // 2. Si es un invitado, gestionamos el perfil sin tocar la tabla `users`.
-        // Puedes buscar por correo o teléfono dentro de la misma tabla `client_profiles` 
-        // si necesitas evitar duplicados para invitados, o simplemente crearlo.
-        return ClientProfile::updateOrCreate(
-            ['phone' => $phone], // O el criterio que prefieras para identificar al cliente invitado
-            [
-                'user_id' => null,
-                'full_name' => $name,
-                'phone' => $phone,
-                'notes' => $notes,
-            ]
-        );
     }
 }
