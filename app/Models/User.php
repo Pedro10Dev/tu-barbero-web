@@ -30,7 +30,7 @@ use App\Enums\UserRole;
  * @property Carbon|null $updated_at
  * @property string|null $phone
  */
-#[Fillable(['name', 'email', 'password', 'phone, role, google_id'])]
+#[Fillable(['name', 'email', 'password', 'phone, role, google_id','email_verified_at'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable implements PasskeyUser, MustVerifyEmail
 {
