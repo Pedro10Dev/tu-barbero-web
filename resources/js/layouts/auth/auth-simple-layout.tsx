@@ -1,6 +1,4 @@
-import { Link, Head} from '@inertiajs/react';
-import AppLogoIcon from '@/components/app-logo-icon';
-
+import { Link, Head } from '@inertiajs/react';
 import type { AuthLayoutProps } from '@/types';
 
 export default function AuthSimpleLayout({
@@ -9,31 +7,34 @@ export default function AuthSimpleLayout({
     description,
 }: AuthLayoutProps) {
     return (
-        <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10">
+        <div className="flex min-h-screen w-full items-center justify-center bg-zinc-950 p-4">
             <div className="w-full max-w-sm">
-                <div className="flex flex-col gap-8">
-                    <div className="flex flex-col items-center gap-4">
-                        <Link
-                            href="/"
-                            className="flex flex-col items-center gap-2 font-medium"
-                        >
-                            <div className="flex h-20 w-20 items-center justify-center rounded-md">
+                <div className="flex flex-col gap-6">
+                    {title && (
+                        <div className="flex flex-col items-center gap-4">
+                            <Link
+                                href="/"
+                                className="group flex items-center justify-center transition-transform hover:scale-105"
+                            >
                                 <img
                                     src="/favicon.ico"
-                                    alt="Logo de la barbería"
-                                    className="h-16 w-16 object-contain"
+                                    alt="Logo"
+                                    className="h-20 w-20 object-contain"
                                 />
-                            </div>
-                            <span className="sr-only">{title}</span>
-                        </Link>
+                            </Link>
 
-                        <div className="space-y-2 text-center">
-                            <h1 className="text-xl font-medium">{title}</h1>
-                            <p className="text-center text-sm text-muted-foreground">
-                                {description}
-                            </p>
+                            <div className="space-y-1 text-center">
+                                <h1 className="text-xl font-bold tracking-tight text-white">
+                                    {title}
+                                </h1>
+                                {description && (
+                                    <p className="max-w-xs text-center text-sm text-zinc-400">
+                                        {description}
+                                    </p>
+                                )}
+                            </div>
                         </div>
-                    </div>
+                    )}
                     {children}
                 </div>
             </div>

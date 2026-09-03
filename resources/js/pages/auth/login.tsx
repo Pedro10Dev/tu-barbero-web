@@ -1,4 +1,4 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, Link } from '@inertiajs/react';
 import InputError from '@/components/input-error';
 import PasskeyVerify from '@/components/passkey-verify';
 import PasswordInput from '@/components/password-input';
@@ -21,7 +21,7 @@ export default function Login({ status, canResetPassword }: Props) {
     return (
         <>
             <Head title="Inicio de Sesión" />
-
+         
             {/* <PasskeyVerify />
              */}
             <Form

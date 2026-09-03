@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use App\Http\Middleware\RedirectClientsToLanding;
 use App\Http\Controllers\ClientProfileController;
 use App\Http\Controllers\Auth\SocialController;
+use App\Http\Controllers\PhonePromptController;
 
 
 Route::get('/', function () {
@@ -25,8 +26,12 @@ Route::get('/reserva-exitosa', function () {
     return inertia('booking/success');
 })->name('booking.success');
 
-
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/complete-profile/phone', [PhonePromptController::class, 'create'])->name('phone.prompt');
+    Route::post('/complete-profile/phone', [PhonePromptController::class, 'store'])->name('phone.store');
+});
+
+Route::middleware(['auth', 'verified', 'phone.required'])->group(function () {
     Route::get('/dashboard', function () {
         $user = auth()->user();
 
