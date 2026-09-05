@@ -1,50 +1,74 @@
-import { Link } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid } from 'lucide-react';
-import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
-import { NavMain } from '@/components/nav-main';
+import { NavMain, type ExtendedNavItem } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
-import {
-    Sidebar,
-    SidebarContent,
-    SidebarFooter,
-    SidebarHeader,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
+import { 
+    Sidebar, 
+    SidebarContent, 
+    SidebarFooter, 
+    SidebarHeader, 
+    SidebarMenu, 
+    SidebarMenuButton, 
+    SidebarMenuItem 
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
-import type { NavItem } from '@/types';
+import { LayoutGrid, Calendar, Users, Scissors, Globe, Activity } from 'lucide-react';
+import AppLogo from './app-logo';
+import { Link } from '@inertiajs/react';
 
-const mainNavItems: NavItem[] = [
+const mainNavItems: ExtendedNavItem[] = [
     {
-        title: 'Dashboard',
+        title: 'Panel Principal',
         href: dashboard(),
         icon: LayoutGrid,
     },
-];
-
-const footerNavItems: NavItem[] = [
     {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: FolderGit2,
+        title: 'Citas y Agenda',
+        href: '#',
+        icon: Calendar,
+        items: [
+            {
+                title: 'Agenda',
+                href: '/agenda/calendario', // Ruta única temporal
+            },
+            {
+                title: 'Gestión de citas ',
+                href: '/agenda/listado', // Ruta única temporal
+            },
+        ],
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
+        title: 'Mis Clientes',
+        href: '/clientes', // Ruta única temporal
+        icon: Users,
+    },
+    {
+        title: 'Servicios',
+        href: '/servicios', // Ruta única temporal
+        icon: Scissors,
+    },
+     {
+        title: 'Productividad',
+        href: '/productividad', // Ruta única temporal
+        icon: Activity,
+    },
+];
+
+const footerNavItems = [
+    {
+        title: 'Landing',
+        href: '/',
+        icon: Globe,
     },
 ];
 
 export function AppSidebar() {
     return (
-        <Sidebar collapsible="icon" variant="inset">
+        <Sidebar collapsible="offcanvas" variant="sidebar">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={dashboard()} prefetch>
+                            <Link href="/" prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
@@ -53,7 +77,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain items={mainNavItems} label="Menú Barbero" />
             </SidebarContent>
 
             <SidebarFooter>

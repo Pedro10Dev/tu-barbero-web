@@ -1,20 +1,20 @@
-import { usePage } from '@inertiajs/react';
-
-import AppLogoIcon from '@/components/app-logo-icon';
+import { Link } from '@inertiajs/react';
 
 export default function AppLogo() {
-    const { name } = usePage().props;
-
     return (
-        <>
-            <div className="flex aspect-square size-8 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
-                <AppLogoIcon className="size-5 fill-current text-white dark:text-black" />
+        <Link href="/dashboard" className="flex items-center gap-1 w-full text-left group">
+            <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-zinc-900 border border-zinc-800 overflow-hidden shadow-md group-hover:border-zinc-700 transition">
+                <img 
+                    src="/favicon.png" 
+                    alt="Logo TuBarbero" 
+                    className="size-6 object-contain" 
+                />
             </div>
-            <div className="ml-1 grid flex-1 text-left text-sm">
-                <span className="mb-0.5 truncate leading-tight font-semibold">
-                    {name}
+            <div className="ml-2 grid flex-1 text-left text-sm">
+                <span className="truncate font-black tracking-wider uppercase text-white group-hover:text-zinc-300 transition">
+                    TuBarbero
                 </span>
             </div>
-        </>
+        </Link>
     );
 }

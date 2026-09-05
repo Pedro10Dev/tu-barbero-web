@@ -5,6 +5,7 @@ export default function AppLayout({
     breadcrumbs = [],
     children,
 }: {
+    title?: string;
     breadcrumbs?: BreadcrumbItem[];
     children: React.ReactNode;
 }) {

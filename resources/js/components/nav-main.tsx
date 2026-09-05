@@ -5,31 +5,113 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    SidebarMenuSub,
+    SidebarMenuSubButton,
+    SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import type { NavItem } from '@/types';
+import { ChevronRight } from 'lucide-react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
-export function NavMain({ items = [] }: { items: NavItem[] }) {
+export interface ExtendedNavItem extends NavItem {
+    items?: {
+        title: string;
+        href: string;
+    }[];
+}
+
+export function NavMain({ 
+    items = [], 
+    label = "Menú Barbero" 
+}: { 
+    items: ExtendedNavItem[]; 
+    label?: string; 
+} ) {
     const { isCurrentUrl } = useCurrentUrl();
 
     return (
         <SidebarGroup className="px-2 py-0">
-            <SidebarGroupLabel>Platform</SidebarGroupLabel>
-            <SidebarMenu>
-                {items.map((item) => (
-                    <SidebarMenuItem key={item.title}>
-                        <SidebarMenuButton
-                            asChild
-                            isActive={isCurrentUrl(item.href)}
-                            tooltip={{ children: item.title }}
-                        >
-                            <Link href={item.href} prefetch>
-                                {item.icon && <item.icon />}
-                                <span>{item.title}</span>
-                            </Link>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                ))}
+            <SidebarGroupLabel className="text-xs font-semibold uppercase tracking-wider text-zinc-500 mb-2 px-2">
+                {label}
+            </SidebarGroupLabel>
+            <SidebarMenu className="space-y-1">
+                {items.map((item) => {
+                    const hasSubItems = item.items && item.items.length > 0;
+                    const isAnySubItemActive = hasSubItems && item.items?.some((sub) => isCurrentUrl(sub.href));
+
+                    return (
+                        hasSubItems ? (
+                            <Collapsible 
+                                key={item.title} 
+                                asChild 
+                                defaultOpen={isAnySubItemActive} 
+                                className="group/collapsible"
+                            >
+                                <SidebarMenuItem>
+                                    <CollapsibleTrigger asChild>
+                                        <SidebarMenuButton 
+                                            tooltip={{ children: item.title }} 
+                                            isActive={isAnySubItemActive}
+                                            className="flex w-full justify-between hover:bg-zinc-800/50 text-zinc-300 transition-colors"
+                                        >
+                                            <div className="flex items-center gap-2">
+                                                {item.icon && <item.icon className="size-4" />}
+                                                <span className="font-medium">{item.title}</span>
+                                            </div>
+                                            <ChevronRight className="size-4 text-zinc-500 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                                        </SidebarMenuButton>
+                                    </CollapsibleTrigger>
+                                    <CollapsibleContent>
+                                        {/* Contenedor sin línea izquierda (border-none sobreescribe el estilo por defecto) */}
+                                        <SidebarMenuSub className="flex flex-col border-none ml-4 pl-1 pr-2 py-2">
+                                            {item.items?.map((subItem, index) => {
+                                                const active = isCurrentUrl(subItem.href);
+                                                return (
+                                                    <SidebarMenuSubItem key={subItem.title} className="list-none">
+                                                        <SidebarMenuSubButton 
+                                                            asChild 
+                                                            isActive={active}
+                                                            className={`flex w-full items-center rounded-lg border px-3 py-2.5 text-sm transition-all duration-200 ${
+                                                                active 
+                                                                    ? 'bg-zinc-800 border-zinc-700 text-white shadow-sm font-medium' 
+                                                                    : 'bg-transparent border-transparent text-zinc-400 hover:bg-zinc-900 hover:border-zinc-800 hover:text-zinc-200 cursor-pointer'
+                                                            }`}
+                                                        >
+                                                            <Link href={subItem.href} prefetch className="flex items-center gap-3 w-full">
+                                                                <div className={`size-1.5 rounded-full transition-colors ${active ? 'bg-zinc-300' : 'bg-zinc-700'}`} />
+                                                                <span>{subItem.title}</span>
+                                                            </Link>
+                                                        </SidebarMenuSubButton>
+                                                        
+                                                        {/* Línea divisora entre elementos (se omite en el último) */}
+                                                        {index < item.items!.length - 1 && (
+                                                            <div className="mx-2 my-1.5 h-[1px] bg-zinc-800/60" />
+                                                        )}
+                                                    </SidebarMenuSubItem>
+                                                );
+                                            })}
+                                        </SidebarMenuSub>
+                                    </CollapsibleContent>
+                                </SidebarMenuItem>
+                            </Collapsible>
+                        ) : (
+                            <SidebarMenuItem key={item.title}>
+                                <SidebarMenuButton
+                                    asChild
+                                    isActive={isCurrentUrl(item.href)}
+                                    tooltip={{ children: item.title }}
+                                    className="hover:bg-zinc-800/50 text-zinc-300 transition-colors"
+                                >
+                                    <Link href={item.href} prefetch className="flex items-center gap-2">
+                                        {item.icon && <item.icon className="size-4" />}
+                                        <span className="font-medium">{item.title}</span>
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        )
+                    );
+                })}
             </SidebarMenu>
         </SidebarGroup>
     );
