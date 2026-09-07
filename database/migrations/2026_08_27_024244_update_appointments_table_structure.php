@@ -22,15 +22,13 @@ return new class extends Migration {
             $table->string('guest_phone')->nullable()->after('guest_name');
 
 
-            $table->dropForeign(['client_profile_id']);
-            $table->dropColumn('client_profile_id');
+        
         });
     }
 
     public function down(): void
     {
         Schema::table('appointments', function (Blueprint $table) {
-            $table->foreignId('client_profile_id')->nullable()->constrained('client_profiles');
             $table->dropColumn(['notes', 'user_id', 'guest_name', 'guest_phone']);
         });
     }

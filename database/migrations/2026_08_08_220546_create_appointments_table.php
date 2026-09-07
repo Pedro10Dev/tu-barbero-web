@@ -12,7 +12,6 @@ return new class extends Migration {
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('client_profile_id')->constrained('client_profiles')->cascadeOnDelete();
             $table->foreignId('barber_profile_id')->constrained('barber_profiles')->cascadeOnDelete();
             $table->foreignId('service_id')->constrained('services')->cascadeOnDelete();
             $table->dateTime('start_time');

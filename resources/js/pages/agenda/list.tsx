@@ -4,16 +4,7 @@ import { Head } from '@inertiajs/react';
 import { Calendar, CheckCircle2, Clock, Plus, Search, XCircle, AlertCircle, Phone, Scissors, Mail, ChevronDown, MessageSquare } from 'lucide-react';
 import { useState } from 'react';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Panel Principal',
-        href: '/dashboard',
-    },
-    {
-        title: 'Gestión de Citas',
-        href: '/agenda/listado',
-    },
-];
+
 
 // Datos de ejemplo ampliados con correo e info detallada
 const mockAppointments = [

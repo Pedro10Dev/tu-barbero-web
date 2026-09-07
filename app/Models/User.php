@@ -15,6 +15,7 @@ use Laravel\Fortify\Contracts\PasskeyUser;
 use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use App\Enums\UserRole;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
  * @property int $id
@@ -30,12 +31,12 @@ use App\Enums\UserRole;
  * @property Carbon|null $updated_at
  * @property string|null $phone
  */
-#[Fillable(['name', 'email', 'password', 'phone' , 'role, google_id','email_verified_at'])]
+#[Fillable(['name', 'email', 'password', 'phone' , 'google_id','email_verified_at'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
 class User extends Authenticatable implements PasskeyUser, MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;
+    use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable,HasRoles;
 
     /**
      * Get the attributes that should be cast.
@@ -48,14 +49,9 @@ class User extends Authenticatable implements PasskeyUser, MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
-            'role' => UserRole::class,
         ];
     }
-    public function clientProfile()
-    {
-        return $this->hasOne(ClientProfile::class);
-    }
-
+    
     public function barberProfile()
     {
         return $this->hasOne(BarberProfile::class);
@@ -63,11 +59,11 @@ class User extends Authenticatable implements PasskeyUser, MustVerifyEmail
 
     public function isAdmin(): bool
     {
-        return $this->role === UserRole::ADMIN;
+        return $this->hasRole('admin'); // O el nombre que le des a tu rol en la BD
     }
 
     public function isBarber(): bool
     {
-        return $this->role === UserRole::BARBER;
+        return $this->hasRole('barber');
     }
 }

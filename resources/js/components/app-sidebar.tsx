@@ -1,21 +1,35 @@
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain, type ExtendedNavItem } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
-import { 
-    Sidebar, 
-    SidebarContent, 
-    SidebarFooter, 
-    SidebarHeader, 
-    SidebarMenu, 
-    SidebarMenuButton, 
-    SidebarMenuItem 
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
-import { LayoutGrid, Calendar, Users, Scissors, Globe, Activity } from 'lucide-react';
+import {
+    LayoutGrid,
+    Calendar,
+    Users,
+    Scissors,
+    Globe,
+    Activity,
+    Shield,
+    CalendarDays,
+    Briefcase,
+    Clock,
+    ShieldCheck,
+    History,
+    Settings,
+} from 'lucide-react';
 import AppLogo from './app-logo';
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 
-const mainNavItems: ExtendedNavItem[] = [
+const barberNavItems: ExtendedNavItem[] = [
     {
         title: 'Panel Principal',
         href: dashboard(),
@@ -28,28 +42,76 @@ const mainNavItems: ExtendedNavItem[] = [
         items: [
             {
                 title: 'Agenda',
-                href: '/agenda/calendario', // Ruta única temporal
+                href: '/agenda/calendario',
             },
             {
                 title: 'Gestión de citas ',
-                href: '/agenda/listado', // Ruta única temporal
+                href: '/agenda/listado',
             },
         ],
     },
     {
         title: 'Mis Clientes',
-        href: '/clientes', // Ruta única temporal
+        href: '/clientes',
         icon: Users,
     },
     {
         title: 'Servicios',
-        href: '/servicios', // Ruta única temporal
+        href: '/servicios',
         icon: Scissors,
     },
-     {
+    {
         title: 'Productividad',
-        href: '/productividad', // Ruta única temporal
+        href: '/productividad',
         icon: Activity,
+    },
+];
+
+const adminNavItems: ExtendedNavItem[] = [
+    {
+        title: 'Panel Administrador',
+        href: '/admin/dashboard',
+        icon: LayoutGrid,
+    },
+    {
+        title: 'Gestión de Citas',
+        href: '/admin/appointments',
+        icon: CalendarDays,
+    },
+    {
+        title: 'Barberos',
+        href: '/admin/barbers',
+        icon: Scissors,
+    },
+    {
+        title: 'Servicios',
+        href: '/admin/services',
+        icon: Briefcase,
+    },
+    {
+        title: 'Usuarios',
+        href: '/admin/users',
+        icon: Users,
+    },
+    {
+        title: 'Horarios y Turnos',
+        href: '/admin/schedules',
+        icon: Clock,
+    },
+    {
+        title: 'Roles y Permisos',
+        href: '/admin/roles',
+        icon: ShieldCheck,
+    },
+    {
+        title: 'Auditoría',
+        href: '/admin/activity',
+        icon: History,
+    },
+    {
+        title: 'Configuración',
+        href: '/admin/settings',
+        icon: Settings,
     },
 ];
 
@@ -62,6 +124,11 @@ const footerNavItems = [
 ];
 
 export function AppSidebar() {
+    const { auth } = usePage().props;
+    const roles = (auth.user?.roles as string[]) || [];
+
+    const isAdmin = roles.includes('admin');
+    const isBarber = roles.includes('barber') || isAdmin;
     return (
         <Sidebar collapsible="offcanvas" variant="sidebar">
             <SidebarHeader>
@@ -77,7 +144,12 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} label="Menú Barbero" />
+                {isAdmin && (
+                    <NavMain items={adminNavItems} label="Menú Administrador" />
+                )}
+                {isBarber && (
+                    <NavMain items={barberNavItems} label="Menú Barbero" />
+                )}
             </SidebarContent>
 
             <SidebarFooter>

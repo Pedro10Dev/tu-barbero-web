@@ -34,18 +34,17 @@ class FortifyServiceProvider extends ServiceProvider
         $this->configureViews();
         $this->configureRateLimiting();
 
-        $this->app->singleton(LoginResponse::class, function () {
-            return new class implements LoginResponse {
-                public function toResponse($request)
-                {
-                    $user = auth()->user();
+    $this->app->singleton(LoginResponse::class, function () {
+        return new class implements LoginResponse {
+            public function toResponse($request)
+            {
+                // Usamos $request->user() que el editor reconoce mejor con tipado
+                $user = $request->user();
 
-                    // Si el usuario tiene rol de cliente, lo mandamos a la landing o a la ruta que prefieras
-                    if ($user && $user->role === 'client') {
-                        return redirect()->route('landing'); // Cambia 'landing' por el nombre de tu ruta si es distinto
-                    }
+                if ($user && method_exists($user, 'hasRole') && $user->hasRole('client')) {
+                    return redirect()->intended(config('fortify.home', '/landing'));
+                }
 
-                    // Si es admin u otro rol, va a la ruta por defecto (dashboard)
                     return redirect()->intended(config('fortify.home', '/dashboard'));
                 }
             };

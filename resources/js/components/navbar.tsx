@@ -120,7 +120,8 @@ export default function Navbar() {
 
                             {dropdownOpen && (
                                 <div className="ring-opacity-5 absolute right-0 mt-2 w-48 origin-top-right rounded-xl border border-white/10 bg-zinc-900 py-1 shadow-2xl ring-1 ring-black focus:outline-none">
-                                    {auth.user?.role === 'client' && (
+                                    {/* Si el usuario tiene el rol de cliente */}
+                                    {auth.user?.roles?.includes('client') && (
                                         <Link
                                             href="/client/profile"
                                             className="block px-4 py-2.5 text-sm text-zinc-300 transition-colors hover:bg-zinc-800 hover:text-white"
@@ -129,9 +130,9 @@ export default function Navbar() {
                                         </Link>
                                     )}
 
-                                    {auth.user.role &&
-                                        auth.user.role !== 'client' &&
-                                        auth.user.role?.value !== 'client' && (
+                                    {/* Si el usuario NO es cliente (es admin o barbero) */}
+                                    {auth.user?.roles &&
+                                        !auth.user.roles.includes('client') && (
                                             <Link
                                                 href={dashboard().url}
                                                 className="block px-4 py-2.5 text-sm text-zinc-300 transition-colors hover:bg-zinc-800 hover:text-white"
@@ -209,7 +210,7 @@ export default function Navbar() {
                                         href="/client/profile"
                                         className="block py-1 text-sm text-zinc-300 hover:text-white"
                                     >
-                                       Información personal
+                                        Información personal
                                     </Link>
                                 )}
 

@@ -14,13 +14,15 @@ class RedirectClientsToLanding
      * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
-    {
-        // Si el usuario está autenticado y su rol es 'client'
-        if ($request->user() && $request->user()->role === 'client') {
-            // Lo redirigimos a la ruta de la landing (asegúrate de que tu ruta se llame 'landing' o cámbiala por la URL correcta)
-            return redirect()->route('landing');
-        }
+{
+    /** @var \App\Models\User $user */
+    $user = $request->user();
 
-        return $next($request);
+    // Si el usuario está autenticado y tiene el rol de cliente
+    if ($user && $user->hasRole('client')) {
+        return redirect()->route('landing');
     }
+
+    return $next($request);
+}
 }

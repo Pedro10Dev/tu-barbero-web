@@ -4,15 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use App\Enums\UserRole;
 
 class ClientProfileController extends Controller
 {
     public function edit(Request $request)
     {
+        /** @var \App\Models\User $user */
         $user = $request->user();
 
-        if ($user->role !== UserRole::CLIENT) {
+        // Usamos Spatie en lugar de la propiedad antigua
+        if (!$user->hasRole('client')) {
             return redirect('/');
         }
 
@@ -27,9 +28,11 @@ class ClientProfileController extends Controller
 
     public function update(Request $request)
     {
+        /** @var \App\Models\User $user */
         $user = $request->user();
 
-        if ($user->role !== UserRole::CLIENT) {
+        // Usamos Spatie aquí también
+        if (!$user->hasRole('client')) {
             return redirect('/');
         }
 

@@ -10,6 +10,9 @@ use App\Http\Controllers\ClientProfileController;
 use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\PhonePromptController;
 use App\Http\Controllers\BarberDashboardController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use Spatie\Permission\Middleware\RoleMiddleware;
+
 
 
 Route::get('/', function () {
@@ -35,15 +38,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::middleware(['auth', 'verified', 'phone.required'])->group(function () {
     Route::get('/dashboard', function () {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        // Si tu Enum es un backed enum (ej: string), evalúa su value o compara directo con el caso del Enum:
-        if ($user && $user->role->value === 'client') { // O prueba con: $user->role === UserRole::Client
+        if ($user && $user->hasRole('client')) {
             return redirect()->route('landing');
         }
 
        return app(BarberDashboardController::class)->index(request());
     })->name('dashboard');
+});
+
+Route::middleware(['auth', RoleMiddleware::class . ':admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 });
 
 Route::get('/agenda/calendario', function () {

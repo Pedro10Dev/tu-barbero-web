@@ -4,16 +4,7 @@ import { Head } from '@inertiajs/react';
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Panel Principal',
-        href: '/dashboard',
-    },
-    {
-        title: 'Agenda',
-        href: '/agenda/calendario',
-    },
-];
+
 
 export default function AgendaCalendar() {
     const [viewMode, setViewMode] = useState<'day' | 'week' | 'month'>('day');

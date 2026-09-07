@@ -16,8 +16,9 @@ class UserSeeder extends Seeder
             'name' => 'Carlos Barbero',
             'email' => 'admin@barberflow.com',
             'password' => Hash::make('password123'),
-            'role' => UserRole::BARBER,
         ]);
+        $barberUser->assignRole('barber');
+        $barberUser->assignRole('admin');
 
         // 2. Crear su perfil profesional asociado
         $barberUser->barberProfile()->create([
