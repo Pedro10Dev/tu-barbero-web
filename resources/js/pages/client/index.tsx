@@ -13,45 +13,21 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 
-const mockClients = [
-    {
-        id: 1,
-        name: 'Miguel Torres',
-        email: 'miguel.torres@gmail.com',
-        phone: '+584125551234',
-        phoneFormatted: '+58 412-5551234',
-        totalVisits: 8,
-        lastVisit: 'Ayer, 02:30 PM',
-        favoriteService: 'Corte Clásico + Barba',
-        notes: 'Le gusta el desvanecido bajo en los lados. Prefiere agua al clima.',
-    },
-    {
-        id: 2,
-        name: 'Carlos Mendoza',
-        email: 'carlos.mendoza@outlook.com',
-        phone: '+584145559876',
-        phoneFormatted: '+58 414-5559876',
-        totalVisits: 14,
-        lastVisit: 'Hace 2 semanas',
-        favoriteService: 'Corte Degradado',
-        notes: 'Cliente muy puntual. Siempre pide perfilado de cejas.',
-    },
-    {
-        id: 3,
-        name: 'Andrés Silva',
-        email: 'andres.silva@yahoo.com',
-        phone: '+584245554321',
-        phoneFormatted: '+58 424-5554321',
-        totalVisits: 3,
-        lastVisit: 'Hace 1 mes',
-        favoriteService: 'Mantenimiento de Barba',
-        notes: 'Viene recomendando por Miguel Torres. Usa productos para barba larga.',
-    },
-];
+type Client = {
+    id: number;
+    name: string;
+    email: string | null;
+    phone: string | null;
+    phoneFormatted: string;
+    totalVisits: number;
+    lastVisit: string;
+    favoriteService: string;
+    notes: string;
+};
 
 type SortOption = 'asc' | 'desc' | 'most-visits' | 'least-visits';
 
-export default function ClientsIndex() {
+export default function ClientsIndex({ clients }: { clients: Client[] }) {
     const [expandedId, setExpandedId] = useState<number | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortOption, setSortOption] = useState<SortOption>('asc');
@@ -60,11 +36,13 @@ export default function ClientsIndex() {
         setExpandedId(expandedId === id ? null : id);
     };
 
-    const filteredClients = mockClients.filter(
+    const filteredClients = clients.filter(
         (client) =>
             client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            client.phone.includes(searchTerm) ||
-            client.email.toLowerCase().includes(searchTerm.toLowerCase()),
+            (client.phone ?? '').includes(searchTerm) ||
+            (client.email ?? '')
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase()),
     );
 
     const sortedClients = [...filteredClients].sort((a, b) => {
@@ -86,7 +64,7 @@ export default function ClientsIndex() {
             <Head title="Mis Clientes" />
 
             <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 p-6 lg:p-8">
-                {/* Cabecera y Resumen Superior alineado con el resto del sistema */}
+                {/* Cabecera y Resumen Superior */}
                 <div className="flex flex-col justify-between gap-4 border-b border-zinc-800/80 pb-6 md:flex-row md:items-center">
                     <div className="space-y-1">
                         <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-white">
@@ -99,7 +77,7 @@ export default function ClientsIndex() {
                         </p>
                     </div>
 
-                    {/* Tarjeta de Resumen Rápido Estética */}
+                    {/* Tarjeta de Resumen Rápido */}
                     <div className="flex shrink-0 items-center gap-3 rounded-2xl border border-zinc-800/80 bg-zinc-900/60 px-4 py-3">
                         <div className="flex size-10 items-center justify-center rounded-xl border border-zinc-700/50 bg-zinc-800/80 text-zinc-300">
                             <UserCheck className="size-5" />
@@ -109,7 +87,7 @@ export default function ClientsIndex() {
                                 Total Registrados
                             </span>
                             <span className="text-base font-bold text-white">
-                                {mockClients.length}{' '}
+                                {clients.length}{' '}
                                 <span className="text-xs font-normal text-zinc-500">
                                     clientes
                                 </span>
@@ -168,7 +146,7 @@ export default function ClientsIndex() {
                     </div>
                 </div>
 
-                {/* Listado de Clientes con tarjetas expandibles */}
+                {/* Listado de Clientes */}
                 <div className="flex flex-col gap-3">
                     {sortedClients.length === 0 ? (
                         <div className="rounded-2xl border border-zinc-800/60 bg-zinc-900/30 py-12 text-center text-sm text-zinc-500">
@@ -188,7 +166,7 @@ export default function ClientsIndex() {
                                             : 'border-zinc-800/80 hover:border-zinc-700/80'
                                     }`}
                                 >
-                                    {/* Barra indicadora lateral izquierda dinámica */}
+                                    {/* Barra indicadora lateral */}
                                     <div
                                         className={`absolute top-0 bottom-0 left-0 w-1.5 transition-colors duration-300 ${
                                             isExpanded
@@ -197,7 +175,7 @@ export default function ClientsIndex() {
                                         }`}
                                     />
 
-                                    {/* Cabecera principal de la tarjeta */}
+                                    {/* Cabecera */}
                                     <div
                                         onClick={() => toggleExpand(client.id)}
                                         className="flex cursor-pointer flex-col justify-between gap-4 p-5 pl-6 select-none sm:flex-row sm:items-center"
@@ -219,19 +197,24 @@ export default function ClientsIndex() {
                                                 </div>
 
                                                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-zinc-400">
-                                                    <span className="flex items-center gap-1.5 font-medium text-zinc-300">
-                                                        <Phone className="size-3.5 text-zinc-500" />
-                                                        {client.phoneFormatted}
-                                                    </span>
-                                                    <span className="flex items-center gap-1.5">
-                                                        <Mail className="size-3.5 text-zinc-500" />
-                                                        {client.email}
-                                                    </span>
+                                                    {client.phoneFormatted && (
+                                                        <span className="flex items-center gap-1.5 font-medium text-zinc-300">
+                                                            <Phone className="size-3.5 text-zinc-500" />
+                                                            {
+                                                                client.phoneFormatted
+                                                            }
+                                                        </span>
+                                                    )}
+                                                    {client.email && (
+                                                        <span className="flex items-center gap-1.5">
+                                                            <Mail className="size-3.5 text-zinc-500" />
+                                                            {client.email}
+                                                        </span>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
 
-                                        {/* Botón de expansión */}
                                         <div className="flex items-center gap-2 self-end sm:self-center">
                                             <button
                                                 onClick={(e) => {
@@ -252,7 +235,7 @@ export default function ClientsIndex() {
                                         </div>
                                     </div>
 
-                                    {/* Contenido Desplegable Animado */}
+                                    {/* Contenido Desplegable */}
                                     <div
                                         className={`grid transition-all duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
                                     >
@@ -292,15 +275,23 @@ export default function ClientsIndex() {
                                                 </div>
 
                                                 <div className="flex shrink-0 items-center border-t border-zinc-800/40 pt-4 md:border-t-0 md:pt-0">
-                                                    <a
-                                                        href={`https://wa.me/${client.phone}?text=Hola%20${encodeURIComponent(client.name)},%20te%20escribo%20desde%20TuBarbero...`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-600/20 px-4 py-2.5 text-xs font-semibold text-emerald-300 shadow-sm transition-all hover:border-emerald-500 hover:bg-emerald-600/30 md:w-auto"
-                                                    >
-                                                        <MessageSquare className="size-4 text-emerald-400" />
-                                                        Contactar por WhatsApp
-                                                    </a>
+                                                    {client.phone ? (
+                                                        <a
+                                                            href={`https://wa.me/${client.phone}?text=Hola%20${encodeURIComponent(client.name)},%20te%20escribo%20desde%20TuBarbero...`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-600/20 px-4 py-2.5 text-xs font-semibold text-emerald-300 shadow-sm transition-all hover:border-emerald-500 hover:bg-emerald-600/30 md:w-auto"
+                                                        >
+                                                            <MessageSquare className="size-4 text-emerald-400" />
+                                                            Contactar por
+                                                            WhatsApp
+                                                        </a>
+                                                    ) : (
+                                                        <span className="text-xs text-zinc-500">
+                                                            Sin teléfono
+                                                            registrado
+                                                        </span>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>

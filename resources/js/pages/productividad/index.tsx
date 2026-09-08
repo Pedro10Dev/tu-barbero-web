@@ -11,67 +11,31 @@ import { useState } from 'react';
 
 type Periodo = 'dia' | 'semana' | 'mes';
 
-const productivitySummary: Record<
-    Periodo,
-    { totalServicios: number; tiempoPromedio: string; servicioEstrella: string }
-> = {
-    dia: {
-        totalServicios: 6,
-        tiempoPromedio: '32 min',
-        servicioEstrella: 'Corte Degradado (Fade)',
-    },
-    semana: {
-        totalServicios: 34,
-        tiempoPromedio: '35 min',
-        servicioEstrella: 'Corte Degradado (Fade)',
-    },
-    mes: {
-        totalServicios: 142,
-        tiempoPromedio: '34 min',
-        servicioEstrella: 'Corte + Barba Completa',
-    },
+type PeriodSummary = {
+    totalServicios: number;
+    tiempoPromedio: string;
+    servicioEstrella: string;
 };
 
-export default function ProductividadIndex() {
+type ActivityEntry = {
+    id: number;
+    client: string;
+    service: string;
+    time: string;
+    duration: number | null;
+    status: string;
+};
+
+export default function ProductividadIndex({
+    summary,
+    recentActivity,
+}: {
+    summary: Record<Periodo, PeriodSummary>;
+    recentActivity: ActivityEntry[];
+}) {
     const [selectedPeriod, setSelectedPeriod] = useState<Periodo>('semana');
 
-    // Bitácora de servicios completados recientemente en la silla
-    const recentActivity = [
-        {
-            id: 1,
-            client: 'Miguel Torres',
-            service: 'Corte Clásico + Barba',
-            time: 'Hace 45 minutos',
-            duration: '55 min',
-            status: 'Completado',
-        },
-        {
-            id: 2,
-            client: 'Carlos Mendoza',
-            service: 'Corte Degradado (Fade)',
-            time: 'Hace 2 horas',
-            duration: '40 min',
-            status: 'Completado',
-        },
-        {
-            id: 3,
-            client: 'Andrés Silva',
-            service: 'Mantenimiento de Barba',
-            time: 'Hace 4 horas',
-            duration: '30 min',
-            status: 'Completado',
-        },
-        {
-            id: 4,
-            client: 'Gabriel Rojas',
-            service: 'Corte Clásico',
-            time: 'Ayer, 05:00 PM',
-            duration: '30 min',
-            status: 'Completado',
-        },
-    ];
-
-    const currentData = productivitySummary[selectedPeriod];
+    const currentData = summary[selectedPeriod];
 
     return (
         <>
@@ -93,40 +57,29 @@ export default function ProductividadIndex() {
 
                     {/* Selector rápido de periodo */}
                     <div className="flex shrink-0 items-center rounded-xl border border-zinc-800/80 bg-zinc-900/60 p-1">
-                        <button
-                            onClick={() => setSelectedPeriod('dia')}
-                            className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
-                                selectedPeriod === 'dia'
-                                    ? 'bg-zinc-800 text-white shadow-sm'
-                                    : 'text-zinc-400 hover:text-white'
-                            }`}
-                        >
-                            Hoy
-                        </button>
-                        <button
-                            onClick={() => setSelectedPeriod('semana')}
-                            className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
-                                selectedPeriod === 'semana'
-                                    ? 'bg-zinc-800 text-white shadow-sm'
-                                    : 'text-zinc-400 hover:text-white'
-                            }`}
-                        >
-                            Esta Semana
-                        </button>
-                        <button
-                            onClick={() => setSelectedPeriod('mes')}
-                            className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
-                                selectedPeriod === 'mes'
-                                    ? 'bg-zinc-800 text-white shadow-sm'
-                                    : 'text-zinc-400 hover:text-white'
-                            }`}
-                        >
-                            Este Mes
-                        </button>
+                        {(['dia', 'semana', 'mes'] as Periodo[]).map(
+                            (period) => (
+                                <button
+                                    key={period}
+                                    onClick={() => setSelectedPeriod(period)}
+                                    className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                                        selectedPeriod === period
+                                            ? 'bg-zinc-800 text-white shadow-sm'
+                                            : 'text-zinc-400 hover:text-white'
+                                    }`}
+                                >
+                                    {period === 'dia'
+                                        ? 'Hoy'
+                                        : period === 'semana'
+                                          ? 'Esta Semana'
+                                          : 'Este Mes'}
+                                </button>
+                            ),
+                        )}
                     </div>
                 </div>
 
-                {/* Tarjetas de Métricas de Productividad (3 Columnas) */}
+                {/* Tarjetas de Métricas */}
                 <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
                     {/* Total de Servicios */}
                     <div className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-6 transition-all hover:border-zinc-700">
@@ -205,7 +158,7 @@ export default function ProductividadIndex() {
                     </div>
                 </div>
 
-                {/* Bitácora Reciente de Actividad Operativa */}
+                {/* Bitácora Reciente */}
                 <div className="flex flex-col gap-4 pt-4">
                     <div className="flex items-center justify-between">
                         <h2 className="text-lg font-bold tracking-tight text-white">
@@ -216,52 +169,60 @@ export default function ProductividadIndex() {
                         </span>
                     </div>
 
-                    <div className="flex flex-col gap-3">
-                        {recentActivity.map((item) => (
-                            <div
-                                key={item.id}
-                                className="flex flex-col justify-between gap-4 rounded-xl border border-zinc-800/80 bg-zinc-900/40 p-4 transition-all hover:border-zinc-700 sm:flex-row sm:items-center"
-                            >
-                                <div className="flex items-start gap-3.5">
-                                    <div className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-xl border border-zinc-700/50 bg-zinc-800/60 text-zinc-300 sm:mt-0">
-                                        <CheckCircle2 className="size-4 text-emerald-400" />
-                                    </div>
-                                    <div className="space-y-1">
-                                        <div className="flex flex-wrap items-center gap-2">
-                                            <h4 className="text-sm font-semibold text-white">
-                                                {item.client}
-                                            </h4>
-                                            <span className="text-xs text-zinc-400">
-                                                •
-                                            </span>
-                                            <span className="text-xs font-medium text-zinc-300">
-                                                {item.service}
-                                            </span>
+                    {recentActivity.length === 0 ? (
+                        <div className="rounded-2xl border border-zinc-800/60 bg-zinc-900/30 py-12 text-center text-sm text-zinc-500">
+                            Aún no hay servicios completados.
+                        </div>
+                    ) : (
+                        <div className="flex flex-col gap-3">
+                            {recentActivity.map((item) => (
+                                <div
+                                    key={item.id}
+                                    className="flex flex-col justify-between gap-4 rounded-xl border border-zinc-800/80 bg-zinc-900/40 p-4 transition-all hover:border-zinc-700 sm:flex-row sm:items-center"
+                                >
+                                    <div className="flex items-start gap-3.5">
+                                        <div className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-xl border border-zinc-700/50 bg-zinc-800/60 text-zinc-300 sm:mt-0">
+                                            <CheckCircle2 className="size-4 text-emerald-400" />
                                         </div>
-                                        <div className="flex items-center gap-3 text-xs text-zinc-500">
-                                            <span className="flex items-center gap-1">
-                                                <Calendar className="size-3" />{' '}
-                                                {item.time}
-                                            </span>
-                                            <span>
-                                                Estado:{' '}
-                                                <strong className="text-emerald-400">
-                                                    {item.status}
-                                                </strong>
-                                            </span>
+                                        <div className="space-y-1">
+                                            <div className="flex flex-wrap items-center gap-2">
+                                                <h4 className="text-sm font-semibold text-white">
+                                                    {item.client}
+                                                </h4>
+                                                <span className="text-xs text-zinc-400">
+                                                    •
+                                                </span>
+                                                <span className="text-xs font-medium text-zinc-300">
+                                                    {item.service}
+                                                </span>
+                                            </div>
+                                            <div className="flex items-center gap-3 text-xs text-zinc-500">
+                                                <span className="flex items-center gap-1">
+                                                    <Calendar className="size-3" />{' '}
+                                                    {item.time}
+                                                </span>
+                                                <span>
+                                                    Estado:{' '}
+                                                    <strong className="text-emerald-400">
+                                                        {item.status}
+                                                    </strong>
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div className="flex items-center justify-between gap-3 border-t border-zinc-800/60 pt-3 sm:justify-end sm:border-t-0 sm:pt-0">
-                                    <span className="inline-flex items-center gap-1 rounded-lg border border-zinc-700/50 bg-zinc-800/60 px-3 py-1 text-xs font-medium text-zinc-300">
-                                        <Clock className="size-3 text-zinc-400" />{' '}
-                                        {item.duration}
-                                    </span>
+                                    <div className="flex items-center justify-between gap-3 border-t border-zinc-800/60 pt-3 sm:justify-end sm:border-t-0 sm:pt-0">
+                                        <span className="inline-flex items-center gap-1 rounded-lg border border-zinc-700/50 bg-zinc-800/60 px-3 py-1 text-xs font-medium text-zinc-300">
+                                            <Clock className="size-3 text-zinc-400" />{' '}
+                                            {item.duration
+                                                ? `${item.duration} min`
+                                                : '—'}
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </>

@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import {
     Calendar,
     CheckCircle2,
@@ -15,83 +15,116 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 
-// Datos de ejemplo ampliados con correo e info detallada
-const mockAppointments = [
-    {
-        id: 1,
-        client: 'Miguel Torres',
-        email: 'miguel.torres@gmail.com',
-        phone: '+584125551234',
-        phoneFormatted: '+58 412-5551234',
-        service: 'Corte Clásico + Barba',
-        duration: '45 mins',
-        price: '$20.00',
-        time: 'Hoy, 02:30 PM',
-        notes: 'El cliente prefiere un desvanecido bajo en los lados.',
-        status: 'pending',
-    },
-    {
-        id: 2,
-        client: 'Carlos Mendoza',
-        email: 'carlos.mendoza@outlook.com',
-        phone: '+584145559876',
-        phoneFormatted: '+58 414-5559876',
-        service: 'Corte Degradado',
-        duration: '30 mins',
-        price: '$15.00',
-        time: 'Hoy, 04:30 PM',
-        notes: 'Viene puntual, cliente frecuente.',
-        status: 'confirmed',
-    },
-    {
-        id: 3,
-        client: 'Andrés Silva',
-        email: 'andres.silva@yahoo.com',
-        phone: '+584245554321',
-        phoneFormatted: '+58 424-5554321',
-        service: 'Mantenimiento de Barba',
-        duration: '25 mins',
-        price: '$12.00',
-        time: 'Mañana, 10:00 AM',
-        notes: 'Primera vez en la barbería.',
-        status: 'pending',
-    },
-];
+type Appointment = {
+    id: number;
+    client: string;
+    email?: string | null;
+    phone?: string | null;
+    phoneFormatted: string;
+    service: string;
+    duration?: number | null;
+    price: number;
+    start_time: string;
+    time: string;
+    notes?: string | null;
+    status: 'pending' | 'confirmed' | 'rejected' | 'cancelled' | 'completed';
+};
 
-export default function AgendaList() {
+const statusConfig = {
+    pending: {
+        label: 'Pendiente de aprobación',
+        bar: 'bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.4)]',
+        chip: 'border-amber-500/20 bg-amber-500/10 text-amber-400',
+        icon: AlertCircle,
+    },
+    confirmed: {
+        label: 'Confirmada',
+        bar: 'bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.4)]',
+        chip: 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400',
+        icon: CheckCircle2,
+    },
+    rejected: {
+        label: 'Rechazada',
+        bar: 'bg-rose-500 shadow-[0_0_12px_rgba(244,63,94,0.4)]',
+        chip: 'border-rose-500/20 bg-rose-500/10 text-rose-400',
+        icon: XCircle,
+    },
+    cancelled: {
+        label: 'Cancelada',
+        bar: 'bg-zinc-600',
+        chip: 'border-zinc-700/60 bg-zinc-800/80 text-zinc-400',
+        icon: XCircle,
+    },
+    completed: {
+        label: 'Completada',
+        bar: 'bg-blue-500 shadow-[0_0_12px_rgba(59,130,246,0.4)]',
+        chip: 'border-blue-500/20 bg-blue-500/10 text-blue-400',
+        icon: CheckCircle2,
+    },
+} as const;
+
+function formatPrice(price: number): string {
+    return `$${Number(price).toFixed(2)}`;
+}
+
+export default function AgendaList({
+    appointments,
+    pendingCount,
+}: {
+    appointments: Appointment[];
+    pendingCount: number;
+}) {
     const [filter, setFilter] = useState<'all' | 'pending' | 'confirmed'>(
         'all',
     );
-    // Estado para llevar el control de qué tarjeta está expandida por su ID
+    const [searchTerm, setSearchTerm] = useState('');
     const [expandedId, setExpandedId] = useState<number | null>(null);
+    const [updatingId, setUpdatingId] = useState<number | null>(null);
 
     const toggleExpand = (id: number) => {
         setExpandedId(expandedId === id ? null : id);
     };
 
-    // Filtrar citas según el estado seleccionado
-    const filteredAppointments = mockAppointments.filter((app) => {
-        if (filter === 'pending') {
-            return app.status === 'pending';
+    const decide = (id: number, action: 'accept' | 'reject') => {
+        setUpdatingId(id);
+        router.patch(
+            `/agenda/appointments/${id}`,
+            { action },
+            {
+                preserveScroll: true,
+                onFinish: () => setUpdatingId(null),
+            },
+        );
+    };
+
+    const visibleAppointments = appointments.filter((app) => {
+        const matchesFilter =
+            filter === 'all' ||
+            (filter === 'pending' && app.status === 'pending') ||
+            (filter === 'confirmed' && app.status === 'confirmed');
+
+        if (!matchesFilter) {
+            return false;
         }
 
-        if (filter === 'confirmed') {
-            return app.status === 'confirmed';
-        }
+        const haystack = [
+            app.client,
+            app.service,
+            app.phone ?? '',
+            app.email ?? '',
+        ]
+            .join(' ')
+            .toLowerCase();
 
-        return true;
+        return haystack.includes(searchTerm.toLowerCase());
     });
-
-    const pendingCount = mockAppointments.filter(
-        (app) => app.status === 'pending',
-    ).length;
 
     return (
         <>
             <Head title="Gestión de Citas" />
 
             <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 p-6 lg:p-8">
-                {/* Cabecera y Resumen Superior alineado con el resto del sistema */}
+                {/* Cabecera y Resumen Superior */}
                 <div className="flex flex-col justify-between gap-4 border-b border-zinc-800/80 pb-6 md:flex-row md:items-center">
                     <div className="space-y-1">
                         <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-white">
@@ -104,7 +137,7 @@ export default function AgendaList() {
                         </p>
                     </div>
 
-                    {/* Tarjeta de Resumen Rápido Estética */}
+                    {/* Tarjeta de Solicitudes Pendientes */}
                     <div className="flex shrink-0 items-center gap-3 rounded-2xl border border-zinc-800/80 bg-zinc-900/60 px-4 py-3">
                         <div className="flex size-10 items-center justify-center rounded-xl border border-amber-500/20 bg-amber-500/10 text-amber-400">
                             <AlertCircle className="size-5" />
@@ -123,20 +156,20 @@ export default function AgendaList() {
                     </div>
                 </div>
 
-                {/* Filtros de Estado y Botón de Nuevo Turno */}
+                {/* Filtros y Búsqueda */}
                 <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
-                    {/* Barra de Búsqueda */}
                     <div className="relative flex w-full items-center">
                         <Search className="absolute left-3.5 size-4 text-zinc-500" />
                         <input
                             type="text"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
                             placeholder="Buscar cliente, teléfono o servicio..."
                             className="w-full rounded-xl border border-zinc-800/80 bg-zinc-900/60 py-2.5 pr-4 pl-10 text-sm text-white placeholder-zinc-500 transition focus:border-zinc-700 focus:outline-none"
                         />
                     </div>
 
                     <div className="flex w-full shrink-0 items-center justify-between gap-3 sm:w-auto sm:justify-end">
-                        {/* Filtros de Estado */}
                         <div className="flex rounded-xl border border-zinc-800/80 bg-zinc-900/60 p-1">
                             <button
                                 onClick={() => setFilter('all')}
@@ -170,7 +203,6 @@ export default function AgendaList() {
                             </button>
                         </div>
 
-                        {/* Botón de Nuevo Turno Manual */}
                         <button className="flex shrink-0 items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-zinc-200">
                             <Plus className="size-4" />
                             Nuevo Turno
@@ -178,16 +210,19 @@ export default function AgendaList() {
                     </div>
                 </div>
 
-                {/* Listado de Citas con tarjetas expandibles */}
+                {/* Listado de Citas */}
                 <div className="flex flex-col gap-3">
-                    {filteredAppointments.length === 0 ? (
+                    {visibleAppointments.length === 0 ? (
                         <div className="rounded-2xl border border-zinc-800/60 bg-zinc-900/30 py-12 text-center text-sm text-zinc-500">
                             No hay citas que coincidan con este filtro.
                         </div>
                     ) : (
-                        filteredAppointments.map((app) => {
-                            const isPending = app.status === 'pending';
+                        visibleAppointments.map((app) => {
+                            const config = statusConfig[app.status];
+                            const StatusIcon = config.icon;
                             const isExpanded = expandedId === app.id;
+                            const isUpdating = updatingId === app.id;
+                            const isPending = app.status === 'pending';
 
                             return (
                                 <div
@@ -198,33 +233,20 @@ export default function AgendaList() {
                                             : 'border-zinc-800/80 hover:border-zinc-700/80'
                                     }`}
                                 >
-                                    {/* Barra indicadora lateral izquierda dinámica según estado */}
                                     <div
-                                        className={`absolute top-0 bottom-0 left-0 w-1.5 transition-colors duration-300 ${
-                                            isPending
-                                                ? 'bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.4)]'
-                                                : 'bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.4)]'
-                                        }`}
+                                        className={`absolute top-0 bottom-0 left-0 w-1.5 transition-colors duration-300 ${config.bar}`}
                                     />
 
-                                    {/* Cabecera principal de la tarjeta */}
+                                    {/* Cabecera */}
                                     <div
                                         onClick={() => toggleExpand(app.id)}
                                         className="flex cursor-pointer flex-col justify-between gap-4 p-5 pl-6 select-none sm:flex-row sm:items-center"
                                     >
                                         <div className="flex items-start gap-4">
                                             <div
-                                                className={`flex size-11 shrink-0 items-center justify-center rounded-xl border ${
-                                                    isPending
-                                                        ? 'border-amber-500/20 bg-amber-500/10 text-amber-400'
-                                                        : 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
-                                                }`}
+                                                className={`flex size-11 shrink-0 items-center justify-center rounded-xl border ${config.chip}`}
                                             >
-                                                {isPending ? (
-                                                    <AlertCircle className="size-5" />
-                                                ) : (
-                                                    <CheckCircle2 className="size-5" />
-                                                )}
+                                                <StatusIcon className="size-5" />
                                             </div>
 
                                             <div className="space-y-1">
@@ -233,15 +255,9 @@ export default function AgendaList() {
                                                         {app.client}
                                                     </h3>
                                                     <span
-                                                        className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${
-                                                            isPending
-                                                                ? 'border-amber-500/20 bg-amber-500/10 text-amber-400'
-                                                                : 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
-                                                        }`}
+                                                        className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${config.chip}`}
                                                     >
-                                                        {isPending
-                                                            ? 'Pendiente de aprobación'
-                                                            : 'Confirmada'}
+                                                        {config.label}
                                                     </span>
                                                 </div>
 
@@ -252,35 +268,54 @@ export default function AgendaList() {
                                                     </span>
                                                     <span className="flex items-center gap-1.5">
                                                         <Clock className="size-3.5 text-zinc-500" />
+                                                        {app.start_time}{' '}
                                                         {app.time}
                                                     </span>
-                                                    <span className="flex items-center gap-1.5">
-                                                        <Phone className="size-3.5 text-zinc-500" />
-                                                        {app.phoneFormatted}
-                                                    </span>
+                                                    {app.phoneFormatted && (
+                                                        <span className="flex items-center gap-1.5">
+                                                            <Phone className="size-3.5 text-zinc-500" />
+                                                            {app.phoneFormatted}
+                                                        </span>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
 
-                                        {/* Controles de la derecha */}
+                                        {/* Controles */}
                                         <div
                                             className="flex items-center gap-2 self-end sm:self-center"
                                             onClick={(e) => e.stopPropagation()}
                                         >
                                             {isPending && (
-                                                <button className="flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-500">
-                                                    Aprobar
-                                                </button>
+                                                <>
+                                                    <button
+                                                        onClick={() =>
+                                                            decide(
+                                                                app.id,
+                                                                'accept',
+                                                            )
+                                                        }
+                                                        disabled={isUpdating}
+                                                        className="flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-500 disabled:opacity-50"
+                                                    >
+                                                        <CheckCircle2 className="size-4" />
+                                                        Aprobar
+                                                    </button>
+                                                    <button
+                                                        onClick={() =>
+                                                            decide(
+                                                                app.id,
+                                                                'reject',
+                                                            )
+                                                        }
+                                                        disabled={isUpdating}
+                                                        className="flex items-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 px-3.5 py-2 text-xs font-semibold text-rose-300 transition hover:bg-rose-500/20 disabled:opacity-50"
+                                                    >
+                                                        <XCircle className="size-4" />
+                                                        Rechazar
+                                                    </button>
+                                                </>
                                             )}
-                                            <button className="flex items-center gap-1.5 rounded-xl border border-zinc-700/50 bg-zinc-800/60 px-3.5 py-2 text-xs font-medium text-zinc-300 transition hover:bg-zinc-700 hover:text-white">
-                                                Estado
-                                            </button>
-                                            <button
-                                                className="flex size-9 items-center justify-center rounded-xl border border-zinc-700/50 bg-zinc-800/60 text-zinc-400 transition hover:bg-zinc-700 hover:text-red-400"
-                                                title="Cancelar turno"
-                                            >
-                                                <XCircle className="size-4" />
-                                            </button>
 
                                             <button
                                                 onClick={() =>
@@ -300,7 +335,7 @@ export default function AgendaList() {
                                         </div>
                                     </div>
 
-                                    {/* Contenido Desplegable Animado */}
+                                    {/* Contenido Desplegable */}
                                     <div
                                         className={`grid transition-all duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
                                     >
@@ -313,7 +348,7 @@ export default function AgendaList() {
                                                         </span>
                                                         <div className="flex items-center gap-2 text-zinc-300">
                                                             <Mail className="size-3.5 text-zinc-500" />
-                                                            {app.email}
+                                                            {app.email || '—'}
                                                         </div>
                                                     </div>
 
@@ -323,9 +358,12 @@ export default function AgendaList() {
                                                             Servicio
                                                         </span>
                                                         <span className="block font-medium text-zinc-300">
-                                                            {app.price} •{' '}
-                                                            {app.duration}{' '}
-                                                            estimada
+                                                            {formatPrice(
+                                                                app.price,
+                                                            )}
+                                                            {app.duration
+                                                                ? ` • ${app.duration} min estimada`
+                                                                : ''}
                                                         </span>
                                                     </div>
 
@@ -335,21 +373,31 @@ export default function AgendaList() {
                                                             Observaciones
                                                         </span>
                                                         <p className="text-zinc-400 italic">
-                                                            "{app.notes}"
+                                                            {app.notes
+                                                                ? `"${app.notes}"`
+                                                                : 'Sin notas'}
                                                         </p>
                                                     </div>
                                                 </div>
 
                                                 <div className="flex shrink-0 items-center border-t border-zinc-800/40 pt-4 md:border-t-0 md:pt-0">
-                                                    <a
-                                                        href={`https://wa.me/${app.phone}?text=Hola%20${encodeURIComponent(app.client)},%20te%20contacto%20desde%20TuBarbero%20en%20relación%20a%20tu%20cita%20de%20${encodeURIComponent(app.service)}...`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-600/20 px-4 py-2.5 text-xs font-semibold text-emerald-300 shadow-sm transition-all hover:border-emerald-500 hover:bg-emerald-600/30 md:w-auto"
-                                                    >
-                                                        <MessageSquare className="size-4 text-emerald-400" />
-                                                        Escribir por WhatsApp
-                                                    </a>
+                                                    {app.phone ? (
+                                                        <a
+                                                            href={`https://wa.me/${app.phone}?text=Hola%20${encodeURIComponent(app.client)},%20te%20contacto%20desde%20TuBarbero%20en%20relación%20a%20tu%20cita%20de%20${encodeURIComponent(app.service)}...`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-600/20 px-4 py-2.5 text-xs font-semibold text-emerald-300 shadow-sm transition-all hover:border-emerald-500 hover:bg-emerald-600/30 md:w-auto"
+                                                        >
+                                                            <MessageSquare className="size-4 text-emerald-400" />
+                                                            Escribir por
+                                                            WhatsApp
+                                                        </a>
+                                                    ) : (
+                                                        <span className="text-xs text-zinc-500">
+                                                            Sin teléfono de
+                                                            contacto
+                                                        </span>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>

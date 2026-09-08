@@ -1,77 +1,21 @@
 import { Head } from '@inertiajs/react';
-import { Scissors, Clock, CheckCircle2, ShieldCheck, Zap } from 'lucide-react';
-import { useState } from 'react';
+import { Scissors, Clock, CheckCircle2, ShieldCheck } from 'lucide-react';
 
-const initialServices = [
-    {
-        id: 1,
-        name: 'Corte Clásico',
-        description:
-            'Corte de cabello tradicional con máquina y tijera, incluye lavado y peinado.',
-        duration: '30 min',
-        priceHint: 'Tarifa Estándar',
-        isOffered: true,
-    },
-    {
-        id: 2,
-        name: 'Corte Degradado (Fade)',
-        description:
-            'Desvanecido limpio en los laterales con transición pulida y acabado a navaja.',
-        duration: '45 min',
-        priceHint: 'Tarifa Estándar',
-        isOffered: true,
-    },
-    {
-        id: 3,
-        name: 'Mantenimiento de Barba',
-        description:
-            'Perfilado de barba con navaja, aplicación de vapor, aceite hidratante y bálsamo.',
-        duration: '30 min',
-        priceHint: 'Tarifa Estándar',
-        isOffered: true,
-    },
-    {
-        id: 4,
-        name: 'Corte + Barba Completa',
-        description:
-            'El combo completo de la casa. Servicio integral de corte y arreglo de barba.',
-        duration: '60 min',
-        priceHint: 'Tarifa Premium',
-        isOffered: true,
-    },
-    {
-        id: 5,
-        name: 'Diseño de Cejas',
-        description:
-            'Perfilado y limpieza de cejas con navaja o cera para un acabado definido.',
-        duration: '15 min',
-        priceHint: 'Tarifa Adicional',
-        isOffered: false,
-    },
-    {
-        id: 6,
-        name: 'Tratamiento Capilar Anticaída',
-        description:
-            'Masaje capilar profundo con productos especiales para revitalizar el cuero cabelludo.',
-        duration: '30 min',
-        priceHint: 'Tarifa Especial',
-        isOffered: false,
-    },
-];
+type Service = {
+    id: number;
+    name: string;
+    duration_minutes: number;
+    price: number;
+    isOffered: boolean;
+};
 
-export default function ServicesIndex() {
-    const [services, setServices] = useState(initialServices);
+function formatPrice(price: number): string {
+    return `$${Number(price).toFixed(2)}`;
+}
 
-    const toggleServiceStatus = (id: number) => {
-        setServices(
-            services.map((service) =>
-                service.id === id
-                    ? { ...service, isOffered: !service.isOffered }
-                    : service,
-            ),
-        );
-    };
-
+export default function ServicesIndex({ services }: { services: Service[] }) {
+    // Nota: los servicios son genéricos y los realizan todos los barberos.
+    // Por el momento isOffered siempre es true desde el backend (sin columna is_active).
     const activeCount = services.filter((s) => s.isOffered).length;
 
     return (
@@ -87,12 +31,11 @@ export default function ServicesIndex() {
                             Catálogo de Especialidades
                         </h1>
                         <p className="text-sm text-zinc-400">
-                            Habilita o deshabilita los servicios que realizas
-                            personalmente en tu estación de trabajo.
+                            Los servicios ofrecidos en tu estación de trabajo.
                         </p>
                     </div>
 
-                    {/* Tarjeta de Resumen Rápido Estética */}
+                    {/* Tarjeta de Resumen Rápido */}
                     <div className="flex shrink-0 items-center gap-3 rounded-2xl border border-zinc-800/80 bg-zinc-900/60 px-4 py-3">
                         <div className="flex size-10 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-500/10 text-emerald-400">
                             <ShieldCheck className="size-5" />
@@ -113,101 +56,65 @@ export default function ServicesIndex() {
 
                 {/* Grid de Servicios */}
                 <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-                    {services.map((service) => {
-                        return (
-                            <div
-                                key={service.id}
-                                className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border bg-zinc-900/40 p-6 transition-all duration-300 ${
-                                    service.isOffered
-                                        ? 'border-zinc-700/80 shadow-lg shadow-black/20 hover:border-zinc-600'
-                                        : 'border-zinc-800/50 opacity-60 hover:border-zinc-700/50 hover:opacity-85'
-                                }`}
-                            >
-                                {/* Barra indicadora lateral izquierda dinámica */}
-                                <div
-                                    className={`absolute top-0 bottom-0 left-0 w-1.5 transition-colors duration-300 ${
-                                        service.isOffered
-                                            ? 'bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.4)]'
-                                            : 'bg-zinc-800'
-                                    }`}
-                                />
+                    {services.map((service) => (
+                        <div
+                            key={service.id}
+                            className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-zinc-700/80 bg-zinc-900/40 p-6 shadow-lg shadow-black/20 transition-all duration-300 hover:border-zinc-600"
+                        >
+                            {/* Barra indicadora lateral */}
+                            <div className="absolute top-0 bottom-0 left-0 w-1.5 bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.4)]" />
 
-                                <div className="space-y-4 pl-2">
-                                    {/* Cabecera de la tarjeta */}
-                                    <div className="flex items-start justify-between gap-3">
-                                        <div className="space-y-1.5">
-                                            <span className="block text-[11px] font-semibold tracking-wider text-zinc-500 uppercase">
-                                                {service.priceHint}
-                                            </span>
-                                            <h3 className="text-base font-semibold tracking-tight text-white transition-colors group-hover:text-zinc-100">
-                                                {service.name}
-                                            </h3>
-                                        </div>
-
-                                        {/* Estado Badge */}
-                                        <span
-                                            className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors ${
-                                                service.isOffered
-                                                    ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
-                                                    : 'border-zinc-700/60 bg-zinc-800/80 text-zinc-400'
-                                            }`}
-                                        >
-                                            {service.isOffered ? (
-                                                <>
-                                                    <CheckCircle2 className="size-3 text-emerald-400" />{' '}
-                                                    Ofreciendo
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <Zap className="size-3 text-zinc-500" />{' '}
-                                                    Inactivo
-                                                </>
-                                            )}
+                            <div className="space-y-4 pl-2">
+                                {/* Cabecera de la tarjeta */}
+                                <div className="flex items-start justify-between gap-3">
+                                    <div className="space-y-1.5">
+                                        <span className="block text-[11px] font-semibold tracking-wider text-zinc-500 uppercase">
+                                            Tarifa Estándar
                                         </span>
+                                        <h3 className="text-base font-semibold tracking-tight text-white transition-colors group-hover:text-zinc-100">
+                                            {service.name}
+                                        </h3>
                                     </div>
 
-                                    <p className="line-clamp-2 text-xs leading-relaxed text-zinc-400">
-                                        {service.description}
-                                    </p>
-
-                                    {/* Duración */}
-                                    <div className="flex items-center gap-2 border-t border-zinc-800/60 pt-2 text-xs font-medium text-zinc-300">
-                                        <Clock className="size-3.5 text-zinc-500" />
-                                        <span>
-                                            Duración estimada:{' '}
-                                            <strong className="font-semibold text-white">
-                                                {service.duration}
-                                            </strong>
-                                        </span>
-                                    </div>
+                                    {/* Estado Badge */}
+                                    <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-medium text-emerald-400">
+                                        <CheckCircle2 className="size-3" />
+                                        Ofreciendo
+                                    </span>
                                 </div>
 
-                                {/* Botón de acción inferior integrado */}
-                                <div className="mt-6 flex items-center justify-between border-t border-zinc-800/40 pt-4 pl-2">
-                                    <span className="text-[11px] font-medium text-zinc-500">
-                                        {service.isOffered
-                                            ? 'Visible en agenda'
-                                            : 'Oculto en agenda'}
-                                    </span>
+                                <p className="text-xs leading-relaxed text-zinc-400">
+                                    Servicio disponible para reserva por la web.
+                                </p>
 
-                                    <button
-                                        onClick={() =>
-                                            toggleServiceStatus(service.id)
-                                        }
-                                        className={`cursor-pointer rounded-xl px-4 py-2 text-xs font-semibold shadow-sm transition-all duration-200 ${
-                                            service.isOffered
-                                                ? 'border border-zinc-700 bg-zinc-800 text-zinc-300 hover:border-zinc-600 hover:bg-zinc-700 hover:text-white'
-                                                : 'border border-zinc-700/50 bg-zinc-800/60 text-zinc-300 hover:bg-zinc-700 hover:text-white'
-                                        }`}
-                                    >
-                                        {service.isOffered
-                                            ? 'Desactivar'
-                                            : 'Activar servicio'}
-                                    </button>
+                                {/* Duración y Precio */}
+                                <div className="flex items-center gap-4 border-t border-zinc-800/60 pt-2.5 text-xs font-medium text-zinc-300">
+                                    <span className="flex items-center gap-2">
+                                        <Clock className="size-3.5 text-zinc-500" />
+                                        Duración:{' '}
+                                        <strong className="font-semibold text-white">
+                                            {service.duration_minutes} min
+                                        </strong>
+                                    </span>
+                                    <span className="text-zinc-500">•</span>
+                                    <span>
+                                        Precio:{' '}
+                                        <strong className="font-semibold text-emerald-400">
+                                            {formatPrice(service.price)}
+                                        </strong>
+                                    </span>
                                 </div>
                             </div>
-                        );
-                    })}
+
+                            {/* Pie de tarjeta */}
+                            <div className="mt-6 flex items-center justify-between border-t border-zinc-800/40 pt-4 pl-2">
+                                <span className="text-[11px] font-medium text-zinc-500">
+                                    Visible en agenda
+                                </span>
+                                <CheckCircle2 className="size-4 text-emerald-500/80" />
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </>

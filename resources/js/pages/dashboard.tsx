@@ -1,4 +1,4 @@
-import { Head, usePage } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import {
     Scissors,
     Calendar,
@@ -10,17 +10,60 @@ import {
     UserPlus,
     CalendarOff,
     History,
-    ArrowRight,
 } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
+
+type Stats = {
+    totalCuts: number;
+    monthlyCuts: number;
+    monthlyRevenue: number;
+    todayAppointments: number;
+    scheduledAppointments: number;
+};
+
+type PendingAppointment = {
+    id: number;
+    client: string;
+    start_time: string;
+    service: string;
+};
+
+type NextAppointment = {
+    client: string;
+    start_time: string;
+    service: string;
+};
+
+type ActivityEntry = {
+    id: number;
+    title: string;
+    description: string;
+    tone: 'emerald' | 'blue' | 'rose';
+};
+
+const toneDot: Record<ActivityEntry['tone'], string> = {
+    emerald: 'bg-emerald-500',
+    blue: 'bg-blue-500',
+    rose: 'bg-rose-500',
+};
 
 export default function Dashboard({
     stats,
     pendingAppointments,
     nextAppointment,
-}: any) {
-    const { auth } = usePage().props as any;
+    activity,
+}: {
+    stats: Stats;
+    pendingAppointments: PendingAppointment[];
+    nextAppointment: NextAppointment | null;
+    activity: ActivityEntry[];
+}) {
+    const { auth } = usePage().props as { auth?: { user?: { name?: string } } };
     const barberName = auth?.user?.name || 'Barbero';
+
+    const decide = (id: number, action: 'accept' | 'reject') => {
+        router.patch(`/agenda/appointments/${id}`, { action });
+    };
 
     return (
         <>
@@ -58,31 +101,33 @@ export default function Dashboard({
                         <Clock className="h-32 w-32 -rotate-12 transform" />
                     </div>
 
-                    <div className="relative z-10 flex items-center gap-4">
-                        <div className="rounded-xl border border-blue-500/20 bg-blue-500/10 p-3.5 text-blue-400">
-                            <Clock className="h-6 w-6" />
+                    {nextAppointment ? (
+                        <>
+                            <div className="relative z-10 flex items-center gap-4">
+                                <div className="rounded-xl border border-blue-500/20 bg-blue-500/10 p-3.5 text-blue-400">
+                                    <Clock className="h-6 w-6" />
+                                </div>
+                                <div>
+                                    <p className="mb-1 text-xs font-semibold tracking-wider text-slate-400 uppercase">
+                                        Tu siguiente cliente
+                                    </p>
+                                    <h3 className="flex items-center gap-2 text-xl font-bold text-white sm:text-2xl">
+                                        {nextAppointment.client}
+                                        <span className="text-lg font-medium text-slate-400">
+                                            · {nextAppointment.start_time}
+                                        </span>
+                                    </h3>
+                                    <p className="mt-1 text-sm text-slate-300">
+                                        {nextAppointment.service}
+                                    </p>
+                                </div>
+                            </div>
+                        </>
+                    ) : (
+                        <div className="relative z-10 text-sm text-slate-300">
+                            No tienes citas confirmadas próximamente.
                         </div>
-                        <div>
-                            <p className="mb-1 text-xs font-semibold tracking-wider text-slate-400 uppercase">
-                                Tu siguiente cliente
-                            </p>
-                            <h3 className="flex items-center gap-2 text-xl font-bold text-white sm:text-2xl">
-                                {nextAppointment?.client?.name ||
-                                    'Carlos Mendoza'}
-                                <span className="text-lg font-medium text-slate-400">
-                                    · 14:30
-                                </span>
-                            </h3>
-                            <p className="mt-1 text-sm text-slate-300">
-                                Corte Clásico + Perfilado de Barba
-                            </p>
-                        </div>
-                    </div>
-
-                    <button className="relative z-10 flex items-center gap-2 self-start rounded-lg border border-slate-600 bg-slate-800/80 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-slate-700 md:self-auto">
-                        Ver detalle{' '}
-                        <ArrowRight className="h-4 w-4 text-slate-400" />
-                    </button>
+                    )}
                 </div>
 
                 {/* Grid de Métricas Principales */}
@@ -95,7 +140,7 @@ export default function Dashboard({
                             <DollarSign className="h-4.5 w-4.5 text-emerald-400" />
                         </div>
                         <p className="text-2xl font-black text-white sm:text-3xl">
-                            ${stats?.monthlyRevenue || '450'}
+                            ${stats.monthlyRevenue.toFixed(2)}
                         </p>
                     </div>
 
@@ -107,7 +152,7 @@ export default function Dashboard({
                             <Calendar className="h-4.5 w-4.5 text-blue-400" />
                         </div>
                         <p className="text-2xl font-black text-white sm:text-3xl">
-                            {stats?.todayAppointments || '5'}
+                            {stats.todayAppointments}
                         </p>
                     </div>
 
@@ -119,7 +164,7 @@ export default function Dashboard({
                             <Scissors className="h-4.5 w-4.5 text-slate-300" />
                         </div>
                         <p className="text-2xl font-black text-white sm:text-3xl">
-                            {stats?.monthlyCuts || 0}
+                            {stats.monthlyCuts}
                         </p>
                     </div>
 
@@ -131,7 +176,7 @@ export default function Dashboard({
                             <TrendingUp className="h-4.5 w-4.5 text-zinc-500" />
                         </div>
                         <p className="text-2xl font-black text-white sm:text-3xl">
-                            {stats?.totalCuts || 0}
+                            {stats.totalCuts}
                         </p>
                     </div>
                 </div>
@@ -150,12 +195,11 @@ export default function Dashboard({
                                 </p>
                             </div>
                             <span className="rounded-md border border-zinc-700 bg-zinc-800/80 px-2.5 py-1 text-xs font-bold text-zinc-300">
-                                {pendingAppointments?.length || 0}
+                                {pendingAppointments.length}
                             </span>
                         </div>
 
-                        {!pendingAppointments ||
-                        pendingAppointments.length === 0 ? (
+                        {pendingAppointments.length === 0 ? (
                             <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-dashed border-zinc-800/80 bg-zinc-900/20 py-10">
                                 <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800">
                                     <CheckCircle2 className="h-5 w-5 text-zinc-400" />
@@ -169,7 +213,7 @@ export default function Dashboard({
                             </div>
                         ) : (
                             <div className="space-y-3">
-                                {pendingAppointments.map((appointment: any) => (
+                                {pendingAppointments.map((appointment) => (
                                     <div
                                         key={appointment.id}
                                         className="flex flex-col justify-between gap-4 rounded-xl border border-zinc-800/80 bg-zinc-950 p-4 transition hover:border-zinc-700 sm:flex-row sm:items-center"
@@ -180,21 +224,36 @@ export default function Dashboard({
                                             </div>
                                             <div>
                                                 <p className="text-sm font-semibold text-white">
-                                                    {appointment.client?.name ||
-                                                        'Cliente'}
+                                                    {appointment.client}
                                                 </p>
-                                                <p className="mt-0.5 flex items-center gap-1.5 text-xs text-zinc-400">
-                                                    <Clock className="h-3.5 w-3.5 text-slate-500" />{' '}
+                                                <p className="mt-0.5 text-xs text-zinc-400">
+                                                    {appointment.service} ·{' '}
                                                     {appointment.start_time}
                                                 </p>
                                             </div>
                                         </div>
                                         <div className="flex w-full items-center gap-2 border-t border-zinc-900 pt-2 sm:w-auto sm:border-t-0 sm:pt-0">
-                                            <button className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400 transition hover:bg-emerald-500/20 sm:flex-none">
+                                            <button
+                                                onClick={() =>
+                                                    decide(
+                                                        appointment.id,
+                                                        'accept',
+                                                    )
+                                                }
+                                                className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400 transition hover:bg-emerald-500/20 sm:flex-none"
+                                            >
                                                 <CheckCircle2 className="h-3.5 w-3.5" />{' '}
                                                 Aceptar
                                             </button>
-                                            <button className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-rose-500/20 bg-rose-500/10 px-3 py-1.5 text-xs font-semibold text-rose-400 transition hover:bg-rose-500/20 sm:flex-none">
+                                            <button
+                                                onClick={() =>
+                                                    decide(
+                                                        appointment.id,
+                                                        'reject',
+                                                    )
+                                                }
+                                                className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-rose-500/20 bg-rose-500/10 px-3 py-1.5 text-xs font-semibold text-rose-400 transition hover:bg-rose-500/20 sm:flex-none"
+                                            >
                                                 <XCircle className="h-3.5 w-3.5" />{' '}
                                                 Rechazar
                                             </button>
@@ -214,54 +273,37 @@ export default function Dashboard({
                             <History className="h-4.5 w-4.5 text-zinc-500" />
                         </div>
 
-                        <div className="flex-1 space-y-4">
-                            {/* Ítem de actividad 1 */}
-                            <div className="relative flex items-start gap-4">
-                                <div className="absolute top-7 bottom-[-16px] left-[11px] w-[1px] bg-zinc-800"></div>
-                                <div className="relative z-10 mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-zinc-700 bg-zinc-900">
-                                    <div className="h-2 w-2 rounded-full bg-emerald-500"></div>
-                                </div>
-                                <div>
-                                    <p className="text-sm font-semibold text-zinc-200">
-                                        Corte finalizado
-                                    </p>
-                                    <p className="mt-0.5 text-xs text-zinc-400">
-                                        Miguel Torres • Hace 1 hora
-                                    </p>
-                                </div>
+                        {activity.length === 0 ? (
+                            <div className="flex flex-1 items-center justify-center rounded-xl border border-dashed border-zinc-800/80 bg-zinc-900/20 py-10 text-center text-xs text-zinc-500">
+                                Aún no hay actividad registrada.
                             </div>
-
-                            {/* Ítem de actividad 2 */}
-                            <div className="relative flex items-start gap-4">
-                                <div className="absolute top-7 bottom-[-16px] left-[11px] w-[1px] bg-zinc-800"></div>
-                                <div className="relative z-10 mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-zinc-700 bg-zinc-900">
-                                    <div className="h-2 w-2 rounded-full bg-blue-500"></div>
-                                </div>
-                                <div>
-                                    <p className="text-sm font-semibold text-zinc-200">
-                                        Nueva reserva
-                                    </p>
-                                    <p className="mt-0.5 text-xs text-zinc-400">
-                                        Andrés Silva • Hace 3 horas
-                                    </p>
-                                </div>
+                        ) : (
+                            <div className="flex-1 space-y-4">
+                                {activity.map((item, index) => (
+                                    <div
+                                        key={item.id}
+                                        className="relative flex items-start gap-4"
+                                    >
+                                        {index < activity.length - 1 && (
+                                            <div className="absolute top-7 bottom-[-16px] left-[11px] w-[1px] bg-zinc-800"></div>
+                                        )}
+                                        <div className="relative z-10 mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-zinc-700 bg-zinc-900">
+                                            <div
+                                                className={`h-2 w-2 rounded-full ${toneDot[item.tone]}`}
+                                            ></div>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-semibold text-zinc-200">
+                                                {item.title}
+                                            </p>
+                                            <p className="mt-0.5 text-xs text-zinc-400">
+                                                {item.description}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-
-                            {/* Ítem de actividad 3 */}
-                            <div className="relative flex items-start gap-4">
-                                <div className="relative z-10 mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-zinc-700 bg-zinc-900">
-                                    <div className="h-2 w-2 rounded-full bg-rose-500"></div>
-                                </div>
-                                <div>
-                                    <p className="text-sm font-semibold text-zinc-200">
-                                        Cita cancelada
-                                    </p>
-                                    <p className="mt-0.5 text-xs text-zinc-400">
-                                        Luis Gómez • Ayer
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
+                        )}
 
                         <button className="mt-6 w-full rounded-lg border border-zinc-800/80 bg-zinc-800/40 py-2 text-xs font-semibold text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-white">
                             Ver historial completo

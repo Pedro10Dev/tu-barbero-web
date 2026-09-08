@@ -1,6 +1,12 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Agenda\AgendaCalendarController;
+use App\Http\Controllers\Agenda\AgendaListController;
+use App\Http\Controllers\Agenda\AppointmentStatusController;
+use App\Http\Controllers\Agenda\ClientListController;
+use App\Http\Controllers\Agenda\ProductividadController;
+use App\Http\Controllers\Agenda\ServiceListController;
 use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\BarberDashboardController;
 use App\Http\Controllers\BookingController;
@@ -33,11 +39,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::middleware(['auth', 'verified', 'phone.required', RoleMiddleware::class.':barber|admin'])->group(function () {
     Route::get('/dashboard', [BarberDashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/agenda/calendario', fn () => Inertia::render('agenda/calendar'))->name('agenda.calendar');
-    Route::get('/agenda/listado', fn () => Inertia::render('agenda/list'))->name('agenda.list');
-    Route::get('/clientes', fn () => Inertia::render('client/index'))->name('clients.index');
-    Route::get('/servicios', fn () => Inertia::render('services/index'))->name('services.index');
-    Route::get('/productividad', fn () => Inertia::render('productividad/index'))->name('productividad.index');
+    Route::get('/agenda/calendario', [AgendaCalendarController::class, 'index'])->name('agenda.calendar');
+    Route::get('/agenda/listado', [AgendaListController::class, 'index'])->name('agenda.list');
+    Route::patch('/agenda/appointments/{appointment}', [AppointmentStatusController::class, 'update'])->name('agenda.appointment.status');
+    Route::get('/clientes', [ClientListController::class, 'index'])->name('clients.index');
+    Route::get('/servicios', [ServiceListController::class, 'index'])->name('services.index');
+    Route::get('/productividad', [ProductividadController::class, 'index'])->name('productividad.index');
 });
 
 Route::middleware(['auth', RoleMiddleware::class.':admin'])->prefix('admin')->name('admin.')->group(function () {

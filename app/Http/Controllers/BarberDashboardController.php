@@ -13,6 +13,8 @@ class BarberDashboardController extends Controller
 {
     public function index(Request $request): Response
     {
+        Carbon::setLocale('es');
+
         /** @var User $user */
         $user = $request->user();
 
@@ -29,6 +31,7 @@ class BarberDashboardController extends Controller
                 ],
                 'pendingAppointments' => [],
                 'nextAppointment' => null,
+                'activity' => [],
             ]);
         }
 
@@ -50,12 +53,12 @@ class BarberDashboardController extends Controller
             ->sum('price_at_booking');
 
         $todayAppointments = Appointment::where('barber_profile_id', $barberId)
-            ->whereIn('status', ['pending', 'scheduled', 'confirmed'])
+            ->whereIn('status', ['pending', 'confirmed'])
             ->whereDate('start_time', Carbon::today())
             ->count();
 
         $scheduledAppointments = Appointment::where('barber_profile_id', $barberId)
-            ->whereIn('status', ['scheduled', 'confirmed'])
+            ->where('status', 'confirmed')
             ->count();
 
         $pendingAppointments = Appointment::where('barber_profile_id', $barberId)
@@ -66,25 +69,57 @@ class BarberDashboardController extends Controller
             ->map(function (Appointment $appointment): array {
                 return [
                     'id' => $appointment->id,
-                    'client' => $appointment->guest_name ?? $appointment->user?->name,
+                    'client' => $appointment->guest_name ?? $appointment->user->name ?? 'Cliente',
                     'start_time' => $appointment->start_time->format('d/m/Y H:i'),
-                    'service' => $appointment->service?->name,
+                    'service' => $appointment->service->name ?? 'Servicio',
                 ];
             })
             ->values();
 
         $nextAppointment = Appointment::where('barber_profile_id', $barberId)
-            ->whereIn('status', ['scheduled', 'confirmed'])
+            ->where('status', 'confirmed')
             ->where('start_time', '>=', Carbon::now())
             ->with(['user', 'service'])
             ->orderBy('start_time')
             ->first();
 
         $nextAppointmentData = $nextAppointment !== null ? [
-            'client' => $nextAppointment->guest_name ?? $nextAppointment->user?->name,
+            'client' => $nextAppointment->guest_name ?? $nextAppointment->user->name ?? 'Cliente',
             'start_time' => $nextAppointment->start_time->format('d/m/Y H:i'),
-            'service' => $nextAppointment->service?->name,
+            'service' => $nextAppointment->service->name ?? 'Servicio',
         ] : null;
+
+        $activity = Appointment::where('barber_profile_id', $barberId)
+            ->orderByDesc('start_time')
+            ->limit(8)
+            ->with('user')
+            ->get()
+            ->map(function (Appointment $appointment): array {
+                $label = match ($appointment->status) {
+                    'pending' => 'Nueva reserva',
+                    'confirmed' => 'Cita confirmada',
+                    'rejected' => 'Cita rechazada',
+                    'cancelled' => 'Cita cancelada',
+                    'completed' => 'Corte finalizado',
+                    default => 'Cita actualizada',
+                };
+
+                $tone = match ($appointment->status) {
+                    'cancelled', 'rejected' => 'rose',
+                    'confirmed' => 'blue',
+                    'completed' => 'emerald',
+                    default => 'emerald',
+                };
+
+                return [
+                    'id' => $appointment->id,
+                    'title' => $label,
+                    'description' => ($appointment->guest_name ?? $appointment->user->name ?? 'Cliente')
+                                        .' · '.$appointment->start_time->diffForHumans(),
+                    'tone' => $tone,
+                ];
+            })
+            ->values();
 
         return Inertia::render('dashboard', [
             'stats' => [
@@ -96,6 +131,7 @@ class BarberDashboardController extends Controller
             ],
             'pendingAppointments' => $pendingAppointments,
             'nextAppointment' => $nextAppointmentData,
+            'activity' => $activity,
         ]);
     }
 }

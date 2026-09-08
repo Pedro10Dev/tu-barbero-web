@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import {
     Calendar as CalendarIcon,
     ChevronLeft,
@@ -6,15 +6,103 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 
-export default function AgendaCalendar() {
-    const [viewMode, setViewMode] = useState<'day' | 'week' | 'month'>('day');
+type ViewMode = 'day' | 'week' | 'month';
+
+type ScheduleEntry = {
+    id: number;
+    date: string;
+    client: string;
+    service: string;
+    start_time: string;
+    end_time: string;
+    status: 'pending' | 'confirmed';
+};
+
+function formatHeader(date: string): string {
+    const [year, month, day] = date.split('-').map(Number);
+    const parsed = new Date(year, month - 1, day);
+    const formatted = parsed.toLocaleDateString('es-ES', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+    });
+
+    return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+}
+
+function shiftDate(date: string, view: ViewMode, delta: number): string {
+    const [year, month, day] = date.split('-').map(Number);
+    const parsed = new Date(year, month - 1, day);
+
+    if (view === 'month') {
+        parsed.setMonth(parsed.getMonth() + delta);
+    } else {
+        parsed.setDate(parsed.getDate() + delta * (view === 'week' ? 7 : 1));
+    }
+
+    const y = parsed.getFullYear();
+    const m = String(parsed.getMonth() + 1).padStart(2, '0');
+    const d = String(parsed.getDate()).padStart(2, '0');
+
+    return `${y}-${m}-${d}`;
+}
+
+export default function AgendaCalendar({
+    date,
+    view,
+    appointments,
+}: {
+    date: string;
+    view: ViewMode;
+    appointments: ScheduleEntry[];
+}) {
+    const [viewMode, setViewMode] = useState<ViewMode>(view);
+
+    const navigate = (nextView: ViewMode, nextDate: string) => {
+        setViewMode(nextView);
+        router.get(
+            '/agenda/calendario',
+            { date: nextDate, view: nextView },
+            { preserveState: true },
+        );
+    };
+
+    const goToday = () => {
+        const today = new Date();
+        const y = today.getFullYear();
+        const m = String(today.getMonth() + 1).padStart(2, '0');
+        const d = String(today.getDate()).padStart(2, '0');
+        navigate(viewMode, `${y}-${m}-${d}`);
+    };
+
+    const goPrev = () => navigate(viewMode, shiftDate(date, viewMode, -1));
+    const goNext = () => navigate(viewMode, shiftDate(date, viewMode, 1));
+
+    const grouped = appointments.reduce<Record<string, ScheduleEntry[]>>(
+        (acc, entry) => {
+            (acc[entry.date] ??= []).push(entry);
+
+            return acc;
+        },
+        {},
+    );
+    const entries = grouped[date] ?? [];
+
+    const isViewChange = (next: ViewMode) => {
+        if (next === viewMode) {
+            return;
+        }
+
+        navigate(next, date);
+    };
 
     return (
         <>
             <Head title="Mi Agenda" />
 
             <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 p-6 lg:p-8">
-                {/* Cabecera y Resumen Superior alineado con el resto del sistema */}
+                {/* Cabecera y Selector de Vista */}
                 <div className="flex flex-col justify-between gap-4 border-b border-zinc-800/80 pb-6 md:flex-row md:items-center">
                     <div className="space-y-1">
                         <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-white">
@@ -22,43 +110,31 @@ export default function AgendaCalendar() {
                             Mi Agenda
                         </h1>
                         <p className="text-sm text-zinc-400">
-                            Visualiza y administra tus bloques horarios y turnos
-                            programados en estación.
+                            Visualiza tus bloques horarios y turnos programados
+                            en estación.
                         </p>
                     </div>
 
-                    {/* Selector de Vista (Diaria / Semanal / Mensual) con estilo unificado */}
                     <div className="flex shrink-0 rounded-xl border border-zinc-800/80 bg-zinc-900/60 p-1">
-                        <button
-                            onClick={() => setViewMode('day')}
-                            className={`rounded-lg px-3.5 py-2 text-xs font-semibold transition-all ${
-                                viewMode === 'day'
-                                    ? 'bg-zinc-800 text-white shadow-sm'
-                                    : 'text-zinc-400 hover:text-white'
-                            }`}
-                        >
-                            Día
-                        </button>
-                        <button
-                            onClick={() => setViewMode('week')}
-                            className={`rounded-lg px-3.5 py-2 text-xs font-semibold transition-all ${
-                                viewMode === 'week'
-                                    ? 'bg-zinc-800 text-white shadow-sm'
-                                    : 'text-zinc-400 hover:text-white'
-                            }`}
-                        >
-                            Semana
-                        </button>
-                        <button
-                            onClick={() => setViewMode('month')}
-                            className={`rounded-lg px-3.5 py-2 text-xs font-semibold transition-all ${
-                                viewMode === 'month'
-                                    ? 'bg-zinc-800 text-white shadow-sm'
-                                    : 'text-zinc-400 hover:text-white'
-                            }`}
-                        >
-                            Mes
-                        </button>
+                        {(['day', 'week', 'month'] as ViewMode[]).map(
+                            (mode) => (
+                                <button
+                                    key={mode}
+                                    onClick={() => isViewChange(mode)}
+                                    className={`rounded-lg px-3.5 py-2 text-xs font-semibold transition-all ${
+                                        viewMode === mode
+                                            ? 'bg-zinc-800 text-white shadow-sm'
+                                            : 'text-zinc-400 hover:text-white'
+                                    }`}
+                                >
+                                    {mode === 'day'
+                                        ? 'Día'
+                                        : mode === 'week'
+                                          ? 'Semana'
+                                          : 'Mes'}
+                                </button>
+                            ),
+                        )}
                     </div>
                 </div>
 
@@ -70,44 +146,98 @@ export default function AgendaCalendar() {
                         </div>
                         <div>
                             <span className="block text-xs font-semibold tracking-wider text-zinc-500 uppercase">
-                                Fecha Seleccionada
+                                {viewMode === 'day'
+                                    ? 'Fecha Seleccionada'
+                                    : viewMode === 'week'
+                                      ? 'Semana del'
+                                      : 'Mes de'}
                             </span>
                             <h2 className="text-base font-bold text-white">
-                                Viernes, 4 de Septiembre de 2026
+                                {formatHeader(date)}
                             </h2>
                         </div>
                     </div>
 
                     <div className="flex items-center gap-2">
                         <div className="flex items-center overflow-hidden rounded-xl border border-zinc-700/50 bg-zinc-800/60">
-                            <button className="p-2.5 text-zinc-400 transition hover:bg-zinc-700 hover:text-white">
+                            <button
+                                onClick={goPrev}
+                                className="p-2.5 text-zinc-400 transition hover:bg-zinc-700 hover:text-white"
+                            >
                                 <ChevronLeft className="size-4" />
                             </button>
-                            <span className="border-x border-zinc-700/50 px-4 text-xs font-semibold text-zinc-200">
+                            <button
+                                onClick={goToday}
+                                className="border-x border-zinc-700/50 px-4 text-xs font-semibold text-zinc-200 transition hover:text-white"
+                            >
                                 Hoy
-                            </span>
-                            <button className="p-2.5 text-zinc-400 transition hover:bg-zinc-700 hover:text-white">
+                            </button>
+                            <button
+                                onClick={goNext}
+                                className="p-2.5 text-zinc-400 transition hover:bg-zinc-700 hover:text-white"
+                            >
                                 <ChevronRight className="size-4" />
                             </button>
                         </div>
                     </div>
                 </div>
 
-                {/* Cuadrícula de la Agenda (Bloques horarios personales) */}
-                <div className="flex min-h-[500px] flex-col items-center justify-center overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-8 text-center">
-                    <div className="mb-3 flex size-12 items-center justify-center rounded-2xl border border-zinc-700/50 bg-zinc-800/60 text-zinc-400">
-                        <CalendarIcon className="size-6" />
-                    </div>
-                    <h3 className="mb-1 text-sm font-semibold text-white">
-                        Tu agenda está lista
-                    </h3>
-                    <p className="mb-4 max-w-sm text-xs text-zinc-400">
-                        Aquí visualizarás tus bloques de tiempo para la vista
-                        seleccionada ({viewMode}).
-                    </p>
-                    <span className="inline-flex items-center rounded-xl border border-zinc-700/60 bg-zinc-800/80 px-3 py-1.5 text-xs font-medium text-zinc-300">
-                        Horario activo: 09:00 AM - 08:00 PM
-                    </span>
+                {/* Cuadrícula de la Agenda */}
+                <div className="min-h-[400px] overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/40">
+                    {entries.length === 0 ? (
+                        <div className="flex min-h-[400px] flex-col items-center justify-center p-8 text-center">
+                            <div className="mb-3 flex size-12 items-center justify-center rounded-2xl border border-zinc-700/50 bg-zinc-800/60 text-zinc-400">
+                                <CalendarIcon className="size-6" />
+                            </div>
+                            <h3 className="mb-1 text-sm font-semibold text-white">
+                                Sin turnos en este período
+                            </h3>
+                            <p className="max-w-sm text-xs text-zinc-400">
+                                Las citas programadas aparecerán aquí para la
+                                vista seleccionada.
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col divide-y divide-zinc-800/70">
+                            {entries.map((entry) => (
+                                <div
+                                    key={entry.id}
+                                    className="flex flex-col gap-3 px-5 py-4 transition-colors hover:bg-zinc-900/60 sm:flex-row sm:items-center sm:justify-between"
+                                >
+                                    <div className="flex items-start gap-4">
+                                        <div className="flex w-16 shrink-0 flex-col items-center justify-center rounded-xl border border-zinc-700/50 bg-zinc-800/60 px-2 py-2 text-center">
+                                            <span className="text-sm font-bold text-white">
+                                                {entry.start_time}
+                                            </span>
+                                            <span className="text-[10px] text-zinc-500">
+                                                {entry.end_time}
+                                            </span>
+                                        </div>
+                                        <div className="space-y-0.5">
+                                            <h3 className="text-sm font-semibold text-white">
+                                                {entry.client}
+                                            </h3>
+                                            <p className="text-xs text-zinc-400">
+                                                {entry.service}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <span
+                                        className={`inline-flex w-fit shrink-0 items-center rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${
+                                            entry.status === 'confirmed'
+                                                ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
+                                                : 'border-amber-500/20 bg-amber-500/10 text-amber-400'
+                                        }`}
+                                    >
+                                        {entry.status === 'confirmed'
+                                            ? 'Confirmada'
+                                            : 'Pendiente'}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </>

@@ -111,7 +111,7 @@ class BookingController extends Controller
 
         $existingAppointments = Appointment::where('barber_profile_id', $barberId)
             ->whereDate('start_time', $date)
-            ->whereIn('status', ['pending', 'confirmed'])
+            ->where('status', 'confirmed')
             ->get();
 
         $availableSlots = [];
@@ -147,7 +147,7 @@ class BookingController extends Controller
     private function hasOverlap(int $barberId, Carbon $start, Carbon $end): bool
     {
         return Appointment::where('barber_profile_id', $barberId)
-            ->whereIn('status', ['pending', 'confirmed'])
+            ->where('status', 'confirmed')
             ->where(function ($query) use ($start, $end) {
                 $query->where('start_time', '<', $end)
                     ->where('end_time', '>', $start);
