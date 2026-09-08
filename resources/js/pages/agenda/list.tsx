@@ -12,6 +12,7 @@ import {
     Mail,
     ChevronDown,
     MessageSquare,
+    CalendarOff,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -85,7 +86,7 @@ export default function AgendaList({
         setExpandedId(expandedId === id ? null : id);
     };
 
-    const decide = (id: number, action: 'accept' | 'reject') => {
+    const decide = (id: number, action: 'accept' | 'reject' | 'cancel') => {
         setUpdatingId(id);
         router.patch(
             `/agenda/appointments/${id}`,
@@ -315,6 +316,19 @@ export default function AgendaList({
                                                         Rechazar
                                                     </button>
                                                 </>
+                                            )}
+
+                                            {app.status === 'confirmed' && (
+                                                <button
+                                                    onClick={() =>
+                                                        decide(app.id, 'cancel')
+                                                    }
+                                                    disabled={isUpdating}
+                                                    className="flex items-center gap-1.5 rounded-xl border border-zinc-600/50 bg-zinc-800/60 px-3.5 py-2 text-xs font-semibold text-zinc-300 transition hover:bg-zinc-700 hover:text-white disabled:opacity-50"
+                                                >
+                                                    <CalendarOff className="size-4" />
+                                                    Cancelar
+                                                </button>
                                             )}
 
                                             <button

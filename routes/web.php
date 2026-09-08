@@ -1,6 +1,12 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AppointmentController;
+use App\Http\Controllers\Admin\BarberController;
+use App\Http\Controllers\Admin\ScheduleController;
+use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Agenda\AgendaCalendarController;
 use App\Http\Controllers\Agenda\AgendaListController;
 use App\Http\Controllers\Agenda\AppointmentStatusController;
@@ -11,6 +17,7 @@ use App\Http\Controllers\Auth\SocialController;
 use App\Http\Controllers\BarberDashboardController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ClientProfileController;
+use App\Http\Controllers\ForcedPasswordController;
 use App\Http\Controllers\PhonePromptController;
 use App\Models\Service;
 use Illuminate\Support\Facades\Route;
@@ -34,9 +41,13 @@ Route::get('/reserva-exitosa', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/complete-profile/phone', [PhonePromptController::class, 'create'])->name('phone.prompt');
     Route::post('/complete-profile/phone', [PhonePromptController::class, 'store'])->name('phone.store');
+
+    Route::get('/complete-profile/password', [ForcedPasswordController::class, 'create'])
+        ->middleware('password.change.required')
+        ->name('password.force');
 });
 
-Route::middleware(['auth', 'verified', 'phone.required', RoleMiddleware::class.':barber|admin'])->group(function () {
+Route::middleware(['auth', 'verified', 'phone.required', 'password.change', RoleMiddleware::class.':barber|admin'])->group(function () {
     Route::get('/dashboard', [BarberDashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/agenda/calendario', [AgendaCalendarController::class, 'index'])->name('agenda.calendar');
@@ -49,6 +60,14 @@ Route::middleware(['auth', 'verified', 'phone.required', RoleMiddleware::class.'
 
 Route::middleware(['auth', RoleMiddleware::class.':admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/appointments', [AppointmentController::class, 'index'])->name('appointments.index');
+    Route::resource('barbers', BarberController::class)->except(['show']);
+    Route::resource('services', AdminServiceController::class)->except(['show']);
+    Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+    Route::patch('/users/{user}/role', [AdminUserController::class, 'updateRole'])->name('users.role');
+    Route::get('/schedules', [ScheduleController::class, 'index'])->name('schedules.index');
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::patch('/settings', [SettingController::class, 'update'])->name('settings.update');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

@@ -1,5 +1,6 @@
 import BookingController from './BookingController'
 import PhonePromptController from './PhonePromptController'
+import ForcedPasswordController from './ForcedPasswordController'
 import BarberDashboardController from './BarberDashboardController'
 import Agenda from './Agenda'
 import Admin from './Admin'
@@ -10,6 +11,7 @@ import Settings from './Settings'
 const Controllers = {
     BookingController: Object.assign(BookingController, BookingController),
     PhonePromptController: Object.assign(PhonePromptController, PhonePromptController),
+    ForcedPasswordController: Object.assign(ForcedPasswordController, ForcedPasswordController),
     BarberDashboardController: Object.assign(BarberDashboardController, BarberDashboardController),
     Agenda: Object.assign(Agenda, Agenda),
     Admin: Object.assign(Admin, Admin),

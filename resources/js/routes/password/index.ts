@@ -454,6 +454,87 @@ confirmationForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'
 
 confirmation.form = confirmationForm
 
+/**
+* @see \App\Http\Controllers\ForcedPasswordController::force
+* @see app/Http/Controllers/ForcedPasswordController.php:12
+* @route '/complete-profile/password'
+*/
+export const force = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: force.url(options),
+    method: 'get',
+})
+
+force.definition = {
+    methods: ["get","head"],
+    url: '/complete-profile/password',
+} satisfies RouteDefinition<["get","head"]>
+
+/**
+* @see \App\Http\Controllers\ForcedPasswordController::force
+* @see app/Http/Controllers/ForcedPasswordController.php:12
+* @route '/complete-profile/password'
+*/
+force.url = (options?: RouteQueryOptions) => {
+    return force.definition.url + queryParams(options)
+}
+
+/**
+* @see \App\Http\Controllers\ForcedPasswordController::force
+* @see app/Http/Controllers/ForcedPasswordController.php:12
+* @route '/complete-profile/password'
+*/
+force.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
+    url: force.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\ForcedPasswordController::force
+* @see app/Http/Controllers/ForcedPasswordController.php:12
+* @route '/complete-profile/password'
+*/
+force.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
+    url: force.url(options),
+    method: 'head',
+})
+
+/**
+* @see \App\Http\Controllers\ForcedPasswordController::force
+* @see app/Http/Controllers/ForcedPasswordController.php:12
+* @route '/complete-profile/password'
+*/
+const forceForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: force.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\ForcedPasswordController::force
+* @see app/Http/Controllers/ForcedPasswordController.php:12
+* @route '/complete-profile/password'
+*/
+forceForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: force.url(options),
+    method: 'get',
+})
+
+/**
+* @see \App\Http\Controllers\ForcedPasswordController::force
+* @see app/Http/Controllers/ForcedPasswordController.php:12
+* @route '/complete-profile/password'
+*/
+forceForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
+    action: force.url({
+        [options?.mergeQuery ? 'mergeQuery' : 'query']: {
+            _method: 'HEAD',
+            ...(options?.query ?? options?.mergeQuery ?? {}),
+        }
+    }),
+    method: 'get',
+})
+
+force.form = forceForm
+
 const password = {
     request: Object.assign(request, request),
     reset: Object.assign(reset, reset),
@@ -461,6 +542,7 @@ const password = {
     update: Object.assign(update, update),
     confirm: Object.assign(confirm, confirmD7e05f),
     confirmation: Object.assign(confirmation, confirmation),
+    force: Object.assign(force, force),
 }
 
 export default password

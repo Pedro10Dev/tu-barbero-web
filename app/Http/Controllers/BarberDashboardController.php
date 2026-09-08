@@ -24,8 +24,8 @@ class BarberDashboardController extends Controller
             return Inertia::render('dashboard', [
                 'stats' => [
                     'totalCuts' => 0,
+                    'weeklyCuts' => 0,
                     'monthlyCuts' => 0,
-                    'monthlyRevenue' => 0,
                     'todayAppointments' => 0,
                     'scheduledAppointments' => 0,
                 ],
@@ -36,21 +36,22 @@ class BarberDashboardController extends Controller
         }
 
         $barberId = $barberProfile->id;
+        $startOfWeek = Carbon::now()->startOfWeek();
         $startOfMonth = Carbon::now()->startOfMonth();
 
         $totalCuts = Appointment::where('barber_profile_id', $barberId)
             ->where('status', 'completed')
             ->count();
 
+        $weeklyCuts = Appointment::where('barber_profile_id', $barberId)
+            ->where('status', 'completed')
+            ->where('start_time', '>=', $startOfWeek)
+            ->count();
+
         $monthlyCuts = Appointment::where('barber_profile_id', $barberId)
             ->where('status', 'completed')
             ->where('start_time', '>=', $startOfMonth)
             ->count();
-
-        $monthlyRevenue = (float) Appointment::where('barber_profile_id', $barberId)
-            ->where('status', 'completed')
-            ->where('start_time', '>=', $startOfMonth)
-            ->sum('price_at_booking');
 
         $todayAppointments = Appointment::where('barber_profile_id', $barberId)
             ->whereIn('status', ['pending', 'confirmed'])
@@ -124,8 +125,8 @@ class BarberDashboardController extends Controller
         return Inertia::render('dashboard', [
             'stats' => [
                 'totalCuts' => $totalCuts,
+                'weeklyCuts' => $weeklyCuts,
                 'monthlyCuts' => $monthlyCuts,
-                'monthlyRevenue' => $monthlyRevenue,
                 'todayAppointments' => $todayAppointments,
                 'scheduledAppointments' => $scheduledAppointments,
             ],

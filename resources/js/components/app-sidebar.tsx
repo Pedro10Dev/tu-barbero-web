@@ -9,8 +9,6 @@ import {
     CalendarDays,
     Briefcase,
     Clock,
-    ShieldCheck,
-    History,
     Settings,
 } from 'lucide-react';
 import { NavFooter } from '@/components/nav-footer';
@@ -97,16 +95,6 @@ const adminNavItems: ExtendedNavItem[] = [
         title: 'Horarios y Turnos',
         href: '/admin/schedules',
         icon: Clock,
-    },
-    {
-        title: 'Roles y Permisos',
-        href: '/admin/roles',
-        icon: ShieldCheck,
-    },
-    {
-        title: 'Auditoría',
-        href: '/admin/activity',
-        icon: History,
     },
     {
         title: 'Configuración',

@@ -3,6 +3,7 @@ import {
     Calendar as CalendarIcon,
     ChevronLeft,
     ChevronRight,
+    XCircle,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -18,10 +19,22 @@ type ScheduleEntry = {
     status: 'pending' | 'confirmed';
 };
 
-function formatHeader(date: string): string {
+function toDate(date: string): Date {
     const [year, month, day] = date.split('-').map(Number);
-    const parsed = new Date(year, month - 1, day);
-    const formatted = parsed.toLocaleDateString('es-ES', {
+
+    return new Date(year, month - 1, day);
+}
+
+function toIsoDate(d: Date): string {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+
+    return `${y}-${m}-${day}`;
+}
+
+function formatHeader(date: string): string {
+    const formatted = toDate(date).toLocaleDateString('es-ES', {
         weekday: 'long',
         day: 'numeric',
         month: 'long',
@@ -31,9 +44,57 @@ function formatHeader(date: string): string {
     return formatted.charAt(0).toUpperCase() + formatted.slice(1);
 }
 
+function formatShortDate(date: string): string {
+    const formatted = toDate(date).toLocaleDateString('es-ES', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+    });
+
+    return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+}
+
+function formatMonth(date: string): string {
+    const formatted = toDate(date).toLocaleDateString('es-ES', {
+        month: 'long',
+        year: 'numeric',
+    });
+
+    return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+}
+
+function rangeDates(date: string, view: ViewMode): string[] {
+    if (view === 'day') {
+        return [date];
+    }
+
+    const parsed = toDate(date);
+
+    if (view === 'week') {
+        const dayOfWeek = parsed.getDay();
+        const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+        const monday = new Date(parsed);
+        monday.setDate(parsed.getDate() + mondayOffset);
+
+        return Array.from({ length: 7 }, (_, i) => {
+            const d = new Date(monday);
+            d.setDate(monday.getDate() + i);
+
+            return toIsoDate(d);
+        });
+    }
+
+    const year = parsed.getFullYear();
+    const month = parsed.getMonth();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    return Array.from({ length: daysInMonth }, (_, i) =>
+        toIsoDate(new Date(year, month, i + 1)),
+    );
+}
+
 function shiftDate(date: string, view: ViewMode, delta: number): string {
-    const [year, month, day] = date.split('-').map(Number);
-    const parsed = new Date(year, month - 1, day);
+    const parsed = toDate(date);
 
     if (view === 'month') {
         parsed.setMonth(parsed.getMonth() + delta);
@@ -41,11 +102,7 @@ function shiftDate(date: string, view: ViewMode, delta: number): string {
         parsed.setDate(parsed.getDate() + delta * (view === 'week' ? 7 : 1));
     }
 
-    const y = parsed.getFullYear();
-    const m = String(parsed.getMonth() + 1).padStart(2, '0');
-    const d = String(parsed.getDate()).padStart(2, '0');
-
-    return `${y}-${m}-${d}`;
+    return toIsoDate(parsed);
 }
 
 export default function AgendaCalendar({
@@ -69,11 +126,7 @@ export default function AgendaCalendar({
     };
 
     const goToday = () => {
-        const today = new Date();
-        const y = today.getFullYear();
-        const m = String(today.getMonth() + 1).padStart(2, '0');
-        const d = String(today.getDate()).padStart(2, '0');
-        navigate(viewMode, `${y}-${m}-${d}`);
+        navigate(viewMode, toIsoDate(new Date()));
     };
 
     const goPrev = () => navigate(viewMode, shiftDate(date, viewMode, -1));
@@ -87,7 +140,21 @@ export default function AgendaCalendar({
         },
         {},
     );
-    const entries = grouped[date] ?? [];
+
+    const days = rangeDates(date, viewMode)
+        .map((day) => ({ date: day, entries: grouped[day] ?? [] }))
+        .filter((day) => day.entries.length > 0);
+
+    const cancelAppointment = (entry: ScheduleEntry) => {
+        router.patch(
+            `/agenda/appointments/${entry.id}`,
+            { action: 'cancel' },
+            {
+                preserveScroll: true,
+                preserveState: true,
+            },
+        );
+    };
 
     const isViewChange = (next: ViewMode) => {
         if (next === viewMode) {
@@ -96,6 +163,11 @@ export default function AgendaCalendar({
 
         navigate(next, date);
     };
+
+    const periodLabel =
+        viewMode === 'week'
+            ? `del ${formatShortDate(days.length > 0 ? days[0].date : date)} al ${formatShortDate(days.length > 0 ? days[days.length - 1].date : date)}`
+            : formatMonth(date);
 
     return (
         <>
@@ -149,11 +221,13 @@ export default function AgendaCalendar({
                                 {viewMode === 'day'
                                     ? 'Fecha Seleccionada'
                                     : viewMode === 'week'
-                                      ? 'Semana del'
-                                      : 'Mes de'}
+                                      ? 'Semana'
+                                      : 'Mes'}
                             </span>
                             <h2 className="text-base font-bold text-white">
-                                {formatHeader(date)}
+                                {viewMode === 'day'
+                                    ? formatHeader(date)
+                                    : periodLabel}
                             </h2>
                         </div>
                     </div>
@@ -184,7 +258,7 @@ export default function AgendaCalendar({
 
                 {/* Cuadrícula de la Agenda */}
                 <div className="min-h-[400px] overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/40">
-                    {entries.length === 0 ? (
+                    {days.length === 0 ? (
                         <div className="flex min-h-[400px] flex-col items-center justify-center p-8 text-center">
                             <div className="mb-3 flex size-12 items-center justify-center rounded-2xl border border-zinc-700/50 bg-zinc-800/60 text-zinc-400">
                                 <CalendarIcon className="size-6" />
@@ -198,42 +272,81 @@ export default function AgendaCalendar({
                             </p>
                         </div>
                     ) : (
-                        <div className="flex flex-col divide-y divide-zinc-800/70">
-                            {entries.map((entry) => (
+                        <div className="flex flex-col">
+                            {days.map((day) => (
                                 <div
-                                    key={entry.id}
-                                    className="flex flex-col gap-3 px-5 py-4 transition-colors hover:bg-zinc-900/60 sm:flex-row sm:items-center sm:justify-between"
+                                    key={day.date}
+                                    className="flex flex-col rounded-none"
                                 >
-                                    <div className="flex items-start gap-4">
-                                        <div className="flex w-16 shrink-0 flex-col items-center justify-center rounded-xl border border-zinc-700/50 bg-zinc-800/60 px-2 py-2 text-center">
-                                            <span className="text-sm font-bold text-white">
-                                                {entry.start_time}
+                                    {viewMode !== 'day' && (
+                                        <div className="flex items-center justify-between border-b border-zinc-800/70 bg-zinc-950/50 px-5 py-2">
+                                            <span className="text-xs font-semibold tracking-wide text-zinc-400 uppercase">
+                                                {formatShortDate(day.date)}
                                             </span>
-                                            <span className="text-[10px] text-zinc-500">
-                                                {entry.end_time}
+                                            <span className="rounded-full bg-zinc-800/80 px-2 py-0.5 text-[11px] font-semibold text-zinc-300">
+                                                {day.entries.length}
                                             </span>
                                         </div>
-                                        <div className="space-y-0.5">
-                                            <h3 className="text-sm font-semibold text-white">
-                                                {entry.client}
-                                            </h3>
-                                            <p className="text-xs text-zinc-400">
-                                                {entry.service}
-                                            </p>
-                                        </div>
-                                    </div>
+                                    )}
 
-                                    <span
-                                        className={`inline-flex w-fit shrink-0 items-center rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${
-                                            entry.status === 'confirmed'
-                                                ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
-                                                : 'border-amber-500/20 bg-amber-500/10 text-amber-400'
-                                        }`}
-                                    >
-                                        {entry.status === 'confirmed'
-                                            ? 'Confirmada'
-                                            : 'Pendiente'}
-                                    </span>
+                                    <div className="flex flex-col divide-y divide-zinc-800/70">
+                                        {day.entries.map((entry) => (
+                                            <div
+                                                key={entry.id}
+                                                className="flex flex-col gap-3 px-5 py-4 transition-colors hover:bg-zinc-900/60 sm:flex-row sm:items-center sm:justify-between"
+                                            >
+                                                <div className="flex items-start gap-4">
+                                                    <div className="flex w-16 shrink-0 flex-col items-center justify-center rounded-xl border border-zinc-700/50 bg-zinc-800/60 px-2 py-2 text-center">
+                                                        <span className="text-sm font-bold text-white">
+                                                            {entry.start_time}
+                                                        </span>
+                                                        <span className="text-[10px] text-zinc-500">
+                                                            {entry.end_time}
+                                                        </span>
+                                                    </div>
+                                                    <div className="space-y-0.5">
+                                                        <h3 className="text-sm font-semibold text-white">
+                                                            {entry.client}
+                                                        </h3>
+                                                        <p className="text-xs text-zinc-400">
+                                                            {entry.service}
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex shrink-0 items-center gap-2">
+                                                    <span
+                                                        className={`inline-flex w-fit items-center rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${
+                                                            entry.status ===
+                                                            'confirmed'
+                                                                ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
+                                                                : 'border-amber-500/20 bg-amber-500/10 text-amber-400'
+                                                        }`}
+                                                    >
+                                                        {entry.status ===
+                                                        'confirmed'
+                                                            ? 'Confirmada'
+                                                            : 'Pendiente'}
+                                                    </span>
+
+                                                    {entry.status ===
+                                                        'confirmed' && (
+                                                        <button
+                                                            onClick={() =>
+                                                                cancelAppointment(
+                                                                    entry,
+                                                                )
+                                                            }
+                                                            className="flex items-center gap-1.5 rounded-xl border border-zinc-600/50 bg-zinc-800/60 px-2.5 py-1.5 text-[11px] font-semibold text-zinc-300 transition hover:bg-zinc-700 hover:text-white"
+                                                        >
+                                                            <XCircle className="size-3.5" />
+                                                            Cancelar
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             ))}
                         </div>

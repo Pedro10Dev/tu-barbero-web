@@ -137,7 +137,7 @@ storeForm.post = (options?: RouteQueryOptions): RouteFormDefinition<'post'> => (
 store.form = storeForm
 
 /**
-* @see routes/web.php:30
+* @see routes/web.php:37
 * @route '/reserva-exitosa'
 */
 export const success = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -151,7 +151,7 @@ success.definition = {
 } satisfies RouteDefinition<["get","head"]>
 
 /**
-* @see routes/web.php:30
+* @see routes/web.php:37
 * @route '/reserva-exitosa'
 */
 success.url = (options?: RouteQueryOptions) => {
@@ -159,7 +159,7 @@ success.url = (options?: RouteQueryOptions) => {
 }
 
 /**
-* @see routes/web.php:30
+* @see routes/web.php:37
 * @route '/reserva-exitosa'
 */
 success.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
@@ -168,7 +168,7 @@ success.get = (options?: RouteQueryOptions): RouteDefinition<'get'> => ({
 })
 
 /**
-* @see routes/web.php:30
+* @see routes/web.php:37
 * @route '/reserva-exitosa'
 */
 success.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
@@ -177,7 +177,7 @@ success.head = (options?: RouteQueryOptions): RouteDefinition<'head'> => ({
 })
 
 /**
-* @see routes/web.php:30
+* @see routes/web.php:37
 * @route '/reserva-exitosa'
 */
 const successForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -186,7 +186,7 @@ const successForm = (options?: RouteQueryOptions): RouteFormDefinition<'get'> =>
 })
 
 /**
-* @see routes/web.php:30
+* @see routes/web.php:37
 * @route '/reserva-exitosa'
 */
 successForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({
@@ -195,7 +195,7 @@ successForm.get = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => (
 })
 
 /**
-* @see routes/web.php:30
+* @see routes/web.php:37
 * @route '/reserva-exitosa'
 */
 successForm.head = (options?: RouteQueryOptions): RouteFormDefinition<'get'> => ({

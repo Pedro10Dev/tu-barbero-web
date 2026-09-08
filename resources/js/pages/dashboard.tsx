@@ -6,7 +6,7 @@ import {
     Clock,
     CheckCircle2,
     XCircle,
-    DollarSign,
+    Sparkles,
     UserPlus,
     CalendarOff,
     History,
@@ -15,8 +15,8 @@ import AppLayout from '@/layouts/app-layout';
 
 type Stats = {
     totalCuts: number;
+    weeklyCuts: number;
     monthlyCuts: number;
-    monthlyRevenue: number;
     todayAppointments: number;
     scheduledAppointments: number;
 };
@@ -135,12 +135,12 @@ export default function Dashboard({
                     <div className="rounded-2xl border border-zinc-800/80 bg-zinc-900/60 p-5 transition-colors hover:border-zinc-700">
                         <div className="mb-3 flex items-center justify-between">
                             <span className="text-xs font-semibold tracking-wider text-zinc-400 uppercase">
-                                Ingresos (Mes)
+                                Cortes de la Semana
                             </span>
-                            <DollarSign className="h-4.5 w-4.5 text-emerald-400" />
+                            <Sparkles className="h-4.5 w-4.5 text-emerald-400" />
                         </div>
                         <p className="text-2xl font-black text-white sm:text-3xl">
-                            ${stats.monthlyRevenue.toFixed(2)}
+                            {stats.weeklyCuts}
                         </p>
                     </div>
 

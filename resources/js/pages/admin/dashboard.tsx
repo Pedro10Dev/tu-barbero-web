@@ -9,18 +9,63 @@ import {
     Briefcase,
     ArrowUpRight,
     Activity,
+    Clock,
 } from 'lucide-react';
+
+type AdminStats = {
+    totalUsers: number;
+    totalAppointments: number;
+    activeBarbers: number;
+    appointmentsToday: number;
+    totalServices: number;
+};
+
+type RecentAppointment = {
+    id: number;
+    client: string;
+    barber: string;
+    service: string;
+    start_time: string;
+    status: string;
+};
+
+type ActivityEntry = {
+    id: string;
+    title: string;
+    description: string;
+    tone: 'emerald' | 'blue' | 'rose';
+};
+
+const statusChip: Record<string, string> = {
+    pending: 'border-amber-500/20 bg-amber-500/10 text-amber-400',
+    confirmed: 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400',
+    rejected: 'border-rose-500/20 bg-rose-500/10 text-rose-400',
+    cancelled: 'border-zinc-700/60 bg-zinc-800/80 text-zinc-400',
+    completed: 'border-blue-500/20 bg-blue-500/10 text-blue-400',
+};
+
+const statusLabel: Record<string, string> = {
+    pending: 'Pendiente',
+    confirmed: 'Confirmada',
+    rejected: 'Rechazada',
+    cancelled: 'Cancelada',
+    completed: 'Completada',
+};
+
+const toneDot: Record<ActivityEntry['tone'], string> = {
+    emerald: 'bg-emerald-500',
+    blue: 'bg-blue-500',
+    rose: 'bg-rose-500',
+};
 
 export default function AdminDashboard({
     stats,
+    recentAppointments,
+    recentActivity,
 }: {
-    stats: {
-        totalUsers: number;
-        totalAppointments: number;
-        activeBarbers: number;
-        appointmentsToday: number;
-        totalServices: number;
-    };
+    stats: AdminStats;
+    recentAppointments: RecentAppointment[];
+    recentActivity: ActivityEntry[];
 }) {
     const { auth } = usePage().props;
 
@@ -185,15 +230,51 @@ export default function AdminDashboard({
                             </button>
                         </div>
 
-                        <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-dashed border-sidebar-border/60 bg-zinc-900/20 p-8 text-center">
-                            <Calendar className="mb-2 h-8 w-8 text-zinc-600" />
-                            <p className="text-sm font-medium text-zinc-300">
-                                No hay citas recientes registradas
-                            </p>
-                            <p className="mt-1 text-xs text-zinc-500">
-                                Las nuevas reservas aparecerán automáticamente
-                                aquí.
-                            </p>
+                        <div className="flex flex-1 flex-col gap-3">
+                            {recentAppointments.length === 0 ? (
+                                <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-dashed border-sidebar-border/60 bg-zinc-900/20 p-8 text-center">
+                                    <Calendar className="mb-2 h-8 w-8 text-zinc-600" />
+                                    <p className="text-sm font-medium text-zinc-300">
+                                        No hay citas recientes registradas
+                                    </p>
+                                    <p className="mt-1 text-xs text-zinc-500">
+                                        Las nuevas reservas aparecerán
+                                        automáticamente aquí.
+                                    </p>
+                                </div>
+                            ) : (
+                                recentAppointments.map((appointment) => (
+                                    <div
+                                        key={appointment.id}
+                                        className="flex items-start justify-between gap-3 rounded-xl border border-sidebar-border/40 bg-zinc-900/30 p-3"
+                                    >
+                                        <div className="flex items-start gap-3">
+                                            <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-zinc-700/50 bg-zinc-800/60 text-zinc-300">
+                                                <Clock className="h-3.5 w-3.5" />
+                                            </div>
+                                            <div>
+                                                <p className="text-xs font-semibold text-white">
+                                                    {appointment.client}
+                                                    <span className="font-normal text-zinc-400">
+                                                        {' '}
+                                                        · {appointment.barber}
+                                                    </span>
+                                                </p>
+                                                <p className="mt-0.5 text-[11px] text-zinc-400">
+                                                    {appointment.service} ·{' '}
+                                                    {appointment.start_time}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <span
+                                            className={`inline-flex shrink-0 items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${statusChip[appointment.status] ?? statusChip.pending}`}
+                                        >
+                                            {statusLabel[appointment.status] ??
+                                                appointment.status}
+                                        </span>
+                                    </div>
+                                ))
+                            )}
                         </div>
                     </div>
 
@@ -207,28 +288,30 @@ export default function AdminDashboard({
                         </div>
 
                         <div className="flex flex-col gap-4">
-                            <div className="flex items-start gap-3 rounded-xl border border-sidebar-border/40 bg-zinc-900/30 p-3">
-                                <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-emerald-500"></div>
-                                <div className="flex-1">
-                                    <p className="text-xs font-medium text-white">
-                                        Sistema inicializado correctamente
-                                    </p>
-                                    <p className="mt-0.5 text-[11px] text-zinc-400">
-                                        Spatie Roles y Permisos activos
-                                    </p>
+                            {recentActivity.length === 0 ? (
+                                <div className="rounded-xl border border-dashed border-sidebar-border/60 bg-zinc-900/20 p-6 text-center text-xs text-zinc-500">
+                                    Aún no hay actividad registrada.
                                 </div>
-                            </div>
-                            <div className="flex items-start gap-3 rounded-xl border border-sidebar-border/40 bg-zinc-900/30 p-3">
-                                <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-blue-500"></div>
-                                <div className="flex-1">
-                                    <p className="text-xs font-medium text-white">
-                                        Panel administrativo configurado
-                                    </p>
-                                    <p className="mt-0.5 text-[11px] text-zinc-400">
-                                        Vistas e Inertia listos
-                                    </p>
-                                </div>
-                            </div>
+                            ) : (
+                                recentActivity.map((item) => (
+                                    <div
+                                        key={item.id}
+                                        className="flex items-start gap-3 rounded-xl border border-sidebar-border/40 bg-zinc-900/30 p-3"
+                                    >
+                                        <div
+                                            className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${toneDot[item.tone]}`}
+                                        ></div>
+                                        <div className="flex-1">
+                                            <p className="text-xs font-medium text-white">
+                                                {item.title}
+                                            </p>
+                                            <p className="mt-0.5 text-[11px] text-zinc-400">
+                                                {item.description}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))
+                            )}
                         </div>
                     </div>
                 </div>

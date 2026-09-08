@@ -161,13 +161,52 @@ test('a barber cannot decide an appointment of another barber', function () {
     expect($appointment->fresh()->status)->toBe('pending');
 });
 
+test('a barber can cancel a confirmed appointment', function () {
+    $appointment = createAppointmentDecisionFixture($this->barberProfile, $this->service, '2026-09-10 14:00:00', '2026-09-10 14:30:00', null, 'confirmed');
+
+    $this->actingAs($this->barber)
+        ->from('/')
+        ->patch(route('agenda.appointment.status', ['appointment' => $appointment->id]), [
+            'action' => 'cancel',
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect('/');
+
+    expect($appointment->fresh()->status)->toBe('cancelled');
+});
+
+test('a barber can cancel a pending appointment', function () {
+    $appointment = createAppointmentDecisionFixture($this->barberProfile, $this->service, '2026-09-10 14:00:00', '2026-09-10 14:30:00');
+
+    $this->actingAs($this->barber)
+        ->patch(route('agenda.appointment.status', ['appointment' => $appointment->id]), [
+            'action' => 'cancel',
+        ])
+        ->assertSessionHasNoErrors();
+
+    expect($appointment->fresh()->status)->toBe('cancelled');
+});
+
+test('an already processed appointment cannot be cancelled', function () {
+    $completed = createAppointmentDecisionFixture($this->barberProfile, $this->service, '2026-09-10 14:00:00', '2026-09-10 14:30:00', null, 'completed');
+
+    $this->actingAs($this->barber)
+        ->from('/agenda/listado')
+        ->patch(route('agenda.appointment.status', ['appointment' => $completed->id]), [
+            'action' => 'cancel',
+        ])
+        ->assertSessionHasErrors('action');
+
+    expect($completed->fresh()->status)->toBe('completed');
+});
+
 test('an invalid action is not accepted', function () {
     $appointment = createAppointmentDecisionFixture($this->barberProfile, $this->service, '2026-09-10 14:00:00', '2026-09-10 14:30:00');
 
     $this->actingAs($this->barber)
         ->from('/')
         ->patch(route('agenda.appointment.status', ['appointment' => $appointment->id]), [
-            'action' => 'cancel',
+            'action' => 'complete',
         ])
         ->assertSessionHasErrors('action');
 
