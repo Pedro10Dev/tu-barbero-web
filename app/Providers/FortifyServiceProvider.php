@@ -11,9 +11,9 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
+use Laravel\Fortify\Contracts\LoginResponse;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Fortify;
-use Laravel\Fortify\Contracts\LoginResponse;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -34,16 +34,17 @@ class FortifyServiceProvider extends ServiceProvider
         $this->configureViews();
         $this->configureRateLimiting();
 
-    $this->app->singleton(LoginResponse::class, function () {
-        return new class implements LoginResponse {
-            public function toResponse($request)
+        $this->app->singleton(LoginResponse::class, function () {
+            return new class implements LoginResponse
             {
-                // Usamos $request->user() que el editor reconoce mejor con tipado
-                $user = $request->user();
+                public function toResponse($request)
+                {
+                    // Usamos $request->user() que el editor reconoce mejor con tipado
+                    $user = $request->user();
 
-                if ($user && method_exists($user, 'hasRole') && $user->hasRole('client')) {
-                    return redirect()->intended(config('fortify.home', '/landing'));
-                }
+                    if ($user && $user->hasRole('client')) {
+                        return redirect()->intended(config('fortify.home', '/landing'));
+                    }
 
                     return redirect()->intended(config('fortify.home', '/dashboard'));
                 }
@@ -65,32 +66,32 @@ class FortifyServiceProvider extends ServiceProvider
      */
     private function configureViews(): void
     {
-        Fortify::loginView(fn(Request $request) => Inertia::render('auth/login', [
+        Fortify::loginView(fn (Request $request) => Inertia::render('auth/login', [
             'canResetPassword' => Features::enabled(Features::resetPasswords()),
             'status' => $request->session()->get('status'),
         ]));
 
-        Fortify::resetPasswordView(fn(Request $request) => Inertia::render('auth/reset-password', [
+        Fortify::resetPasswordView(fn (Request $request) => Inertia::render('auth/reset-password', [
             'email' => $request->email,
             'token' => $request->route('token'),
             'passwordRules' => Password::defaults()->toPasswordRulesString(),
         ]));
 
-        Fortify::requestPasswordResetLinkView(fn(Request $request) => Inertia::render('auth/forgot-password', [
+        Fortify::requestPasswordResetLinkView(fn (Request $request) => Inertia::render('auth/forgot-password', [
             'status' => $request->session()->get('status'),
         ]));
 
-        Fortify::verifyEmailView(fn(Request $request) => Inertia::render('auth/verify-email', [
+        Fortify::verifyEmailView(fn (Request $request) => Inertia::render('auth/verify-email', [
             'status' => $request->session()->get('status'),
         ]));
 
-        Fortify::registerView(fn() => Inertia::render('auth/register', [
+        Fortify::registerView(fn () => Inertia::render('auth/register', [
             'passwordRules' => Password::defaults()->toPasswordRulesString(),
         ]));
 
-        Fortify::twoFactorChallengeView(fn() => Inertia::render('auth/two-factor-challenge'));
+        Fortify::twoFactorChallengeView(fn () => Inertia::render('auth/two-factor-challenge'));
 
-        Fortify::confirmPasswordView(fn() => Inertia::render('auth/confirm-password'));
+        Fortify::confirmPasswordView(fn () => Inertia::render('auth/confirm-password'));
     }
 
     /**
@@ -103,14 +104,14 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         RateLimiter::for('login', function (Request $request) {
-            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())) . '|' . $request->ip());
+            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
 
             return Limit::perMinute(5)->by($throttleKey);
         });
 
         RateLimiter::for('passkeys', function (Request $request) {
             return Limit::perMinute(10)->by(
-                ($request->input('credential.id') ?: $request->session()->getId()) . '|' . $request->ip(),
+                ($request->input('credential.id') ?: $request->session()->getId()).'|'.$request->ip(),
             );
         });
     }

@@ -1,19 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\BookingController;
-use App\Models\Service;
-use Inertia\Inertia;
-use App\Http\Middleware\RedirectClientsToLanding;
-use App\Http\Controllers\ClientProfileController;
-use App\Http\Controllers\Auth\SocialController;
-use App\Http\Controllers\PhonePromptController;
-use App\Http\Controllers\BarberDashboardController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Auth\SocialController;
+use App\Http\Controllers\BarberDashboardController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ClientProfileController;
+use App\Http\Controllers\PhonePromptController;
+use App\Models\Service;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 use Spatie\Permission\Middleware\RoleMiddleware;
-
-
 
 Route::get('/', function () {
     return Inertia::render('landing', [
@@ -21,11 +17,9 @@ Route::get('/', function () {
     ]);
 })->name('landing');
 
-
 Route::get('/booking', [BookingController::class, 'index'])->name('booking');
 Route::get('/api/booking/availability', [BookingController::class, 'availability'])->name('booking.availability');
 Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
-
 
 Route::get('/reserva-exitosa', function () {
     return inertia('booking/success');
@@ -36,42 +30,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/complete-profile/phone', [PhonePromptController::class, 'store'])->name('phone.store');
 });
 
-Route::middleware(['auth', 'verified', 'phone.required'])->group(function () {
-    Route::get('/dashboard', function () {
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
+Route::middleware(['auth', 'verified', 'phone.required', RoleMiddleware::class.':barber|admin'])->group(function () {
+    Route::get('/dashboard', [BarberDashboardController::class, 'index'])->name('dashboard');
 
-        if ($user && $user->hasRole('client')) {
-            return redirect()->route('landing');
-        }
-
-       return app(BarberDashboardController::class)->index(request());
-    })->name('dashboard');
+    Route::get('/agenda/calendario', fn () => Inertia::render('agenda/calendar'))->name('agenda.calendar');
+    Route::get('/agenda/listado', fn () => Inertia::render('agenda/list'))->name('agenda.list');
+    Route::get('/clientes', fn () => Inertia::render('client/index'))->name('clients.index');
+    Route::get('/servicios', fn () => Inertia::render('services/index'))->name('services.index');
+    Route::get('/productividad', fn () => Inertia::render('productividad/index'))->name('productividad.index');
 });
 
-Route::middleware(['auth', RoleMiddleware::class . ':admin'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', RoleMiddleware::class.':admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 });
-
-Route::get('/agenda/calendario', function () {
-    return Inertia::render('agenda/calendar');
-})->middleware(['auth', 'verified', 'phone.required'])->name('agenda.calendar');
-
-Route::get('/agenda/listado', function () {
-    return Inertia::render('agenda/list');
-})->middleware(['auth', 'verified', 'phone.required'])->name('agenda.list');
-
-Route::get('/clientes', function () {
-    return Inertia::render('client/index');
-})->middleware(['auth', 'verified', 'phone.required'])->name('clients.index');
-
-Route::get('/servicios', function () {
-    return Inertia::render('services/index');
-})->middleware(['auth', 'verified', 'phone.required'])->name('services.index');
-
-Route::get('/productividad', function () {
-    return Inertia::render('productividad/index');
-})->middleware(['auth', 'verified', 'phone.required'])->name('productividad.index');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/client/profile', [ClientProfileController::class, 'edit'])->name('client.profile.edit');
@@ -81,6 +52,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('/auth/google', [SocialController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('/auth/google/callback', [SocialController::class, 'handleGoogleCallback']);
 
-
-
-require __DIR__ . '/settings.php';
+require __DIR__.'/settings.php';

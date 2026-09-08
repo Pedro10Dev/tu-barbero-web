@@ -52,8 +52,8 @@ test('password can be reset with valid token', function () {
         $response = $this->post(route('password.update'), [
             'token' => $notification->token,
             'email' => $user->email,
-            'password' => 'password',
-            'password_confirmation' => 'password',
+            'password' => 'S3cure#Pass2026',
+            'password_confirmation' => 'S3cure#Pass2026',
         ]);
 
         $response

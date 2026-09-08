@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class ClientProfileController extends Controller
 {
-    public function edit(Request $request)
+    public function edit(Request $request): RedirectResponse|Response
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = $request->user();
 
         // Usamos Spatie en lugar de la propiedad antigua
-        if (!$user->hasRole('client')) {
-            return redirect('/');
+        if (! $user->hasRole('client')) {
+            return redirect()->route('landing');
         }
 
         return Inertia::render('client/profile/edit', [
@@ -22,17 +25,17 @@ class ClientProfileController extends Controller
                 'name' => $user->name,
                 'email' => $user->email,
                 'phone' => $user->phone ?? '',
-            ]
+            ],
         ]);
     }
 
-    public function update(Request $request)
+    public function update(Request $request): RedirectResponse
     {
-        /** @var \App\Models\User $user */
+        /** @var User $user */
         $user = $request->user();
 
         // Usamos Spatie aquí también
-        if (!$user->hasRole('client')) {
+        if (! $user->hasRole('client')) {
             return redirect('/');
         }
 

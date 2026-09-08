@@ -1,19 +1,17 @@
-import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
-import { Search, Phone, Mail, Scissors, ChevronDown, MessageSquare, UserCheck, Calendar, ArrowUpDown, Users } from 'lucide-react';
+import {
+    Search,
+    Phone,
+    Mail,
+    Scissors,
+    ChevronDown,
+    MessageSquare,
+    UserCheck,
+    Calendar,
+    ArrowUpDown,
+    Users,
+} from 'lucide-react';
 import { useState } from 'react';
-
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Panel Principal',
-        href: '/dashboard',
-    },
-    {
-        title: 'Mis Clientes',
-        href: '/clientes',
-    },
-];
 
 const mockClients = [
     {
@@ -62,10 +60,11 @@ export default function ClientsIndex() {
         setExpandedId(expandedId === id ? null : id);
     };
 
-    const filteredClients = mockClients.filter((client) => 
-        client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        client.phone.includes(searchTerm) ||
-        client.email.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredClients = mockClients.filter(
+        (client) =>
+            client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            client.phone.includes(searchTerm) ||
+            client.email.toLowerCase().includes(searchTerm.toLowerCase()),
     );
 
     const sortedClients = [...filteredClients].sort((a, b) => {
@@ -78,6 +77,7 @@ export default function ClientsIndex() {
         } else if (sortOption === 'least-visits') {
             return a.totalVisits - b.totalVisits;
         }
+
         return 0;
     });
 
@@ -85,57 +85,85 @@ export default function ClientsIndex() {
         <>
             <Head title="Mis Clientes" />
 
-            <div className="flex flex-col gap-8 p-6 lg:p-8 max-w-7xl mx-auto w-full">
+            <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 p-6 lg:p-8">
                 {/* Cabecera y Resumen Superior alineado con el resto del sistema */}
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-800/80 pb-6">
+                <div className="flex flex-col justify-between gap-4 border-b border-zinc-800/80 pb-6 md:flex-row md:items-center">
                     <div className="space-y-1">
-                        <h1 className="text-2xl font-bold tracking-tight text-white flex items-center gap-2.5">
+                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-white">
                             <Users className="size-6 text-zinc-400" />
                             Directorio de Clientes
                         </h1>
                         <p className="text-sm text-zinc-400">
-                            Consulta el historial, notas y preferencias de tus clientes registrados en estación.
+                            Consulta el historial, notas y preferencias de tus
+                            clientes registrados en estación.
                         </p>
                     </div>
 
                     {/* Tarjeta de Resumen Rápido Estética */}
-                    <div className="flex items-center gap-3 bg-zinc-900/60 border border-zinc-800/80 rounded-2xl px-4 py-3 shrink-0">
-                        <div className="flex items-center justify-center size-10 rounded-xl bg-zinc-800/80 border border-zinc-700/50 text-zinc-300">
+                    <div className="flex shrink-0 items-center gap-3 rounded-2xl border border-zinc-800/80 bg-zinc-900/60 px-4 py-3">
+                        <div className="flex size-10 items-center justify-center rounded-xl border border-zinc-700/50 bg-zinc-800/80 text-zinc-300">
                             <UserCheck className="size-5" />
                         </div>
                         <div>
-                            <span className="text-xs text-zinc-400 block font-medium">Total Registrados</span>
+                            <span className="block text-xs font-medium text-zinc-400">
+                                Total Registrados
+                            </span>
                             <span className="text-base font-bold text-white">
-                                {mockClients.length} <span className="text-xs font-normal text-zinc-500">clientes</span>
+                                {mockClients.length}{' '}
+                                <span className="text-xs font-normal text-zinc-500">
+                                    clientes
+                                </span>
                             </span>
                         </div>
                     </div>
                 </div>
 
                 {/* Barra de Búsqueda y Selector de Ordenamiento */}
-                <div className="flex flex-col sm:flex-row items-center gap-3">
-                    <div className="relative flex items-center w-full">
+                <div className="flex flex-col items-center gap-3 sm:flex-row">
+                    <div className="relative flex w-full items-center">
                         <Search className="absolute left-3.5 size-4 text-zinc-500" />
-                        <input 
-                            type="text" 
+                        <input
+                            type="text"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            placeholder="Buscar por nombre, teléfono o correo electrónico..." 
-                            className="w-full rounded-xl bg-zinc-900/60 border border-zinc-800/80 pl-10 pr-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-700 transition"
+                            placeholder="Buscar por nombre, teléfono o correo electrónico..."
+                            className="w-full rounded-xl border border-zinc-800/80 bg-zinc-900/60 py-2.5 pr-4 pl-10 text-sm text-white placeholder-zinc-500 transition focus:border-zinc-700 focus:outline-none"
                         />
                     </div>
 
-                    <div className="flex items-center gap-2 w-full sm:w-auto shrink-0">
-                        <ArrowUpDown className="size-4 text-zinc-400 hidden sm:block" />
+                    <div className="flex w-full shrink-0 items-center gap-2 sm:w-auto">
+                        <ArrowUpDown className="hidden size-4 text-zinc-400 sm:block" />
                         <select
                             value={sortOption}
-                            onChange={(e) => setSortOption(e.target.value as SortOption)}
-                            className="w-full sm:w-auto rounded-xl bg-zinc-900/60 border border-zinc-800/80 px-4 py-2.5 text-sm text-zinc-300 focus:outline-none focus:border-zinc-700 transition cursor-pointer"
+                            onChange={(e) =>
+                                setSortOption(e.target.value as SortOption)
+                            }
+                            className="w-full cursor-pointer rounded-xl border border-zinc-800/80 bg-zinc-900/60 px-4 py-2.5 text-sm text-zinc-300 transition focus:border-zinc-700 focus:outline-none sm:w-auto"
                         >
-                            <option value="asc" className="bg-zinc-900 text-white">Alfabético (A - Z)</option>
-                            <option value="desc" className="bg-zinc-900 text-white">Alfabético (Z - A)</option>
-                            <option value="most-visits" className="bg-zinc-900 text-white">Más visitas</option>
-                            <option value="least-visits" className="bg-zinc-900 text-white">Menos visitas</option>
+                            <option
+                                value="asc"
+                                className="bg-zinc-900 text-white"
+                            >
+                                Alfabético (A - Z)
+                            </option>
+                            <option
+                                value="desc"
+                                className="bg-zinc-900 text-white"
+                            >
+                                Alfabético (Z - A)
+                            </option>
+                            <option
+                                value="most-visits"
+                                className="bg-zinc-900 text-white"
+                            >
+                                Más visitas
+                            </option>
+                            <option
+                                value="least-visits"
+                                className="bg-zinc-900 text-white"
+                            >
+                                Menos visitas
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -143,47 +171,55 @@ export default function ClientsIndex() {
                 {/* Listado de Clientes con tarjetas expandibles */}
                 <div className="flex flex-col gap-3">
                     {sortedClients.length === 0 ? (
-                        <div className="text-center py-12 text-zinc-500 text-sm bg-zinc-900/30 rounded-2xl border border-zinc-800/60">
-                            No se encontraron clientes que coincidan con la búsqueda.
+                        <div className="rounded-2xl border border-zinc-800/60 bg-zinc-900/30 py-12 text-center text-sm text-zinc-500">
+                            No se encontraron clientes que coincidan con la
+                            búsqueda.
                         </div>
                     ) : (
                         sortedClients.map((client) => {
                             const isExpanded = expandedId === client.id;
 
                             return (
-                                <div 
-                                    key={client.id} 
-                                    className={`group relative flex flex-col rounded-2xl border transition-all duration-300 overflow-hidden bg-zinc-900/40 ${
-                                        isExpanded 
-                                            ? 'border-zinc-700/80 shadow-lg shadow-black/20' 
+                                <div
+                                    key={client.id}
+                                    className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-zinc-900/40 transition-all duration-300 ${
+                                        isExpanded
+                                            ? 'border-zinc-700/80 shadow-lg shadow-black/20'
                                             : 'border-zinc-800/80 hover:border-zinc-700/80'
                                     }`}
                                 >
                                     {/* Barra indicadora lateral izquierda dinámica */}
-                                    <div className={`absolute left-0 top-0 bottom-0 w-1.5 transition-colors duration-300 ${
-                                        isExpanded ? 'bg-zinc-400' : 'bg-zinc-700 group-hover:bg-zinc-500'
-                                    }`} />
+                                    <div
+                                        className={`absolute top-0 bottom-0 left-0 w-1.5 transition-colors duration-300 ${
+                                            isExpanded
+                                                ? 'bg-zinc-400'
+                                                : 'bg-zinc-700 group-hover:bg-zinc-500'
+                                        }`}
+                                    />
 
                                     {/* Cabecera principal de la tarjeta */}
-                                    <div 
+                                    <div
                                         onClick={() => toggleExpand(client.id)}
-                                        className="flex flex-col sm:flex-row sm:items-center justify-between p-5 gap-4 cursor-pointer select-none pl-6"
+                                        className="flex cursor-pointer flex-col justify-between gap-4 p-5 pl-6 select-none sm:flex-row sm:items-center"
                                     >
                                         <div className="flex items-start gap-4">
-                                            <div className="flex items-center justify-center size-11 rounded-xl border border-zinc-700/50 bg-zinc-800/60 text-zinc-300 shrink-0">
+                                            <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-zinc-700/50 bg-zinc-800/60 text-zinc-300">
                                                 <UserCheck className="size-5" />
                                             </div>
 
                                             <div className="space-y-1">
                                                 <div className="flex flex-wrap items-center gap-2.5">
-                                                    <h3 className="text-base font-semibold text-white">{client.name}</h3>
-                                                    <span className="inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-medium border bg-zinc-800/80 text-zinc-300 border-zinc-700/60">
-                                                        {client.totalVisits} visitas registradas
+                                                    <h3 className="text-base font-semibold text-white">
+                                                        {client.name}
+                                                    </h3>
+                                                    <span className="inline-flex items-center rounded-full border border-zinc-700/60 bg-zinc-800/80 px-2.5 py-0.5 text-[11px] font-medium text-zinc-300">
+                                                        {client.totalVisits}{' '}
+                                                        visitas registradas
                                                     </span>
                                                 </div>
 
                                                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-zinc-400">
-                                                    <span className="flex items-center gap-1.5 text-zinc-300 font-medium">
+                                                    <span className="flex items-center gap-1.5 font-medium text-zinc-300">
                                                         <Phone className="size-3.5 text-zinc-500" />
                                                         {client.phoneFormatted}
                                                     </span>
@@ -197,63 +233,78 @@ export default function ClientsIndex() {
 
                                         {/* Botón de expansión */}
                                         <div className="flex items-center gap-2 self-end sm:self-center">
-                                            <button 
+                                            <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     toggleExpand(client.id);
                                                 }}
-                                                className="flex items-center gap-2 rounded-xl border border-zinc-700/50 bg-zinc-800/60 px-4 py-2 text-xs font-semibold text-zinc-300 hover:bg-zinc-700 hover:text-white transition"
+                                                className="flex items-center gap-2 rounded-xl border border-zinc-700/50 bg-zinc-800/60 px-4 py-2 text-xs font-semibold text-zinc-300 transition hover:bg-zinc-700 hover:text-white"
                                             >
-                                                <span>{isExpanded ? 'Ocultar historial' : 'Ver historial y notas'}</span>
-                                                <ChevronDown className={`size-4 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+                                                <span>
+                                                    {isExpanded
+                                                        ? 'Ocultar historial'
+                                                        : 'Ver historial y notas'}
+                                                </span>
+                                                <ChevronDown
+                                                    className={`size-4 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+                                                />
                                             </button>
                                         </div>
                                     </div>
 
                                     {/* Contenido Desplegable Animado */}
-                                    <div className={`grid transition-all duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                                    <div
+                                        className={`grid transition-all duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+                                    >
                                         <div className="overflow-hidden">
-                                            <div className="px-6 pb-6 pt-4 border-t border-zinc-800/60 bg-zinc-950/40 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                                                
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-xs">
+                                            <div className="flex flex-col justify-between gap-6 border-t border-zinc-800/60 bg-zinc-950/40 px-6 pt-4 pb-6 md:flex-row md:items-center">
+                                                <div className="grid grid-cols-1 gap-6 text-xs sm:grid-cols-2 lg:grid-cols-3">
                                                     <div className="space-y-1">
-                                                        <span className="text-zinc-500 uppercase tracking-wider font-semibold block">Servicio Frecuente</span>
-                                                        <div className="flex items-center gap-2 text-zinc-300 font-medium">
+                                                        <span className="block font-semibold tracking-wider text-zinc-500 uppercase">
+                                                            Servicio Frecuente
+                                                        </span>
+                                                        <div className="flex items-center gap-2 font-medium text-zinc-300">
                                                             <Scissors className="size-3.5 text-zinc-500" />
-                                                            {client.favoriteService}
+                                                            {
+                                                                client.favoriteService
+                                                            }
                                                         </div>
                                                     </div>
 
                                                     <div className="space-y-1">
-                                                        <span className="text-zinc-500 uppercase tracking-wider font-semibold block">Última Visita</span>
+                                                        <span className="block font-semibold tracking-wider text-zinc-500 uppercase">
+                                                            Última Visita
+                                                        </span>
                                                         <div className="flex items-center gap-2 text-zinc-300">
                                                             <Calendar className="size-3.5 text-zinc-500" />
                                                             {client.lastVisit}
                                                         </div>
                                                     </div>
 
-                                                    <div className="sm:col-span-2 lg:col-span-1 space-y-1">
-                                                        <span className="text-zinc-500 uppercase tracking-wider font-semibold block">Notas y Preferencias</span>
-                                                        <p className="text-zinc-400 italic">"{client.notes}"</p>
+                                                    <div className="space-y-1 sm:col-span-2 lg:col-span-1">
+                                                        <span className="block font-semibold tracking-wider text-zinc-500 uppercase">
+                                                            Notas y Preferencias
+                                                        </span>
+                                                        <p className="text-zinc-400 italic">
+                                                            "{client.notes}"
+                                                        </p>
                                                     </div>
                                                 </div>
 
-                                                <div className="flex items-center shrink-0 pt-4 md:pt-0 border-t md:border-t-0 border-zinc-800/40">
-                                                    <a 
-                                                        href={`https://wa.me/${client.phone}?text=Hola%20${encodeURIComponent(client.name)},%20te%20escribo%20desde%20TuBarbero...`} 
-                                                        target="_blank" 
+                                                <div className="flex shrink-0 items-center border-t border-zinc-800/40 pt-4 md:border-t-0 md:pt-0">
+                                                    <a
+                                                        href={`https://wa.me/${client.phone}?text=Hola%20${encodeURIComponent(client.name)},%20te%20escribo%20desde%20TuBarbero...`}
+                                                        target="_blank"
                                                         rel="noopener noreferrer"
-                                                        className="flex items-center gap-2 rounded-xl bg-emerald-600/20 border border-emerald-500/40 px-4 py-2.5 text-xs font-semibold text-emerald-300 hover:bg-emerald-600/30 hover:border-emerald-500 transition-all shadow-sm w-full md:w-auto justify-center"
+                                                        className="flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-600/20 px-4 py-2.5 text-xs font-semibold text-emerald-300 shadow-sm transition-all hover:border-emerald-500 hover:bg-emerald-600/30 md:w-auto"
                                                     >
                                                         <MessageSquare className="size-4 text-emerald-400" />
                                                         Contactar por WhatsApp
                                                     </a>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             );
                         })

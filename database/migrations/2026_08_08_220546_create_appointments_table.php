@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -16,8 +17,8 @@ return new class extends Migration {
             $table->foreignId('service_id')->constrained('services')->cascadeOnDelete();
             $table->dateTime('start_time');
             $table->dateTime('end_time');
-            $table->string('status')->default('pending'); 
-            $table->decimal('price_at_booking', 8, 2); 
+            $table->string('status')->default('pending');
+            $table->decimal('price_at_booking', 8, 2);
             $table->timestamps();
         });
     }

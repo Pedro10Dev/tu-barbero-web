@@ -2,19 +2,18 @@
 
 namespace App\Models;
 
-
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Laravel\Fortify\Contracts\PasskeyUser;
 use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
-use App\Enums\UserRole;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
@@ -31,12 +30,12 @@ use Spatie\Permission\Traits\HasRoles;
  * @property Carbon|null $updated_at
  * @property string|null $phone
  */
-#[Fillable(['name', 'email', 'password', 'phone' , 'google_id','email_verified_at'])]
+#[Fillable(['name', 'email', 'password', 'phone', 'google_id', 'email_verified_at'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token'])]
-class User extends Authenticatable implements PasskeyUser, MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable,HasRoles;
+    use HasFactory, HasRoles, Notifiable, PasskeyAuthenticatable,TwoFactorAuthenticatable;
 
     /**
      * Get the attributes that should be cast.
@@ -51,8 +50,9 @@ class User extends Authenticatable implements PasskeyUser, MustVerifyEmail
             'two_factor_confirmed_at' => 'datetime',
         ];
     }
-    
-    public function barberProfile()
+
+    /** @return HasOne<BarberProfile, $this> */
+    public function barberProfile(): HasOne
     {
         return $this->hasOne(BarberProfile::class);
     }

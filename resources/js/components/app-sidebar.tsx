@@ -1,5 +1,21 @@
+import { Link, usePage } from '@inertiajs/react';
+import {
+    LayoutGrid,
+    Calendar,
+    Users,
+    Scissors,
+    Globe,
+    Activity,
+    CalendarDays,
+    Briefcase,
+    Clock,
+    ShieldCheck,
+    History,
+    Settings,
+} from 'lucide-react';
 import { NavFooter } from '@/components/nav-footer';
-import { NavMain, type ExtendedNavItem } from '@/components/nav-main';
+import { NavMain } from '@/components/nav-main';
+import type { ExtendedNavItem } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import {
     Sidebar,
@@ -11,23 +27,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
-import {
-    LayoutGrid,
-    Calendar,
-    Users,
-    Scissors,
-    Globe,
-    Activity,
-    Shield,
-    CalendarDays,
-    Briefcase,
-    Clock,
-    ShieldCheck,
-    History,
-    Settings,
-} from 'lucide-react';
 import AppLogo from './app-logo';
-import { Link, usePage } from '@inertiajs/react';
 
 const barberNavItems: ExtendedNavItem[] = [
     {
@@ -129,6 +129,7 @@ export function AppSidebar() {
 
     const isAdmin = roles.includes('admin');
     const isBarber = roles.includes('barber') || isAdmin;
+
     return (
         <Sidebar collapsible="offcanvas" variant="sidebar">
             <SidebarHeader>

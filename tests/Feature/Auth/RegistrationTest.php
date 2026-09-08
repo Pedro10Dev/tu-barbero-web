@@ -16,8 +16,10 @@ test('new users can register', function () {
     $response = $this->post(route('register.store'), [
         'name' => 'Test User',
         'email' => 'test@example.com',
-        'password' => 'password',
-        'password_confirmation' => 'password',
+        'phone_prefix' => '+34',
+        'phone_number' => '6001234',
+        'password' => 'S3cure#Pass2026',
+        'password_confirmation' => 'S3cure#Pass2026',
     ]);
 
     $this->assertAuthenticated();

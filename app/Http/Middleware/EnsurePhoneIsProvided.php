@@ -13,12 +13,12 @@ class EnsurePhoneIsProvided
         $user = $request->user();
 
         // Si no está autenticado, dejar pasar
-        if (!$user) {
+        if (! $user) {
             return $next($request);
         }
 
         // Si ya tiene teléfono, dejar pasar
-        if (!empty($user->phone)) {
+        if (! empty($user->phone)) {
             return $next($request);
         }
 

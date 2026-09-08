@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
 import { Head, useForm, usePage } from '@inertiajs/react';
-import Navbar from '@/components/navbar';
+import React, { useState, useEffect } from 'react';
 import Footer from '@/components/footer';
+import Navbar from '@/components/navbar';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
@@ -56,22 +56,36 @@ export default function BookingIndex() {
     );
 
     useEffect(() => {
-        if (data.date && data.service_id && data.barber_profile_id) {
-            setLoadingSlots(true);
-            setAvailableSlots([]);
+        let isActive = true;
 
+        if (data.date && data.service_id && data.barber_profile_id) {
             fetch(
                 `/api/booking/availability?date=${data.date}&service_id=${data.service_id}&barber_profile_id=${data.barber_profile_id}`,
             )
                 .then((res) => res.json())
                 .then((resData) => {
-                    setAvailableSlots(resData.slots || []);
+                    if (isActive) {
+                        setAvailableSlots(resData.slots || []);
+                    }
                 })
-                .catch((err) =>
-                    console.error('Error al cargar la disponibilidad:', err),
-                )
-                .finally(() => setLoadingSlots(false));
+                .catch((err) => {
+                    if (isActive) {
+                        console.error(
+                            'Error al cargar la disponibilidad:',
+                            err,
+                        );
+                    }
+                })
+                .finally(() => {
+                    if (isActive) {
+                        setLoadingSlots(false);
+                    }
+                });
         }
+
+        return () => {
+            isActive = false;
+        };
     }, [data.date, data.service_id, data.barber_profile_id]);
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -150,10 +164,13 @@ export default function BookingIndex() {
                                         const isSelected =
                                             data.service_id ===
                                             service.id.toString();
+
                                         return (
                                             <div
                                                 key={service.id}
                                                 onClick={() => {
+                                                    setLoadingSlots(true);
+                                                    setAvailableSlots([]);
                                                     setData(
                                                         'service_id',
                                                         service.id.toString(),
@@ -215,10 +232,13 @@ export default function BookingIndex() {
                                         const isSelected =
                                             data.barber_profile_id ===
                                             barber.id.toString();
+
                                         return (
                                             <div
                                                 key={barber.id}
                                                 onClick={() => {
+                                                    setLoadingSlots(true);
+                                                    setAvailableSlots([]);
                                                     setData(
                                                         'barber_profile_id',
                                                         barber.id.toString(),
@@ -293,6 +313,8 @@ export default function BookingIndex() {
                                         }
                                         value={data.date}
                                         onChange={(e) => {
+                                            setLoadingSlots(true);
+                                            setAvailableSlots([]);
                                             setData('date', e.target.value);
                                             setData('time', '');
                                         }}
@@ -319,6 +341,7 @@ export default function BookingIndex() {
                                                 {availableSlots.map((slot) => {
                                                     const isSelected =
                                                         data.time === slot;
+
                                                     return (
                                                         <button
                                                             type="button"

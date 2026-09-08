@@ -1,18 +1,19 @@
-import React from 'react';
 import { Head, Link } from '@inertiajs/react';
+import React from 'react';
 
 export default function Success() {
     return (
-        <div className="p-6 max-w-md mx-auto text-center mt-12">
+        <div className="mx-auto mt-12 max-w-md p-6 text-center">
             <Head title="Reserva Exitosa" />
-            <div className="mb-4 text-green-500 text-5xl">✓</div>
-            <h1 className="text-2xl font-bold mb-2">¡Reserva Solicitada!</h1>
-            <p className="text-gray-600 mb-6">
-                Tu cita ha sido registrada correctamente. El barbero la revisará y confirmará pronto.
+            <div className="mb-4 text-5xl text-green-500">✓</div>
+            <h1 className="mb-2 text-2xl font-bold">¡Reserva Solicitada!</h1>
+            <p className="mb-6 text-gray-600">
+                Tu cita ha sido registrada correctamente. El barbero la revisará
+                y confirmará pronto.
             </p>
             <Link
                 href="/"
-                className="inline-block bg-black text-white px-6 py-3 rounded-lg font-medium hover:bg-gray-800"
+                className="inline-block rounded-lg bg-black px-6 py-3 font-medium text-white hover:bg-gray-800"
             >
                 Volver al inicio
             </Link>

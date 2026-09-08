@@ -3,17 +3,36 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property string $display_name
+ * @property string|null $bio
+ * @property bool $is_active
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ */
 class BarberProfile extends Model
 {
-    protected $guarded = [];
+    protected $fillable = [
+        'user_id',
+        'display_name',
+        'bio',
+        'is_active',
+    ];
 
-    public function user()
+    /** @return BelongsTo<User, $this> */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function appointments()
+    /** @return HasMany<Appointment, $this> */
+    public function appointments(): HasMany
     {
         return $this->hasMany(Appointment::class);
     }

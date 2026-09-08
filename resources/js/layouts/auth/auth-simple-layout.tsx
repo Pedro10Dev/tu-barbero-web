@@ -1,4 +1,4 @@
-import { Link, Head } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import type { AuthLayoutProps } from '@/types';
 
 export default function AuthSimpleLayout({

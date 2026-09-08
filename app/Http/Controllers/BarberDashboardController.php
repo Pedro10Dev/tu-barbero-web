@@ -2,47 +2,100 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Appointment;
-use Inertia\Inertia;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class BarberDashboardController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
-        $barberId = $request->user()->id;
+        /** @var User $user */
+        $user = $request->user();
 
-        // 1. Cortes totales (filtrando por user_id y status completed)
-        $totalCuts = Appointment::where('user_id', $barberId)
+        $barberProfile = $user->barberProfile()->first();
+
+        if ($barberProfile === null) {
+            return Inertia::render('dashboard', [
+                'stats' => [
+                    'totalCuts' => 0,
+                    'monthlyCuts' => 0,
+                    'monthlyRevenue' => 0,
+                    'todayAppointments' => 0,
+                    'scheduledAppointments' => 0,
+                ],
+                'pendingAppointments' => [],
+                'nextAppointment' => null,
+            ]);
+        }
+
+        $barberId = $barberProfile->id;
+        $startOfMonth = Carbon::now()->startOfMonth();
+
+        $totalCuts = Appointment::where('barber_profile_id', $barberId)
             ->where('status', 'completed')
             ->count();
 
-        // 2. Cortes del mes actual (usando start_time para el mes y año)
-        $monthlyCuts = Appointment::where('user_id', $barberId)
+        $monthlyCuts = Appointment::where('barber_profile_id', $barberId)
             ->where('status', 'completed')
-            ->whereMonth('start_time', Carbon::now()->month)
-            ->whereYear('start_time', Carbon::now()->year)
+            ->where('start_time', '>=', $startOfMonth)
             ->count();
 
-        // 3. Citas agendadas (activas)
-        $scheduledAppointments = Appointment::where('user_id', $barberId)
-            ->where('status', 'scheduled')
+        $monthlyRevenue = (float) Appointment::where('barber_profile_id', $barberId)
+            ->where('status', 'completed')
+            ->where('start_time', '>=', $startOfMonth)
+            ->sum('price_at_booking');
+
+        $todayAppointments = Appointment::where('barber_profile_id', $barberId)
+            ->whereIn('status', ['pending', 'scheduled', 'confirmed'])
+            ->whereDate('start_time', Carbon::today())
             ->count();
 
-        // 4. Citas pendientes por aceptar o rechazar
-        $pendingAppointments = Appointment::where('user_id', $barberId)
+        $scheduledAppointments = Appointment::where('barber_profile_id', $barberId)
+            ->whereIn('status', ['scheduled', 'confirmed'])
+            ->count();
+
+        $pendingAppointments = Appointment::where('barber_profile_id', $barberId)
             ->where('status', 'pending')
-            ->with('client')
-            ->get();
+            ->with(['user', 'service'])
+            ->orderBy('start_time')
+            ->get()
+            ->map(function (Appointment $appointment): array {
+                return [
+                    'id' => $appointment->id,
+                    'client' => $appointment->guest_name ?? $appointment->user?->name,
+                    'start_time' => $appointment->start_time->format('d/m/Y H:i'),
+                    'service' => $appointment->service?->name,
+                ];
+            })
+            ->values();
+
+        $nextAppointment = Appointment::where('barber_profile_id', $barberId)
+            ->whereIn('status', ['scheduled', 'confirmed'])
+            ->where('start_time', '>=', Carbon::now())
+            ->with(['user', 'service'])
+            ->orderBy('start_time')
+            ->first();
+
+        $nextAppointmentData = $nextAppointment !== null ? [
+            'client' => $nextAppointment->guest_name ?? $nextAppointment->user?->name,
+            'start_time' => $nextAppointment->start_time->format('d/m/Y H:i'),
+            'service' => $nextAppointment->service?->name,
+        ] : null;
 
         return Inertia::render('dashboard', [
             'stats' => [
                 'totalCuts' => $totalCuts,
                 'monthlyCuts' => $monthlyCuts,
+                'monthlyRevenue' => $monthlyRevenue,
+                'todayAppointments' => $todayAppointments,
                 'scheduledAppointments' => $scheduledAppointments,
             ],
             'pendingAppointments' => $pendingAppointments,
+            'nextAppointment' => $nextAppointmentData,
         ]);
     }
 }

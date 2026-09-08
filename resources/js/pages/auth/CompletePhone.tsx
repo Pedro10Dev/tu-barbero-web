@@ -1,5 +1,6 @@
 import { Head, useForm, Link } from '@inertiajs/react';
-import { FormEventHandler, useState, useRef, ChangeEvent } from 'react';
+import type { FormEventHandler, ChangeEvent } from 'react';
+import { useState, useRef } from 'react';
 
 export default function CompletePhone() {
     const { data, setData, post, processing, errors } = useForm({
@@ -21,6 +22,7 @@ export default function CompletePhone() {
         // Si pegan los 11 dígitos con prefijo incluido
         if (value.length >= 11) {
             const detectedPrefix = value.slice(0, 4);
+
             if (operatorPrefixes.includes(detectedPrefix)) {
                 setPrefix(detectedPrefix);
                 value = value.slice(4);

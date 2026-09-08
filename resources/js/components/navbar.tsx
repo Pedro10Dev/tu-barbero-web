@@ -19,6 +19,7 @@ export default function Navbar() {
             }
         };
         document.addEventListener('mousedown', handleOutsideClick);
+
         return () =>
             document.removeEventListener('mousedown', handleOutsideClick);
     }, []);

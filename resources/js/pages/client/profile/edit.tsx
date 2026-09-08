@@ -1,10 +1,10 @@
 import { useForm } from '@inertiajs/react';
-import Navbar from '@/components/navbar';
+import { User, Mail, Phone, CheckCircle2, Loader2 } from 'lucide-react';
 import Footer from '@/components/footer';
+import Navbar from '@/components/navbar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { User, Mail, Phone, CheckCircle2, Loader2 } from 'lucide-react';
 
 interface Props {
     user: {

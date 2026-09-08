@@ -5,16 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Models\BarberProfile;
 use App\Models\Service;
-use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class BookingController extends Controller
 {
     // 1. Mostrar la página principal de reservas (Frontend React)
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $user = $request->user();
 
@@ -30,7 +32,7 @@ class BookingController extends Controller
     }
 
     // 2. Endpoint API para calcular horas disponibles según fecha, barbero y servicio
-    public function availability(Request $request)
+    public function availability(Request $request): JsonResponse
     {
         $request->validate([
             'date' => 'required|date',
@@ -48,7 +50,7 @@ class BookingController extends Controller
     }
 
     // 3. Guardar la reserva con validación anti-solapamiento
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'service_id' => 'required|exists:services,id',
@@ -61,7 +63,7 @@ class BookingController extends Controller
             'notes' => 'nullable|string|max:500',
         ]);
 
-        $service = Service::findOrFail($validated['service_id']);
+        $service = Service::query()->whereKey($validated['service_id'])->firstOrFail();
         $startDateTime = Carbon::parse("{$validated['date']} {$validated['time']}");
         $endDateTime = $startDateTime->copy()->addMinutes($service->duration_minutes);
 
@@ -96,10 +98,13 @@ class BookingController extends Controller
 
     // --- ALGORITMOS PRIVADOS ---
 
+    /**
+     * @return array<int, string>
+     */
     private function calculateAvailableSlots(string $date, int $serviceId, int $barberId): array
     {
-        $service = Service::find($serviceId);
-        $duration = ($service && isset($service->duration_minutes)) ? $service->duration_minutes : 30;
+        $service = Service::query()->whereKey($serviceId)->first();
+        $duration = (int) $service->duration_minutes;
 
         $workStart = Carbon::parse("{$date} 09:00:00");
         $workEnd = Carbon::parse("{$date} 18:00:00");
@@ -118,6 +123,7 @@ class BookingController extends Controller
 
             if ($date === today()->toDateString() && $slotStart->isPast()) {
                 $currentSlot->addMinutes(30);
+
                 continue;
             }
 
@@ -128,7 +134,7 @@ class BookingController extends Controller
                 return $slotStart->lt($appEnd) && $slotEnd->gt($appStart);
             });
 
-            if (!$isOccupied) {
+            if (! $isOccupied) {
                 $availableSlots[] = $slotStart->format('H:i');
             }
 

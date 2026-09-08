@@ -1,11 +1,8 @@
 import { Head, Link } from '@inertiajs/react';
-import { useState } from 'react';
-import Navbar from '@/components/navbar';
 import Footer from '@/components/footer';
+import Navbar from '@/components/navbar';
 
 export default function Landing({ services = [] }: { services: any[] }) {
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
     return (
         <div className="min-h-screen overflow-x-hidden bg-zinc-950 text-white">
             <Head title="Tu Barbero - Reserva tu Cita" />
