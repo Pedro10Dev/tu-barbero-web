@@ -349,7 +349,7 @@ Dashboard.layout = (page: any) => (
     <AppLayout
         breadcrumbs={[
             {
-                title: 'Panel de Control',
+                title: '',
                 href: '/dashboard',
             },
         ]}
