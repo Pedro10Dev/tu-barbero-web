@@ -140,14 +140,26 @@ class BarberController extends Controller
 
     public function destroy(BarberProfile $barber): RedirectResponse
     {
-        if (! $barber->appointments()->exists()) {
-            $barber->delete();
+        $barber->loadMissing('user');
 
-            return back()->with('toast', ['type' => 'success', 'message' => 'Barbero eliminado.']);
+        Appointment::where('barber_profile_id', $barber->id)
+            ->whereNull('barber_name')
+            ->update(['barber_name' => $barber->display_name]);
+
+        if ($barber->user !== null) {
+            $barber->user->delete();
+
+            return back()->with('toast', [
+                'type' => 'success',
+                'message' => 'Barbero y su usuario eliminados. El historial de citas se conservó.',
+            ]);
         }
 
-        return back()->withErrors([
-            'barber' => 'No se puede eliminar un barbero con citas asociadas.',
+        $barber->delete();
+
+        return back()->with('toast', [
+            'type' => 'success',
+            'message' => 'Barbero eliminado.',
         ]);
     }
 }

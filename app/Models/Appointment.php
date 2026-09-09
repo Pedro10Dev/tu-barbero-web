@@ -11,7 +11,8 @@ use Illuminate\Support\Carbon;
  * @property int|null $user_id
  * @property string|null $guest_name
  * @property string|null $guest_phone
- * @property int $barber_profile_id
+ * @property int|null $barber_profile_id
+ * @property string|null $barber_name
  * @property int $service_id
  * @property Carbon $start_time
  * @property Carbon $end_time
@@ -28,6 +29,7 @@ class Appointment extends Model
         'guest_name',
         'guest_phone',
         'barber_profile_id',
+        'barber_name',
         'service_id',
         'start_time',
         'end_time',

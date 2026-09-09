@@ -12,6 +12,7 @@ import {
     User,
 } from 'lucide-react';
 import { useState } from 'react';
+import { formatTimeAMPM } from '@/lib/utils';
 
 type Appointment = {
     id: number;
@@ -226,7 +227,9 @@ export default function AdminAppointments({
                                                     <span className="flex items-center gap-1.5">
                                                         <Clock className="size-3.5 text-zinc-500" />
                                                         {app.start_time}{' '}
-                                                        {app.time}
+                                                        {formatTimeAMPM(
+                                                            app.time,
+                                                        )}
                                                     </span>
                                                     <span className="flex items-center gap-1.5">
                                                         <User className="size-3.5 text-zinc-500" />

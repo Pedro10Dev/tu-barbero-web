@@ -19,7 +19,7 @@ class AppointmentController extends Controller
                 return [
                     'id' => $appointment->id,
                     'client' => $appointment->guest_name ?? $appointment->user->name ?? 'Cliente',
-                    'barber' => $appointment->barberProfile->display_name,
+                    'barber' => $appointment->barber_name ?? $appointment->barberProfile->display_name ?? '—',
                     'service' => $appointment->service->name ?? 'Servicio',
                     'start_time' => $appointment->start_time->format('d/m/Y'),
                     'time' => $appointment->start_time->format('H:i'),

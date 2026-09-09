@@ -4,6 +4,7 @@ import Footer from '@/components/footer';
 import Navbar from '@/components/navbar';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { formatTimeAMPM } from '@/lib/utils';
 
 interface Service {
     id: number;
@@ -358,7 +359,9 @@ export default function BookingIndex() {
                                                                     : 'border-zinc-800 bg-zinc-900/40 text-zinc-300 hover:border-zinc-700'
                                                             }`}
                                                         >
-                                                            {slot}
+                                                            {formatTimeAMPM(
+                                                                slot,
+                                                            )}
                                                         </button>
                                                     );
                                                 })}
@@ -428,7 +431,8 @@ export default function BookingIndex() {
                                             Fecha y Hora
                                         </span>
                                         <span className="font-semibold text-white">
-                                            {data.date} a las {data.time}
+                                            {data.date} a las{' '}
+                                            {formatTimeAMPM(data.time)}
                                         </span>
                                     </div>
                                     <div>

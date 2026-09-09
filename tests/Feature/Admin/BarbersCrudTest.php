@@ -118,16 +118,17 @@ test('admins can update a barber and its linked user', function () {
         ->and($this->barber->fresh()->email)->toBe('renombrado@example.com');
 });
 
-test('admins can delete a barber without appointments', function () {
+test('admins can delete a barber and its linked user', function () {
     $this->actingAs($this->admin)
         ->from(route('admin.barbers.index'))
         ->delete(route('admin.barbers.destroy', ['barber' => $this->profile->id]))
         ->assertRedirect(route('admin.barbers.index'));
 
-    expect(BarberProfile::count())->toBe(0);
+    expect(BarberProfile::count())->toBe(0)
+        ->and(User::where('email', $this->barber->email)->exists())->toBeFalse();
 });
 
-test('admins cannot delete a barber that has appointments', function () {
+test('admins can delete a barber with appointments keeping the history', function () {
     Appointment::create([
         'user_id' => $this->barber->id,
         'guest_name' => null,
@@ -143,7 +144,17 @@ test('admins cannot delete a barber that has appointments', function () {
     $this->actingAs($this->admin)
         ->from(route('admin.barbers.index'))
         ->delete(route('admin.barbers.destroy', ['barber' => $this->profile->id]))
-        ->assertSessionHasErrors('barber');
+        ->assertRedirect(route('admin.barbers.index'))
+        ->assertSessionHasNoErrors();
 
-    expect(BarberProfile::count())->toBe(1);
+    expect(BarberProfile::count())->toBe(0)
+        ->and(User::where('email', $this->barber->email)->exists())->toBeFalse();
+
+    $appointment = Appointment::first();
+
+    expect($appointment)->not->toBeNull()
+        ->and($appointment->barber_name)->toBe('Barber Test')
+        ->and($appointment->barber_profile_id)->toBeNull()
+        ->and($appointment->user_id)->toBeNull()
+        ->and($appointment->status)->toBe('pending');
 });

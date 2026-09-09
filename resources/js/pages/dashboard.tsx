@@ -1,4 +1,4 @@
-import { Head, router, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import {
     Scissors,
     Calendar,
@@ -8,17 +8,17 @@ import {
     XCircle,
     Sparkles,
     UserPlus,
-    CalendarOff,
     History,
 } from 'lucide-react';
+import { useState } from 'react';
 import AppLayout from '@/layouts/app-layout';
+import { formatDateTimeAMPM } from '@/lib/utils';
 
 type Stats = {
     totalCuts: number;
     weeklyCuts: number;
     monthlyCuts: number;
     todayAppointments: number;
-    scheduledAppointments: number;
 };
 
 type PendingAppointment = {
@@ -61,8 +61,18 @@ export default function Dashboard({
     const { auth } = usePage().props as { auth?: { user?: { name?: string } } };
     const barberName = auth?.user?.name || 'Barbero';
 
+    const [decidingId, setDecidingId] = useState<number | null>(null);
+
     const decide = (id: number, action: 'accept' | 'reject') => {
-        router.patch(`/agenda/appointments/${id}`, { action });
+        setDecidingId(id);
+        router.patch(
+            `/agenda/appointments/${id}`,
+            { action },
+            {
+                onFinish: () => setDecidingId(null),
+                onError: () => setDecidingId(null),
+            },
+        );
     };
 
     return (
@@ -85,12 +95,12 @@ export default function Dashboard({
                     </div>
 
                     <div className="flex w-full items-center gap-2 sm:w-auto">
-                        <button className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-zinc-900 shadow-sm transition-colors hover:bg-zinc-200 sm:flex-none">
+                        <Link
+                            href="/agenda/nuevo-turno"
+                            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-zinc-900 shadow-sm transition-colors hover:bg-zinc-200 sm:flex-none"
+                        >
                             <UserPlus className="h-4 w-4" /> Nuevo Turno
-                        </button>
-                        <button className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2.5 text-sm font-semibold text-zinc-300 transition-colors hover:bg-zinc-800 hover:text-white sm:flex-none">
-                            <CalendarOff className="h-4 w-4" /> Bloquear Hora
-                        </button>
+                        </Link>
                     </div>
                 </div>
 
@@ -114,7 +124,10 @@ export default function Dashboard({
                                     <h3 className="flex items-center gap-2 text-xl font-bold text-white sm:text-2xl">
                                         {nextAppointment.client}
                                         <span className="text-lg font-medium text-slate-400">
-                                            · {nextAppointment.start_time}
+                                            ·{' '}
+                                            {formatDateTimeAMPM(
+                                                nextAppointment.start_time,
+                                            )}
                                         </span>
                                     </h3>
                                     <p className="mt-1 text-sm text-slate-300">
@@ -228,7 +241,9 @@ export default function Dashboard({
                                                 </p>
                                                 <p className="mt-0.5 text-xs text-zinc-400">
                                                     {appointment.service} ·{' '}
-                                                    {appointment.start_time}
+                                                    {formatDateTimeAMPM(
+                                                        appointment.start_time,
+                                                    )}
                                                 </p>
                                             </div>
                                         </div>
@@ -240,10 +255,16 @@ export default function Dashboard({
                                                         'accept',
                                                     )
                                                 }
-                                                className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400 transition hover:bg-emerald-500/20 sm:flex-none"
+                                                disabled={
+                                                    decidingId ===
+                                                    appointment.id
+                                                }
+                                                className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-400 transition hover:bg-emerald-500/20 disabled:opacity-50 sm:flex-none"
                                             >
                                                 <CheckCircle2 className="h-3.5 w-3.5" />{' '}
-                                                Aceptar
+                                                {decidingId === appointment.id
+                                                    ? 'Procesando...'
+                                                    : 'Aceptar'}
                                             </button>
                                             <button
                                                 onClick={() =>
@@ -252,10 +273,16 @@ export default function Dashboard({
                                                         'reject',
                                                     )
                                                 }
-                                                className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-rose-500/20 bg-rose-500/10 px-3 py-1.5 text-xs font-semibold text-rose-400 transition hover:bg-rose-500/20 sm:flex-none"
+                                                disabled={
+                                                    decidingId ===
+                                                    appointment.id
+                                                }
+                                                className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-rose-500/20 bg-rose-500/10 px-3 py-1.5 text-xs font-semibold text-rose-400 transition hover:bg-rose-500/20 disabled:opacity-50 sm:flex-none"
                                             >
                                                 <XCircle className="h-3.5 w-3.5" />{' '}
-                                                Rechazar
+                                                {decidingId === appointment.id
+                                                    ? 'Procesando...'
+                                                    : 'Rechazar'}
                                             </button>
                                         </div>
                                     </div>
@@ -305,9 +332,12 @@ export default function Dashboard({
                             </div>
                         )}
 
-                        <button className="mt-6 w-full rounded-lg border border-zinc-800/80 bg-zinc-800/40 py-2 text-xs font-semibold text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-white">
+                        <Link
+                            href="/productividad"
+                            className="mt-6 w-full rounded-lg border border-zinc-800/80 bg-zinc-800/40 py-2 text-center text-xs font-semibold text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-white"
+                        >
                             Ver historial completo
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </div>
@@ -319,8 +349,8 @@ Dashboard.layout = (page: any) => (
     <AppLayout
         breadcrumbs={[
             {
-                title: '',
-                href: 'dashboard',
+                title: 'Panel de Control',
+                href: '/dashboard',
             },
         ]}
     >

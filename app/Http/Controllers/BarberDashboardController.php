@@ -27,7 +27,6 @@ class BarberDashboardController extends Controller
                     'weeklyCuts' => 0,
                     'monthlyCuts' => 0,
                     'todayAppointments' => 0,
-                    'scheduledAppointments' => 0,
                 ],
                 'pendingAppointments' => [],
                 'nextAppointment' => null,
@@ -56,10 +55,6 @@ class BarberDashboardController extends Controller
         $todayAppointments = Appointment::where('barber_profile_id', $barberId)
             ->whereIn('status', ['pending', 'confirmed'])
             ->whereDate('start_time', Carbon::today())
-            ->count();
-
-        $scheduledAppointments = Appointment::where('barber_profile_id', $barberId)
-            ->where('status', 'confirmed')
             ->count();
 
         $pendingAppointments = Appointment::where('barber_profile_id', $barberId)
@@ -128,7 +123,6 @@ class BarberDashboardController extends Controller
                 'weeklyCuts' => $weeklyCuts,
                 'monthlyCuts' => $monthlyCuts,
                 'todayAppointments' => $todayAppointments,
-                'scheduledAppointments' => $scheduledAppointments,
             ],
             'pendingAppointments' => $pendingAppointments,
             'nextAppointment' => $nextAppointmentData,

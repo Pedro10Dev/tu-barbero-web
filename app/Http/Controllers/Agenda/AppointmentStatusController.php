@@ -22,7 +22,7 @@ class AppointmentStatusController extends Controller
         }
 
         $validated = $request->validate([
-            'action' => ['required', Rule::in(['accept', 'reject', 'cancel'])],
+            'action' => ['required', Rule::in(['accept', 'reject', 'cancel', 'complete'])],
         ]);
 
         $action = $validated['action'];
@@ -37,6 +37,18 @@ class AppointmentStatusController extends Controller
             $appointment->update(['status' => 'cancelled']);
 
             return back()->with('toast', ['type' => 'success', 'message' => 'Cita cancelada.']);
+        }
+
+        if ($action === 'complete') {
+            if (! in_array($appointment->status, ['pending', 'confirmed'], true)) {
+                return back()->withErrors([
+                    'action' => 'Solo se pueden completar citas pendientes o confirmadas.',
+                ]);
+            }
+
+            $appointment->update(['status' => 'completed']);
+
+            return back()->with('toast', ['type' => 'success', 'message' => 'Cita marcada como completada.']);
         }
 
         if ($appointment->status !== 'pending') {

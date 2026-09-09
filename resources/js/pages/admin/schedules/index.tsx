@@ -7,6 +7,7 @@ import {
     CalendarDays,
 } from 'lucide-react';
 import { useState } from 'react';
+import { formatTimeAMPM } from '@/lib/utils';
 
 type Slot = {
     id: number;
@@ -231,10 +232,15 @@ export default function AdminSchedules({
                                                 <div className="flex items-center gap-4">
                                                     <div className="flex w-24 shrink-0 items-center justify-center rounded-xl border border-zinc-700/50 bg-zinc-800/60 px-2 py-1.5 text-center">
                                                         <span className="text-sm font-bold text-white">
-                                                            {slot.start_time}
+                                                            {formatTimeAMPM(
+                                                                slot.start_time,
+                                                            )}
                                                         </span>
                                                         <span className="text-[10px] text-zinc-500">
-                                                            - {slot.end_time}
+                                                            -{' '}
+                                                            {formatTimeAMPM(
+                                                                slot.end_time,
+                                                            )}
                                                         </span>
                                                     </div>
                                                     <div>

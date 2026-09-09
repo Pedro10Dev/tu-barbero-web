@@ -11,6 +11,7 @@ use App\Http\Controllers\Agenda\AgendaCalendarController;
 use App\Http\Controllers\Agenda\AgendaListController;
 use App\Http\Controllers\Agenda\AppointmentStatusController;
 use App\Http\Controllers\Agenda\ClientListController;
+use App\Http\Controllers\Agenda\ManualAppointmentController;
 use App\Http\Controllers\Agenda\ProductividadController;
 use App\Http\Controllers\Agenda\ServiceListController;
 use App\Http\Controllers\Auth\SocialController;
@@ -53,6 +54,8 @@ Route::middleware(['auth', 'verified', 'phone.required', 'password.change', Role
     Route::get('/agenda/calendario', [AgendaCalendarController::class, 'index'])->name('agenda.calendar');
     Route::get('/agenda/listado', [AgendaListController::class, 'index'])->name('agenda.list');
     Route::patch('/agenda/appointments/{appointment}', [AppointmentStatusController::class, 'update'])->name('agenda.appointment.status');
+    Route::get('/agenda/nuevo-turno', [ManualAppointmentController::class, 'create'])->name('agenda.appointments.create');
+    Route::post('/agenda/appointments', [ManualAppointmentController::class, 'store'])->name('agenda.appointments.store');
     Route::get('/clientes', [ClientListController::class, 'index'])->name('clients.index');
     Route::get('/servicios', [ServiceListController::class, 'index'])->name('services.index');
     Route::get('/productividad', [ProductividadController::class, 'index'])->name('productividad.index');

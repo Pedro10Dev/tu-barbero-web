@@ -1,5 +1,22 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { Scissors, Plus, UserCheck, Trash2, Pencil, Phone } from 'lucide-react';
+import {
+    Scissors,
+    Plus,
+    UserCheck,
+    Trash2,
+    Pencil,
+    Phone,
+    AlertTriangle,
+} from 'lucide-react';
+import { useState } from 'react';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
 
 type Barber = {
     id: number;
@@ -12,15 +29,25 @@ type Barber = {
     monthlyCompleted: number;
 };
 
+type BarberToDelete = {
+    id: number;
+    display_name: string;
+} | null;
+
 export default function AdminBarbers({ barbers }: { barbers: Barber[] }) {
+    const [barberToDelete, setBarberToDelete] = useState<BarberToDelete>(null);
+
     const activeCount = barbers.filter((b) => b.is_active).length;
 
-    const destroy = (id: number, displayName: string) => {
-        if (window.confirm(`¿Eliminar al barbero "${displayName}"?`)) {
-            router.delete(`/admin/barbers/${id}`, {
-                preserveScroll: true,
-            });
+    const confirmDestroy = () => {
+        if (barberToDelete === null) {
+            return;
         }
+
+        router.delete(`/admin/barbers/${barberToDelete.id}`, {
+            preserveScroll: true,
+        });
+        setBarberToDelete(null);
     };
 
     return (
@@ -145,10 +172,11 @@ export default function AdminBarbers({ barbers }: { barbers: Barber[] }) {
                                     </Link>
                                     <button
                                         onClick={() =>
-                                            destroy(
-                                                barber.id,
-                                                barber.display_name,
-                                            )
+                                            setBarberToDelete({
+                                                id: barber.id,
+                                                display_name:
+                                                    barber.display_name,
+                                            })
                                         }
                                         className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-xs font-semibold text-rose-300 transition hover:bg-rose-500/20"
                                     >
@@ -161,6 +189,58 @@ export default function AdminBarbers({ barbers }: { barbers: Barber[] }) {
                     )}
                 </div>
             </div>
+
+            <Dialog
+                open={barberToDelete !== null}
+                onOpenChange={(open) => {
+                    if (!open) {
+                        setBarberToDelete(null);
+                    }
+                }}
+            >
+                <DialogContent className="border-zinc-800 bg-zinc-900 text-white sm:max-w-md">
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2 text-rose-400">
+                            <AlertTriangle className="size-5" />
+                            Eliminar barbero
+                        </DialogTitle>
+                        <DialogDescription>
+                            Se eliminará el usuario de{' '}
+                            <strong className="text-white">
+                                {barberToDelete?.display_name}
+                            </strong>{' '}
+                            y su perfil; ya no podrá iniciar sesión en la
+                            plataforma.
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <div className="flex items-start gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-3 text-xs text-emerald-200">
+                        <AlertTriangle className="mt-0.5 size-4 shrink-0 text-emerald-400" />
+                        El historial de cortes y citas se conservará en el panel
+                        administrativo.
+                    </div>
+
+                    <p className="text-xs text-zinc-400">
+                        Esta acción no se puede deshacer.
+                    </p>
+
+                    <DialogFooter>
+                        <button
+                            onClick={() => setBarberToDelete(null)}
+                            className="rounded-xl border border-zinc-700/50 bg-zinc-800/60 px-4 py-2.5 text-xs font-semibold text-zinc-300 transition hover:bg-zinc-700 hover:text-white"
+                        >
+                            Cancelar
+                        </button>
+                        <button
+                            onClick={confirmDestroy}
+                            className="flex items-center gap-2 rounded-xl bg-rose-600 px-4 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-rose-500"
+                        >
+                            <Trash2 className="size-4" />
+                            Eliminar barbero
+                        </button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </>
     );
 }

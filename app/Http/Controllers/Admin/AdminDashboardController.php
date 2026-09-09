@@ -26,7 +26,7 @@ class AdminDashboardController extends Controller
                 return [
                     'id' => $appointment->id,
                     'client' => $appointment->guest_name ?? $appointment->user->name ?? 'Cliente',
-                    'barber' => $appointment->barberProfile->display_name,
+                    'barber' => $appointment->barber_name ?? $appointment->barberProfile->display_name ?? '—',
                     'service' => $appointment->service->name ?? 'Servicio',
                     'start_time' => $appointment->start_time->format('d/m/Y H:i'),
                     'status' => $appointment->status,
@@ -56,7 +56,7 @@ class AdminDashboardController extends Controller
                 'id' => 'appointment-'.$appointment->id,
                 'title' => $label,
                 'description' => ($appointment->guest_name ?? $appointment->user->name ?? 'Cliente')
-                    .' · '.$appointment->barberProfile->display_name
+                    .' · '.($appointment->barber_name ?? $appointment->barberProfile->display_name ?? '—')
                     .' · '.$appointment->updated_at->diffForHumans(),
                 'tone' => $tone,
             ]);
@@ -78,7 +78,9 @@ class AdminDashboardController extends Controller
                 'totalUsers' => User::count(),
                 'totalAppointments' => Appointment::count(),
                 'activeBarbers' => BarberProfile::count(),
-                'appointmentsToday' => Appointment::whereDate('created_at', Carbon::today())->count(),
+                'appointmentsToday' => Appointment::whereIn('status', ['pending', 'confirmed'])
+                    ->whereDate('start_time', Carbon::today())
+                    ->count(),
                 'totalServices' => Service::count(),
             ],
             'recentAppointments' => $recentAppointments,

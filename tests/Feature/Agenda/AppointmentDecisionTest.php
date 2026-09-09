@@ -200,13 +200,40 @@ test('an already processed appointment cannot be cancelled', function () {
     expect($completed->fresh()->status)->toBe('completed');
 });
 
+test('a barber can mark a confirmed appointment as completed', function () {
+    $appointment = createAppointmentDecisionFixture($this->barberProfile, $this->service, '2026-09-10 14:00:00', '2026-09-10 14:30:00', null, 'confirmed');
+
+    $this->actingAs($this->barber)
+        ->from('/')
+        ->patch(route('agenda.appointment.status', ['appointment' => $appointment->id]), [
+            'action' => 'complete',
+        ])
+        ->assertSessionHasNoErrors()
+        ->assertRedirect('/');
+
+    expect($appointment->fresh()->status)->toBe('completed');
+});
+
+test('a completed appointment cannot be completed again', function () {
+    $completed = createAppointmentDecisionFixture($this->barberProfile, $this->service, '2026-09-10 14:00:00', '2026-09-10 14:30:00', null, 'completed');
+
+    $this->actingAs($this->barber)
+        ->from('/agenda/listado')
+        ->patch(route('agenda.appointment.status', ['appointment' => $completed->id]), [
+            'action' => 'complete',
+        ])
+        ->assertSessionHasErrors('action');
+
+    expect($completed->fresh()->status)->toBe('completed');
+});
+
 test('an invalid action is not accepted', function () {
     $appointment = createAppointmentDecisionFixture($this->barberProfile, $this->service, '2026-09-10 14:00:00', '2026-09-10 14:30:00');
 
     $this->actingAs($this->barber)
         ->from('/')
         ->patch(route('agenda.appointment.status', ['appointment' => $appointment->id]), [
-            'action' => 'complete',
+            'action' => 'foo',
         ])
         ->assertSessionHasErrors('action');
 

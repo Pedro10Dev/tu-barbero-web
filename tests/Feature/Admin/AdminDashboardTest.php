@@ -70,6 +70,27 @@ test('the admin dashboard shows the real stats, recent appointments and activity
         );
 });
 
+test('the admin dashboard counts appointments scheduled for today, not created today', function () {
+    Appointment::create([
+        'user_id' => null,
+        'guest_name' => 'Cliente Hoy',
+        'guest_phone' => '61112233',
+        'barber_profile_id' => $this->profile->id,
+        'service_id' => $this->service->id,
+        'start_time' => now()->format('Y-m-d 14:00:00'),
+        'end_time' => now()->format('Y-m-d 14:30:00'),
+        'status' => 'confirmed',
+        'price_at_booking' => $this->service->price,
+    ]);
+
+    $this->actingAs($this->admin)
+        ->get(route('admin.dashboard'))
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('admin/dashboard')
+            ->where('stats.appointmentsToday', 1)
+        );
+});
+
 test('the admin dashboard reflects the barber role in the user count', function () {
     $this->actingAs($this->admin)
         ->get(route('admin.dashboard'))

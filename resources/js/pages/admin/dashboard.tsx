@@ -11,6 +11,7 @@ import {
     Activity,
     Clock,
 } from 'lucide-react';
+import { formatDateTimeAMPM } from '@/lib/utils';
 
 type AdminStats = {
     totalUsers: number;
@@ -224,10 +225,13 @@ export default function AdminDashboard({
                                     Últimas Citas Registradas
                                 </h3>
                             </div>
-                            <button className="flex items-center gap-1 text-xs font-medium text-zinc-400 transition-colors hover:text-white">
+                            <Link
+                                href="/admin/appointments"
+                                className="flex items-center gap-1 text-xs font-medium text-zinc-400 transition-colors hover:text-white"
+                            >
                                 Ver todas{' '}
                                 <ArrowUpRight className="h-3.5 w-3.5" />
-                            </button>
+                            </Link>
                         </div>
 
                         <div className="flex flex-1 flex-col gap-3">
@@ -262,7 +266,9 @@ export default function AdminDashboard({
                                                 </p>
                                                 <p className="mt-0.5 text-[11px] text-zinc-400">
                                                     {appointment.service} ·{' '}
-                                                    {appointment.start_time}
+                                                    {formatDateTimeAMPM(
+                                                        appointment.start_time,
+                                                    )}
                                                 </p>
                                             </div>
                                         </div>

@@ -1,4 +1,4 @@
-import { Head, router } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import {
     Calendar,
     CheckCircle2,
@@ -15,6 +15,7 @@ import {
     CalendarOff,
 } from 'lucide-react';
 import { useState } from 'react';
+import { formatTimeAMPM } from '@/lib/utils';
 
 type Appointment = {
     id: number;
@@ -86,7 +87,10 @@ export default function AgendaList({
         setExpandedId(expandedId === id ? null : id);
     };
 
-    const decide = (id: number, action: 'accept' | 'reject' | 'cancel') => {
+    const decide = (
+        id: number,
+        action: 'accept' | 'reject' | 'cancel' | 'complete',
+    ) => {
         setUpdatingId(id);
         router.patch(
             `/agenda/appointments/${id}`,
@@ -204,10 +208,13 @@ export default function AgendaList({
                             </button>
                         </div>
 
-                        <button className="flex shrink-0 items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-zinc-200">
+                        <Link
+                            href="/agenda/nuevo-turno"
+                            className="flex shrink-0 items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-zinc-200"
+                        >
                             <Plus className="size-4" />
                             Nuevo Turno
-                        </button>
+                        </Link>
                     </div>
                 </div>
 
@@ -270,7 +277,9 @@ export default function AgendaList({
                                                     <span className="flex items-center gap-1.5">
                                                         <Clock className="size-3.5 text-zinc-500" />
                                                         {app.start_time}{' '}
-                                                        {app.time}
+                                                        {formatTimeAMPM(
+                                                            app.time,
+                                                        )}
                                                     </span>
                                                     {app.phoneFormatted && (
                                                         <span className="flex items-center gap-1.5">
@@ -319,16 +328,34 @@ export default function AgendaList({
                                             )}
 
                                             {app.status === 'confirmed' && (
-                                                <button
-                                                    onClick={() =>
-                                                        decide(app.id, 'cancel')
-                                                    }
-                                                    disabled={isUpdating}
-                                                    className="flex items-center gap-1.5 rounded-xl border border-zinc-600/50 bg-zinc-800/60 px-3.5 py-2 text-xs font-semibold text-zinc-300 transition hover:bg-zinc-700 hover:text-white disabled:opacity-50"
-                                                >
-                                                    <CalendarOff className="size-4" />
-                                                    Cancelar
-                                                </button>
+                                                <>
+                                                    <button
+                                                        onClick={() =>
+                                                            decide(
+                                                                app.id,
+                                                                'complete',
+                                                            )
+                                                        }
+                                                        disabled={isUpdating}
+                                                        className="flex items-center gap-1.5 rounded-xl bg-blue-600 px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-500 disabled:opacity-50"
+                                                    >
+                                                        <CheckCircle2 className="size-4" />
+                                                        Completar
+                                                    </button>
+                                                    <button
+                                                        onClick={() =>
+                                                            decide(
+                                                                app.id,
+                                                                'cancel',
+                                                            )
+                                                        }
+                                                        disabled={isUpdating}
+                                                        className="flex items-center gap-1.5 rounded-xl border border-zinc-600/50 bg-zinc-800/60 px-3.5 py-2 text-xs font-semibold text-zinc-300 transition hover:bg-zinc-700 hover:text-white disabled:opacity-50"
+                                                    >
+                                                        <CalendarOff className="size-4" />
+                                                        Cancelar
+                                                    </button>
+                                                </>
                                             )}
 
                                             <button

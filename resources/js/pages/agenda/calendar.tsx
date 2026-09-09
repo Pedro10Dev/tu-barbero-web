@@ -3,9 +3,11 @@ import {
     Calendar as CalendarIcon,
     ChevronLeft,
     ChevronRight,
+    CheckCircle2,
     XCircle,
 } from 'lucide-react';
 import { useState } from 'react';
+import { formatTimeAMPM } from '@/lib/utils';
 
 type ViewMode = 'day' | 'week' | 'month';
 
@@ -156,6 +158,17 @@ export default function AgendaCalendar({
         );
     };
 
+    const completeAppointment = (entry: ScheduleEntry) => {
+        router.patch(
+            `/agenda/appointments/${entry.id}`,
+            { action: 'complete' },
+            {
+                preserveScroll: true,
+                preserveState: true,
+            },
+        );
+    };
+
     const isViewChange = (next: ViewMode) => {
         if (next === viewMode) {
             return;
@@ -298,10 +311,14 @@ export default function AgendaCalendar({
                                                 <div className="flex items-start gap-4">
                                                     <div className="flex w-16 shrink-0 flex-col items-center justify-center rounded-xl border border-zinc-700/50 bg-zinc-800/60 px-2 py-2 text-center">
                                                         <span className="text-sm font-bold text-white">
-                                                            {entry.start_time}
+                                                            {formatTimeAMPM(
+                                                                entry.start_time,
+                                                            )}
                                                         </span>
                                                         <span className="text-[10px] text-zinc-500">
-                                                            {entry.end_time}
+                                                            {formatTimeAMPM(
+                                                                entry.end_time,
+                                                            )}
                                                         </span>
                                                     </div>
                                                     <div className="space-y-0.5">
@@ -331,17 +348,30 @@ export default function AgendaCalendar({
 
                                                     {entry.status ===
                                                         'confirmed' && (
-                                                        <button
-                                                            onClick={() =>
-                                                                cancelAppointment(
-                                                                    entry,
-                                                                )
-                                                            }
-                                                            className="flex items-center gap-1.5 rounded-xl border border-zinc-600/50 bg-zinc-800/60 px-2.5 py-1.5 text-[11px] font-semibold text-zinc-300 transition hover:bg-zinc-700 hover:text-white"
-                                                        >
-                                                            <XCircle className="size-3.5" />
-                                                            Cancelar
-                                                        </button>
+                                                        <>
+                                                            <button
+                                                                onClick={() =>
+                                                                    completeAppointment(
+                                                                        entry,
+                                                                    )
+                                                                }
+                                                                className="flex items-center gap-1.5 rounded-xl border border-blue-500/30 bg-blue-500/10 px-2.5 py-1.5 text-[11px] font-semibold text-blue-300 transition hover:bg-blue-500/20"
+                                                            >
+                                                                <CheckCircle2 className="size-3.5" />
+                                                                Completar
+                                                            </button>
+                                                            <button
+                                                                onClick={() =>
+                                                                    cancelAppointment(
+                                                                        entry,
+                                                                    )
+                                                                }
+                                                                className="flex items-center gap-1.5 rounded-xl border border-zinc-600/50 bg-zinc-800/60 px-2.5 py-1.5 text-[11px] font-semibold text-zinc-300 transition hover:bg-zinc-700 hover:text-white"
+                                                            >
+                                                                <XCircle className="size-3.5" />
+                                                                Cancelar
+                                                            </button>
+                                                        </>
                                                     )}
                                                 </div>
                                             </div>
