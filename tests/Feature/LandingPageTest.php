@@ -49,7 +49,7 @@ test('landing shows active barbers with photo and social links', function () {
         ->assertDontSee('Barbero Oculto');
 });
 
-test('landing hides active barbers whose user has no barber role', function () {
+test('landing shows active barbers regardless of the user role', function () {
     $sinRol = User::factory()->create(['phone' => '6000001']);
 
     BarberProfile::create([
@@ -64,6 +64,6 @@ test('landing hides active barbers whose user has no barber role', function () {
 
     $this->get('/')
         ->assertOk()
-        ->assertDontSee('Sin Rol Barbero')
-        ->assertDontSee('https://facebook.com/sinrol');
+        ->assertSee('Sin Rol Barbero')
+        ->assertSee('https://facebook.com/sinrol');
 });

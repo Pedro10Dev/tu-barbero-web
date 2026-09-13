@@ -35,9 +35,6 @@ Route::get('/', function () {
         'services' => Service::all(),
         'barbers' => BarberProfile::query()
             ->where('is_active', true)
-            ->whereHas('user', function ($query) {
-                $query->role('barber');
-            })
             ->orderBy('display_name')
             ->get(),
     ]);
