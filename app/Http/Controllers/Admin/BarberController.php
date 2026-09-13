@@ -9,6 +9,7 @@ use App\Models\BarberProfile;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Inertia\Inertia;
@@ -19,6 +20,8 @@ class BarberController extends Controller
     use PasswordValidationRules;
 
     private const PHONE_PREFIXES = ['0412', '0414', '0424', '0416', '0426'];
+
+    private const SOCIAL_PLATFORMS = ['instagram', 'tiktok', 'facebook', 'whatsapp', 'youtube', 'x'];
 
     public function index(): Response
     {
@@ -34,6 +37,8 @@ class BarberController extends Controller
                     'id' => $barber->id,
                     'display_name' => $barber->display_name,
                     'bio' => $barber->bio,
+                    'photo_url' => $barber->photo_url,
+                    'social_links' => $barber->social_links ?? [],
                     'is_active' => (bool) $barber->is_active,
                     'email' => $barber->user->email,
                     'phone' => $barber->user->phone ?? null,
@@ -68,6 +73,10 @@ class BarberController extends Controller
             'display_name' => 'required|string|max:255',
             'bio' => 'nullable|string|max:1000',
             'is_active' => 'boolean',
+            'photo' => 'nullable|image|mimes:jpeg,png,webp,gif|max:4096',
+            'social_links' => 'nullable|array|max:6',
+            'social_links.*.platform' => 'required_with:social_links|string|in:'.implode(',', self::SOCIAL_PLATFORMS),
+            'social_links.*.url' => 'required_with:social_links|url:http,https',
             'password' => $this->passwordRules(),
         ]);
 
@@ -84,12 +93,20 @@ class BarberController extends Controller
 
         $user->sendEmailVerificationNotification();
 
-        BarberProfile::create([
+        $data = [
             'user_id' => $user->id,
             'display_name' => $validated['display_name'],
             'bio' => $validated['bio'] ?? null,
+            'photo_path' => null,
+            'social_links' => $validated['social_links'] ?? null,
             'is_active' => (bool) ($validated['is_active'] ?? true),
-        ]);
+        ];
+
+        if ($request->hasFile('photo')) {
+            $data['photo_path'] = $request->file('photo')->store('barbers', 'public');
+        }
+
+        BarberProfile::create($data);
 
         return redirect()->route('admin.barbers.index')
             ->with('toast', ['type' => 'success', 'message' => 'Barbero creado correctamente.']);
@@ -106,6 +123,8 @@ class BarberController extends Controller
                 'phone' => $barber->user->phone ?? null,
                 'display_name' => $barber->display_name,
                 'bio' => $barber->bio,
+                'photo_url' => $barber->photo_url,
+                'social_links' => $barber->social_links ?? [],
                 'is_active' => (bool) $barber->is_active,
             ],
         ]);
@@ -120,6 +139,11 @@ class BarberController extends Controller
             'display_name' => 'required|string|max:255',
             'bio' => 'nullable|string|max:1000',
             'is_active' => 'boolean',
+            'photo' => 'nullable|image|mimes:jpeg,png,webp,gif|max:4096',
+            'remove_photo' => 'nullable|boolean',
+            'social_links' => 'nullable|array|max:6',
+            'social_links.*.platform' => 'required_with:social_links|string|in:'.implode(',', self::SOCIAL_PLATFORMS),
+            'social_links.*.url' => 'required_with:social_links|url:http,https',
         ]);
 
         $barber->user->update([
@@ -128,11 +152,27 @@ class BarberController extends Controller
             'phone' => $validated['phone'] ?? null,
         ]);
 
-        $barber->update([
+        $data = [
             'display_name' => $validated['display_name'],
             'bio' => $validated['bio'] ?? null,
+            'social_links' => isset($validated['social_links'])
+                ? array_values($validated['social_links'])
+                : null,
             'is_active' => (bool) ($validated['is_active'] ?? true),
-        ]);
+        ];
+
+        if ($request->hasFile('photo')) {
+            if ($barber->photo_path) {
+                Storage::disk('public')->delete($barber->photo_path);
+            }
+
+            $data['photo_path'] = $request->file('photo')->store('barbers', 'public');
+        } elseif (! empty($validated['remove_photo']) && $barber->photo_path) {
+            Storage::disk('public')->delete($barber->photo_path);
+            $data['photo_path'] = null;
+        }
+
+        $barber->update($data);
 
         return redirect()->route('admin.barbers.index')
             ->with('toast', ['type' => 'success', 'message' => 'Barbero actualizado correctamente.']);
@@ -145,6 +185,10 @@ class BarberController extends Controller
         Appointment::where('barber_profile_id', $barber->id)
             ->whereNull('barber_name')
             ->update(['barber_name' => $barber->display_name]);
+
+        if ($barber->photo_path) {
+            Storage::disk('public')->delete($barber->photo_path);
+        }
 
         if ($barber->user !== null) {
             $barber->user->delete();

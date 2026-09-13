@@ -22,6 +22,7 @@ type Barber = {
     id: number;
     display_name: string;
     bio: string | null;
+    photo_url: string | null;
     is_active: boolean;
     email: string;
     phone: string | null;
@@ -112,8 +113,16 @@ export default function AdminBarbers({ barbers }: { barbers: Barber[] }) {
                                 />
 
                                 <div className="flex items-start justify-between gap-3">
-                                    <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border bg-muted text-foreground">
-                                        <Scissors className="size-5" />
+                                    <div className="flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border bg-muted text-foreground">
+                                        {barber.photo_url ? (
+                                            <img
+                                                src={barber.photo_url}
+                                                alt={barber.display_name}
+                                                className="h-full w-full object-cover"
+                                            />
+                                        ) : (
+                                            <Scissors className="size-5" />
+                                        )}
                                     </div>
                                     <span
                                         className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-medium ${barber.is_active ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400' : 'border-border bg-muted text-muted-foreground'}`}

@@ -39,6 +39,8 @@ test('admins can see the listed barbers', function () {
                     ->has('id')
                     ->has('display_name')
                     ->has('bio')
+                    ->has('photo_url')
+                    ->has('social_links')
                     ->has('is_active')
                     ->has('email')
                     ->has('phone')

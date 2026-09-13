@@ -8,6 +8,8 @@ type BarberRecord = {
     phone: string | null;
     display_name: string;
     bio: string | null;
+    photo_url: string | null;
+    social_links: { platform: string; url: string }[];
     is_active: boolean;
 };
 

@@ -237,49 +237,61 @@
             </div>
 
             <div class="mx-auto grid max-w-5xl gap-8 md:grid-cols-3">
-                @foreach ([
-                    ['nombre' => 'Carlos M.', 'img' => 'barbero-1.jpg', 'alt' => 'Carlos M., master barber', 'bio' => 'Master Barber enfocado en degradados de alta precisión y estilos modernos.'],
-                    ['nombre' => 'Luis P.', 'img' => 'barbero-2.jpg', 'alt' => 'Luis P., barbero experto en barba', 'bio' => 'Experto en diseño de barba y tratamientos capilares de cuidado integral.'],
-                    ['nombre' => 'Andrés G.', 'img' => 'barbero-3.jpg', 'alt' => 'Andrés G., barbero clásico', 'bio' => 'Dominio absoluto del corte clásico a navaja y perfiles tradicionales.'],
-                ] as $barbero)
+                @php
+                    $socialIcons = [
+                        'instagram' => ['<path stroke-linecap="round" stroke-linejoin="round" d="M16.5 8.25V6a2.25 2.25 0 00-2.25-2.25H6A2.25 2.25 0 003.75 6v8.25A2.25 2.25 0 006 16.5h2.25m8.25-8.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-7.5A2.25 2.25 0 018.25 18v-1.5m3-3a3 3 0 100-6 3 3 0 000 6z"/>'],
+                        'tiktok' => ['<path stroke-linecap="round" stroke-linejoin="round" d="M12.525 20.25c5.25 0 8.475-2.025 8.475-5.25 0-5.25-8.475-6.75-8.475-9.75 0-2.1 1.65-3.15 3.375-3.3M12.525 20.25c-2.5 0-4.125-1.9-4.125-4.725 0-5.475 8.475-6.15 8.475-10.875 0-1.275-.45-2.25-1.575-2.25"/>'],
+                        'facebook' => ['<path stroke-linecap="round" stroke-linejoin="round" d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>'],
+                        'whatsapp' => ['<path stroke-linecap="round" stroke-linejoin="round" d="M7.9 20A9 9 0 104 16.1L2 22l5.9-2z"/><path stroke-linecap="round" stroke-linejoin="round" d="M9.5 9.7v.5a4.3 4.3 0 004.3 4.3h.5c.3 0 .5-.3.5-.6l-.3-1.2-1.2-.4c-.2-.1-.5 0-.6.2l-.3.4a3.4 3.4 0 01-1.4-1.4l.4-.3c.2-.1.3-.4.2-.6l-.4-1.2c-.1-.3-.4-.5-.6-.5l-.6.2c-.3.2-.5.5-.5.9z"/>'],
+                        'youtube' => ['<path stroke-linecap="round" stroke-linejoin="round" d="M2.5 17a24.12 24.12 0 010-10 2 2 0 011.4-1.4 49.56 49.56 0 0116.2 0A2 2 0 0121.5 7a24.12 24.12 0 010 10 2 2 0 01-1.4 1.4 49.55 49.55 0 01-16.2 0A2 2 0 012.5 17"/><path stroke-linecap="round" stroke-linejoin="round" d="M10 15l5-3-5-3z"/>'],
+                        'x' => ['<path stroke-linecap="round" stroke-linejoin="round" d="M4 4l16 16"/><path stroke-linecap="round" stroke-linejoin="round" d="M20 4L4 20"/>'],
+                    ];
+                @endphp
+
+                @forelse ($barbers as $barbero)
                 <article class="group flex flex-col justify-between rounded-3xl border border-landing-border bg-landing-surface p-5 transition-all hover:border-landing-border-strong">
                     <div>
                         <div class="mb-6 h-72 overflow-hidden rounded-2xl border border-landing-border">
-                            <img src="{{ asset('images/' . $barbero['img']) }}" alt="{{ $barbero['alt'] }}" loading="lazy"
+                            <img src="{{ $barbero->photo_url }}" alt="Foto de {{ $barbero->display_name }}" loading="lazy"
                                 class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
                         </div>
 
                         <div class="mb-2 flex items-center gap-2">
-                            <h3 class="text-xl font-bold text-landing-text">{{ $barbero['nombre'] }}</h3>
+                            <h3 class="text-xl font-bold text-landing-text">{{ $barbero->display_name }}</h3>
                             <svg class="h-5 w-5 fill-current text-landing-success" viewBox="0 0 24 24">
                                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                             </svg>
                         </div>
 
-                        <p class="mb-6 text-sm leading-relaxed font-light text-landing-text-soft">{{ $barbero['bio'] }}</p>
+                        <p class="mb-6 text-sm leading-relaxed font-light text-landing-text-soft">{{ $barbero->bio }}</p>
                     </div>
 
                     <div class="flex items-center justify-between border-t border-landing-border pt-4">
                         <div class="flex items-center gap-3">
-                            <a href="https://instagram.com/tu-usuario" target="_blank" rel="noopener noreferrer"
-                                class="text-landing-text-soft transition-colors hover:text-landing-text" aria-label="Instagram de {{ $barbero['nombre'] }}">
-                                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 8.25V6a2.25 2.25 0 00-2.25-2.25H6A2.25 2.25 0 003.75 6v8.25A2.25 2.25 0 006 16.5h2.25m8.25-8.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-7.5A2.25 2.25 0 018.25 18v-1.5m3-3a3 3 0 100-6 3 3 0 000 6z" />
-                                </svg>
-                            </a>
-                            <a href="https://tiktok.com/@tu-usuario" target="_blank" rel="noopener noreferrer"
-                                class="text-landing-text-soft transition-colors hover:text-landing-text" aria-label="TikTok de {{ $barbero['nombre'] }}">
-                                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12.525 20.25c5.25 0 8.475-2.025 8.475-5.25 0-5.25-8.475-6.75-8.475-9.75 0-2.1 1.65-3.15 3.375-3.3M12.525 20.25c-2.5 0-4.125-1.9-4.125-4.725 0-5.475 8.475-6.15 8.475-10.875 0-1.275-.45-2.25-1.575-2.25" />
-                                </svg>
-                            </a>
+                            @forelse ($barbero->social_links ?? [] as $social)
+                                @php($iconParts = $socialIcons[$social['platform']] ?? null)
+                                @if ($iconParts)
+                                    <a href="{{ $social['url'] }}" target="_blank" rel="noopener noreferrer"
+                                        class="text-landing-text-soft transition-colors hover:text-landing-text" aria-label="{{ $social['platform'] }} de {{ $barbero->display_name }}">
+                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                            {!! implode('', $iconParts) !!}
+                                        </svg>
+                                    </a>
+                                @endif
+                            @empty
+                                <span class="text-xs font-light text-landing-text-soft">Sin redes aún</span>
+                            @endforelse
                         </div>
                         <a href="{{ route('booking') }}" class="rounded-full bg-landing-accent/10 px-4 py-2 text-xs font-medium text-landing-text transition-all hover:bg-landing-accent hover:text-landing-accent-foreground">
                             Reservar +
                         </a>
                     </div>
                 </article>
-                @endforeach
+                @empty
+                <div class="rounded-3xl border border-landing-border bg-landing-surface py-16 text-center text-sm font-light text-landing-text-soft md:col-span-3">
+                    Próximamente conocerás a nuestro equipo de barberos.
+                </div>
+                @endforelse
             </div>
         </div>
     </section>

@@ -20,6 +20,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ClientProfileController;
 use App\Http\Controllers\ForcedPasswordController;
 use App\Http\Controllers\PhonePromptController;
+use App\Models\BarberProfile;
 use App\Models\Service;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -32,6 +33,13 @@ Route::get('/', function () {
 
     return view('landing', [
         'services' => Service::all(),
+        'barbers' => BarberProfile::query()
+            ->where('is_active', true)
+            ->whereHas('user', function ($query) {
+                $query->role('barber');
+            })
+            ->orderBy('display_name')
+            ->get(),
     ]);
 })->name('landing');
 

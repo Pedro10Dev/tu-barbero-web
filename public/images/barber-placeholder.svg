@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000" role="img" aria-label="Barbero TuBarbero">
+    <rect width="800" height="1000" fill="#141414"/>
+    <g fill="none" stroke="#a3a3a3" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="400" cy="360" r="150"/>
+        <path d="M150 720c40-125 140-190 250-190s210 65 250 190"/>
+        <path d="M300 80l50 90-50 90"/>
+        <path d="M340 80l40 90-40 90"/>
+    </g>
+    <text x="400" y="920" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="40" font-weight="700" fill="#a3a3a3" letter-spacing="6">TUBARBERO</text>
+</svg>
