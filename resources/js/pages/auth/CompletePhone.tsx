@@ -53,7 +53,7 @@ export default function CompletePhone() {
     return (
         <>
             <Head title="Completa tu perfil" />
-            <div className="w-full space-y-6 rounded-3xl border border-zinc-800 bg-zinc-900 p-8 text-zinc-100 shadow-2xl">
+            <div className="w-full space-y-6 rounded-3xl border border-border bg-card p-8 text-foreground shadow-2xl">
                 <form onSubmit={submit} className="space-y-6">
                     <div className="space-y-2 text-center">
                         <div className="mb-6 flex flex-col items-center justify-center">
@@ -63,10 +63,10 @@ export default function CompletePhone() {
                                 className="h-20 w-20 object-contain"
                             />
                         </div>
-                        <h2 className="text-2xl font-bold tracking-tight text-white">
+                        <h2 className="text-2xl font-bold tracking-tight text-foreground">
                             Verifica tu número
                         </h2>
-                        <p className="mx-auto max-w-xs text-sm text-zinc-400">
+                        <p className="mx-auto max-w-xs text-sm text-muted-foreground">
                             Ingresa tu número celular para recibir
                             actualizaciones importantes sobre tus reservas.
                         </p>
@@ -75,7 +75,7 @@ export default function CompletePhone() {
                     <div className="space-y-4">
                         <label
                             htmlFor="phone"
-                            className="block text-sm font-medium text-zinc-200"
+                            className="block text-sm font-medium text-foreground"
                         >
                             Número de Teléfono
                         </label>
@@ -84,13 +84,13 @@ export default function CompletePhone() {
                             <select
                                 value={prefix}
                                 onChange={handlePrefixChange}
-                                className="h-12 w-28 rounded-xl border border-zinc-700 bg-zinc-800 px-3 py-2 font-mono text-base text-white focus:ring-2 focus:ring-zinc-500"
+                                className="h-12 w-28 rounded-xl border border-border bg-muted px-3 py-2 font-mono text-base text-foreground focus:ring-2 focus:ring-ring"
                             >
                                 {operatorPrefixes.map((p) => (
                                     <option
                                         key={p}
                                         value={p}
-                                        className="bg-zinc-900 text-white"
+                                        className="bg-background text-foreground"
                                     >
                                         {p}
                                     </option>
@@ -106,18 +106,18 @@ export default function CompletePhone() {
                                 onChange={handlePhoneChange}
                                 maxLength={7}
                                 placeholder="1234567"
-                                className="h-12 flex-1 rounded-xl border border-zinc-700 bg-zinc-800 px-4 py-2 font-mono text-base text-white placeholder:text-zinc-600 focus:ring-2 focus:ring-zinc-500"
+                                className="h-12 flex-1 rounded-xl border border-border bg-muted px-4 py-2 font-mono text-base text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-ring"
                             />
                         </div>
 
                         {errors.phone && (
-                            <p className="px-1 text-xs text-red-400">
+                            <p className="px-1 text-xs text-destructive">
                                 {errors.phone}
                             </p>
                         )}
-                        <p className="px-1 text-xs text-zinc-500">
+                        <p className="px-1 text-xs text-muted-foreground">
                             Vista previa:{' '}
-                            <span className="font-mono text-zinc-300">
+                            <span className="font-mono text-foreground">
                                 {prefix}-{data.phone}
                             </span>
                         </p>
@@ -126,7 +126,7 @@ export default function CompletePhone() {
                     <button
                         type="submit"
                         disabled={processing || data.phone.length !== 7}
-                        className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-white font-semibold text-black shadow transition-all hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary font-semibold text-primary-foreground shadow transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         {processing ? 'Guardando...' : 'Guardar y Continuar'}
                     </button>
@@ -136,7 +136,7 @@ export default function CompletePhone() {
                             href="/logout"
                             method="post"
                             as="button"
-                            className="text-xs text-zinc-500 underline transition hover:text-zinc-300"
+                            className="text-xs text-muted-foreground underline transition hover:text-foreground"
                         >
                             Cerrar sesión
                         </Link>

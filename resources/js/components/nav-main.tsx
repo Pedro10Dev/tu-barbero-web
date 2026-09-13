@@ -36,7 +36,7 @@ export function NavMain({
 
     return (
         <SidebarGroup className="px-2 py-0">
-            <SidebarGroupLabel className="mb-2 px-2 text-xs font-semibold tracking-wider text-zinc-500 uppercase">
+            <SidebarGroupLabel className="mb-2 px-2 text-xs font-semibold tracking-wider text-sidebar-foreground/50 uppercase">
                 {label}
             </SidebarGroupLabel>
             <SidebarMenu className="space-y-1">
@@ -58,7 +58,7 @@ export function NavMain({
                                     <SidebarMenuButton
                                         tooltip={{ children: item.title }}
                                         isActive={isAnySubItemActive}
-                                        className="flex w-full justify-between text-zinc-300 transition-colors hover:bg-zinc-800/50"
+                                        className="flex w-full justify-between text-sidebar-foreground transition-colors hover:bg-sidebar-accent"
                                     >
                                         <div className="flex items-center gap-2">
                                             {item.icon && (
@@ -68,7 +68,7 @@ export function NavMain({
                                                 {item.title}
                                             </span>
                                         </div>
-                                        <ChevronRight className="size-4 text-zinc-500 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                                        <ChevronRight className="size-4 text-sidebar-foreground/50 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                                     </SidebarMenuButton>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
@@ -89,8 +89,8 @@ export function NavMain({
                                                         isActive={active}
                                                         className={`flex w-full items-center rounded-lg border px-3 py-2.5 text-sm transition-all duration-200 ${
                                                             active
-                                                                ? 'border-zinc-700 bg-zinc-800 font-medium text-white shadow-sm'
-                                                                : 'cursor-pointer border-transparent bg-transparent text-zinc-400 hover:border-zinc-800 hover:bg-zinc-900 hover:text-zinc-200'
+                                                                ? 'border-sidebar-border bg-sidebar-accent font-medium text-sidebar-accent-foreground shadow-sm'
+                                                                : 'cursor-pointer border-transparent bg-transparent text-sidebar-foreground/60 hover:border-sidebar-border hover:bg-sidebar-accent/60 hover:text-sidebar-foreground'
                                                         }`}
                                                     >
                                                         <Link
@@ -99,7 +99,7 @@ export function NavMain({
                                                             className="flex w-full items-center gap-3"
                                                         >
                                                             <div
-                                                                className={`size-1.5 rounded-full transition-colors ${active ? 'bg-zinc-300' : 'bg-zinc-700'}`}
+                                                                className={`size-1.5 rounded-full transition-colors ${active ? 'bg-sidebar-primary' : 'bg-sidebar-foreground/30'}`}
                                                             />
                                                             <span>
                                                                 {subItem.title}
@@ -111,7 +111,7 @@ export function NavMain({
                                                     {index <
                                                         item.items!.length -
                                                             1 && (
-                                                        <div className="mx-2 my-1.5 h-[1px] bg-zinc-800/60" />
+                                                        <div className="mx-2 my-1.5 h-[1px] bg-sidebar-border" />
                                                     )}
                                                 </SidebarMenuSubItem>
                                             );
@@ -126,7 +126,7 @@ export function NavMain({
                                 asChild
                                 isActive={isCurrentUrl(item.href)}
                                 tooltip={{ children: item.title }}
-                                className="text-zinc-300 transition-colors hover:bg-zinc-800/50"
+                                className="text-sidebar-foreground transition-colors hover:bg-sidebar-accent"
                             >
                                 <Link
                                     href={item.href}

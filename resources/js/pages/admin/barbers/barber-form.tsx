@@ -46,20 +46,20 @@ export default function BarberForm({
     };
 
     const inputClass =
-        'w-full rounded-xl border border-zinc-800/80 bg-zinc-900/60 px-4 py-2.5 text-sm text-white placeholder-zinc-500 transition focus:border-zinc-700 focus:outline-none';
+        'w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground transition focus:border-ring focus:outline-none';
     const labelClass =
-        'mb-1.5 block text-xs font-semibold tracking-wider text-zinc-400 uppercase';
+        'mb-1.5 block text-xs font-semibold tracking-wider text-muted-foreground uppercase';
 
     return (
         <>
             <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 p-6 lg:p-8">
-                <div className="flex flex-col justify-between gap-4 border-b border-zinc-800/80 pb-6 md:flex-row md:items-center">
+                <div className="flex flex-col justify-between gap-4 border-b border-border pb-6 md:flex-row md:items-center">
                     <div className="space-y-1">
-                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-white">
-                            <UserPlus className="size-6 text-zinc-400" />
+                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-foreground">
+                            <UserPlus className="size-6 text-muted-foreground" />
                             {isEditing ? 'Editar Barbero' : 'Nuevo Barbero'}
                         </h1>
-                        <p className="text-sm text-zinc-400">
+                        <p className="text-sm text-muted-foreground">
                             {isEditing
                                 ? 'Actualiza los datos del perfil y su usuario.'
                                 : 'Se creará un usuario para que el barbero acceda a su cuenta.'}
@@ -68,7 +68,7 @@ export default function BarberForm({
 
                     <Link
                         href="/admin/barbers"
-                        className="flex shrink-0 items-center gap-2 rounded-xl border border-zinc-700/50 bg-zinc-800/60 px-4 py-2.5 text-xs font-semibold text-zinc-300 transition hover:bg-zinc-700 hover:text-white"
+                        className="flex shrink-0 items-center gap-2 rounded-xl border border-border bg-muted px-4 py-2.5 text-xs font-semibold text-foreground transition hover:bg-accent hover:text-foreground"
                     >
                         <ChevronLeft className="size-4" />
                         Volver
@@ -77,7 +77,7 @@ export default function BarberForm({
 
                 <form
                     onSubmit={submit}
-                    className="flex flex-col gap-6 rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-6"
+                    className="flex flex-col gap-6 rounded-2xl border border-border bg-card p-6"
                 >
                     <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                         <div className="space-y-1">
@@ -132,7 +132,7 @@ export default function BarberForm({
                                 onChange={(e) =>
                                     setData('phone_prefix', e.target.value)
                                 }
-                                className="rounded-xl border border-zinc-800/80 bg-zinc-900/60 px-3 py-2.5 text-sm text-white transition focus:border-zinc-700 focus:outline-none"
+                                className="rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground transition focus:border-ring focus:outline-none"
                             >
                                 {PHONE_PREFIXES.map((prefix) => (
                                     <option key={prefix} value={prefix}>
@@ -171,7 +171,7 @@ export default function BarberForm({
                     </div>
 
                     {!isEditing && (
-                        <div className="grid grid-cols-1 gap-5 border-t border-zinc-800/60 pt-5 sm:grid-cols-2">
+                        <div className="grid grid-cols-1 gap-5 border-t border-border pt-5 sm:grid-cols-2">
                             <div className="space-y-1">
                                 <label
                                     className={labelClass}
@@ -181,7 +181,7 @@ export default function BarberForm({
                                 </label>
                                 <PasswordInput
                                     id="password"
-                                    className="w-full rounded-xl border border-zinc-800/80 bg-zinc-900/60 px-4 py-2.5 text-sm text-white placeholder-zinc-500 transition focus:border-zinc-700 focus:outline-none"
+                                    className="w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground transition focus:border-ring focus:outline-none"
                                     value={data.password}
                                     onChange={(e) =>
                                         setData('password', e.target.value)
@@ -205,7 +205,7 @@ export default function BarberForm({
                                 </label>
                                 <PasswordInput
                                     id="password_confirmation"
-                                    className="w-full rounded-xl border border-zinc-800/80 bg-zinc-900/60 px-4 py-2.5 text-sm text-white placeholder-zinc-500 transition focus:border-zinc-700 focus:outline-none"
+                                    className="w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground transition focus:border-ring focus:outline-none"
                                     value={data.password_confirmation}
                                     onChange={(e) =>
                                         setData(
@@ -226,7 +226,7 @@ export default function BarberForm({
                     )}
 
                     {!isEditing && (
-                        <p className="flex items-center gap-1.5 text-xs text-zinc-500">
+                        <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
                             <Lock className="size-3.5" />
                             El barbero deberá confirmar su correo y cambiar esta
                             contraseña al ingresar por primera vez.
@@ -279,17 +279,17 @@ export default function BarberForm({
                             onChange={(e) =>
                                 setData('is_active', e.target.checked)
                             }
-                            className="size-4 rounded border-zinc-700 bg-zinc-900 accent-emerald-500"
+                            className="size-4 rounded border-border bg-muted accent-emerald-500"
                         />
-                        <span className="text-sm font-medium text-zinc-300">
+                        <span className="text-sm font-medium text-foreground">
                             Barbero activo en estación
                         </span>
                     </label>
 
-                    <div className="flex justify-end gap-3 border-t border-zinc-800/60 pt-5">
+                    <div className="flex justify-end gap-3 border-t border-border pt-5">
                         <Link
                             href="/admin/barbers"
-                            className="rounded-xl border border-zinc-700/50 bg-zinc-800/60 px-4 py-2.5 text-xs font-semibold text-zinc-300 transition hover:bg-zinc-700 hover:text-white"
+                            className="rounded-xl border border-border bg-muted px-4 py-2.5 text-xs font-semibold text-foreground transition hover:bg-accent hover:text-foreground"
                         >
                             Cancelar
                         </Link>

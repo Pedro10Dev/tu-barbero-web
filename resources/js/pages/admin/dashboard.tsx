@@ -41,7 +41,7 @@ const statusChip: Record<string, string> = {
     pending: 'border-amber-500/20 bg-amber-500/10 text-amber-400',
     confirmed: 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400',
     rejected: 'border-rose-500/20 bg-rose-500/10 text-rose-400',
-    cancelled: 'border-zinc-700/60 bg-zinc-800/80 text-zinc-400',
+    cancelled: 'border-border bg-muted text-muted-foreground',
     completed: 'border-blue-500/20 bg-blue-500/10 text-blue-400',
 };
 
@@ -83,10 +83,10 @@ export default function AdminDashboard({
                                 Rol: Administrador
                             </span>
                         </div>
-                        <h1 className="text-3xl font-extrabold tracking-tight text-white">
+                        <h1 className="text-3xl font-extrabold tracking-tight text-foreground">
                             Bienvenido, {auth.user.name}
                         </h1>
-                        <p className="mt-1 text-sm text-zinc-400">
+                        <p className="mt-1 text-sm text-muted-foreground">
                             Supervisa el flujo de la plataforma, gestiona tu
                             equipo y controla los servicios.
                         </p>
@@ -96,14 +96,14 @@ export default function AdminDashboard({
                     <div className="flex items-center gap-3">
                         <Link
                             href="/admin/barbers/create"
-                            className="inline-flex items-center gap-2 rounded-xl border border-zinc-700/60 bg-zinc-800/80 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-all hover:border-zinc-600 hover:bg-zinc-800"
+                            className="inline-flex items-center gap-2 rounded-xl border border-border bg-muted px-4 py-2.5 text-sm font-medium text-foreground shadow-sm transition-all hover:border-border hover:bg-accent"
                         >
-                            <UserPlus className="h-4 w-4 text-zinc-400" />
+                            <UserPlus className="h-4 w-4 text-muted-foreground" />
                             Nuevo Barbero
                         </Link>
                         <Link
                             href="/admin/services/create"
-                            className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-zinc-950 shadow-sm transition-all hover:bg-zinc-200"
+                            className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-all hover:bg-primary/90"
                         >
                             <Plus className="h-4 w-4" />
                             Nuevo Servicio
@@ -114,49 +114,49 @@ export default function AdminDashboard({
                 {/* Tarjetas de Métricas (KPIs) con Estilo Moderno */}
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
                     {/* Usuarios Totales */}
-                    <div className="group relative flex flex-col justify-between rounded-2xl border border-sidebar-border/70 bg-card/60 p-5 shadow-sm backdrop-blur-sm transition-all hover:border-zinc-700 hover:bg-card">
+                    <div className="group relative flex flex-col justify-between rounded-2xl border border-sidebar-border/70 bg-card/60 p-5 shadow-sm backdrop-blur-sm transition-all hover:border-foreground/40 hover:bg-card">
                         <div className="flex items-center justify-between">
-                            <h3 className="text-xs font-semibold tracking-wider text-zinc-400 uppercase">
+                            <h3 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                                 Usuarios Totales
                             </h3>
-                            <div className="rounded-xl border border-zinc-700/40 bg-zinc-800/50 p-2.5 text-zinc-300">
+                            <div className="rounded-xl border border-border bg-muted p-2.5 text-foreground">
                                 <Users className="h-4 w-4" />
                             </div>
                         </div>
                         <div className="mt-4">
-                            <p className="text-3xl font-bold tracking-tight text-white">
+                            <p className="text-3xl font-bold tracking-tight text-foreground">
                                 {stats.totalUsers}
                             </p>
-                            <p className="mt-1 text-xs text-zinc-500">
+                            <p className="mt-1 text-xs text-muted-foreground">
                                 Registrados globalmente
                             </p>
                         </div>
                     </div>
 
                     {/* Citas Históricas */}
-                    <div className="group relative flex flex-col justify-between rounded-2xl border border-sidebar-border/70 bg-card/60 p-5 shadow-sm backdrop-blur-sm transition-all hover:border-zinc-700 hover:bg-card">
+                    <div className="group relative flex flex-col justify-between rounded-2xl border border-sidebar-border/70 bg-card/60 p-5 shadow-sm backdrop-blur-sm transition-all hover:border-foreground/40 hover:bg-card">
                         <div className="flex items-center justify-between">
-                            <h3 className="text-xs font-semibold tracking-wider text-zinc-400 uppercase">
+                            <h3 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                                 Citas Históricas
                             </h3>
-                            <div className="rounded-xl border border-zinc-700/40 bg-zinc-800/50 p-2.5 text-zinc-300">
+                            <div className="rounded-xl border border-border bg-muted p-2.5 text-foreground">
                                 <Calendar className="h-4 w-4" />
                             </div>
                         </div>
                         <div className="mt-4">
-                            <p className="text-3xl font-bold tracking-tight text-white">
+                            <p className="text-3xl font-bold tracking-tight text-foreground">
                                 {stats.totalAppointments}
                             </p>
-                            <p className="mt-1 text-xs text-zinc-500">
+                            <p className="mt-1 text-xs text-muted-foreground">
                                 Acumulado histórico
                             </p>
                         </div>
                     </div>
 
                     {/* Barberos Activos */}
-                    <div className="group relative flex flex-col justify-between rounded-2xl border border-sidebar-border/70 bg-card/60 p-5 shadow-sm backdrop-blur-sm transition-all hover:border-zinc-700 hover:bg-card">
+                    <div className="group relative flex flex-col justify-between rounded-2xl border border-sidebar-border/70 bg-card/60 p-5 shadow-sm backdrop-blur-sm transition-all hover:border-foreground/40 hover:bg-card">
                         <div className="flex items-center justify-between">
-                            <h3 className="text-xs font-semibold tracking-wider text-zinc-400 uppercase">
+                            <h3 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                                 Barberos Activos
                             </h3>
                             <div className="rounded-xl border border-purple-500/20 bg-purple-500/10 p-2.5 text-purple-400">
@@ -164,7 +164,7 @@ export default function AdminDashboard({
                             </div>
                         </div>
                         <div className="mt-4">
-                            <p className="text-3xl font-bold tracking-tight text-white">
+                            <p className="text-3xl font-bold tracking-tight text-foreground">
                                 {stats.activeBarbers}
                             </p>
                             <p className="mt-1 text-xs font-medium text-purple-400/90">
@@ -174,9 +174,9 @@ export default function AdminDashboard({
                     </div>
 
                     {/* Citas de Hoy */}
-                    <div className="group relative flex flex-col justify-between rounded-2xl border border-sidebar-border/70 bg-card/60 p-5 shadow-sm backdrop-blur-sm transition-all hover:border-zinc-700 hover:bg-card">
+                    <div className="group relative flex flex-col justify-between rounded-2xl border border-sidebar-border/70 bg-card/60 p-5 shadow-sm backdrop-blur-sm transition-all hover:border-foreground/40 hover:bg-card">
                         <div className="flex items-center justify-between">
-                            <h3 className="text-xs font-semibold tracking-wider text-zinc-400 uppercase">
+                            <h3 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                                 Citas de Hoy
                             </h3>
                             <div className="rounded-xl border border-blue-500/20 bg-blue-500/10 p-2.5 text-blue-400">
@@ -184,7 +184,7 @@ export default function AdminDashboard({
                             </div>
                         </div>
                         <div className="mt-4">
-                            <p className="text-3xl font-bold tracking-tight text-white">
+                            <p className="text-3xl font-bold tracking-tight text-foreground">
                                 {stats.appointmentsToday}
                             </p>
                             <p className="mt-1 text-xs font-medium text-blue-400">
@@ -194,9 +194,9 @@ export default function AdminDashboard({
                     </div>
 
                     {/* Servicios Totales */}
-                    <div className="group relative flex flex-col justify-between rounded-2xl border border-sidebar-border/70 bg-card/60 p-5 shadow-sm backdrop-blur-sm transition-all hover:border-zinc-700 hover:bg-card">
+                    <div className="group relative flex flex-col justify-between rounded-2xl border border-sidebar-border/70 bg-card/60 p-5 shadow-sm backdrop-blur-sm transition-all hover:border-foreground/40 hover:bg-card">
                         <div className="flex items-center justify-between">
-                            <h3 className="text-xs font-semibold tracking-wider text-zinc-400 uppercase">
+                            <h3 className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                                 Servicios
                             </h3>
                             <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-2.5 text-emerald-400">
@@ -204,7 +204,7 @@ export default function AdminDashboard({
                             </div>
                         </div>
                         <div className="mt-4">
-                            <p className="text-3xl font-bold tracking-tight text-white">
+                            <p className="text-3xl font-bold tracking-tight text-foreground">
                                 {stats.totalServices}
                             </p>
                             <p className="mt-1 text-xs font-medium text-emerald-400">
@@ -221,13 +221,13 @@ export default function AdminDashboard({
                         <div className="mb-4 flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <div className="h-2 w-2 rounded-full bg-blue-500"></div>
-                                <h3 className="text-base font-semibold text-white">
+                                <h3 className="text-base font-semibold text-foreground">
                                     Últimas Citas Registradas
                                 </h3>
                             </div>
                             <Link
                                 href="/admin/appointments"
-                                className="flex items-center gap-1 text-xs font-medium text-zinc-400 transition-colors hover:text-white"
+                                className="flex items-center gap-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
                             >
                                 Ver todas{' '}
                                 <ArrowUpRight className="h-3.5 w-3.5" />
@@ -236,12 +236,12 @@ export default function AdminDashboard({
 
                         <div className="flex flex-1 flex-col gap-3">
                             {recentAppointments.length === 0 ? (
-                                <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-dashed border-sidebar-border/60 bg-zinc-900/20 p-8 text-center">
-                                    <Calendar className="mb-2 h-8 w-8 text-zinc-600" />
-                                    <p className="text-sm font-medium text-zinc-300">
+                                <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-dashed border-sidebar-border/60 bg-card p-8 text-center">
+                                    <Calendar className="mb-2 h-8 w-8 text-muted-foreground" />
+                                    <p className="text-sm font-medium text-foreground">
                                         No hay citas recientes registradas
                                     </p>
-                                    <p className="mt-1 text-xs text-zinc-500">
+                                    <p className="mt-1 text-xs text-muted-foreground">
                                         Las nuevas reservas aparecerán
                                         automáticamente aquí.
                                     </p>
@@ -250,21 +250,21 @@ export default function AdminDashboard({
                                 recentAppointments.map((appointment) => (
                                     <div
                                         key={appointment.id}
-                                        className="flex items-start justify-between gap-3 rounded-xl border border-sidebar-border/40 bg-zinc-900/30 p-3"
+                                        className="flex items-start justify-between gap-3 rounded-xl border border-sidebar-border/40 bg-card p-3"
                                     >
                                         <div className="flex items-start gap-3">
-                                            <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-zinc-700/50 bg-zinc-800/60 text-zinc-300">
+                                            <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border bg-muted text-foreground">
                                                 <Clock className="h-3.5 w-3.5" />
                                             </div>
                                             <div>
-                                                <p className="text-xs font-semibold text-white">
+                                                <p className="text-xs font-semibold text-foreground">
                                                     {appointment.client}
-                                                    <span className="font-normal text-zinc-400">
+                                                    <span className="font-normal text-muted-foreground">
                                                         {' '}
                                                         · {appointment.barber}
                                                     </span>
                                                 </p>
-                                                <p className="mt-0.5 text-[11px] text-zinc-400">
+                                                <p className="mt-0.5 text-[11px] text-muted-foreground">
                                                     {appointment.service} ·{' '}
                                                     {formatDateTimeAMPM(
                                                         appointment.start_time,
@@ -287,31 +287,31 @@ export default function AdminDashboard({
                     {/* Columna Secundaria: Actividad del Sistema */}
                     <div className="col-span-3 flex flex-col rounded-2xl border border-sidebar-border/70 bg-card/60 p-6 shadow-sm backdrop-blur-sm">
                         <div className="mb-4 flex items-center gap-2">
-                            <Activity className="h-4 w-4 text-zinc-400" />
-                            <h3 className="text-base font-semibold text-white">
+                            <Activity className="h-4 w-4 text-muted-foreground" />
+                            <h3 className="text-base font-semibold text-foreground">
                                 Actividad Reciente
                             </h3>
                         </div>
 
                         <div className="flex flex-col gap-4">
                             {recentActivity.length === 0 ? (
-                                <div className="rounded-xl border border-dashed border-sidebar-border/60 bg-zinc-900/20 p-6 text-center text-xs text-zinc-500">
+                                <div className="rounded-xl border border-dashed border-sidebar-border/60 bg-card p-6 text-center text-xs text-muted-foreground">
                                     Aún no hay actividad registrada.
                                 </div>
                             ) : (
                                 recentActivity.map((item) => (
                                     <div
                                         key={item.id}
-                                        className="flex items-start gap-3 rounded-xl border border-sidebar-border/40 bg-zinc-900/30 p-3"
+                                        className="flex items-start gap-3 rounded-xl border border-sidebar-border/40 bg-card p-3"
                                     >
                                         <div
                                             className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${toneDot[item.tone]}`}
                                         ></div>
                                         <div className="flex-1">
-                                            <p className="text-xs font-medium text-white">
+                                            <p className="text-xs font-medium text-foreground">
                                                 {item.title}
                                             </p>
-                                            <p className="mt-0.5 text-[11px] text-zinc-400">
+                                            <p className="mt-0.5 text-[11px] text-muted-foreground">
                                                 {item.description}
                                             </p>
                                         </div>

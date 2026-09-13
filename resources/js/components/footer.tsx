@@ -2,19 +2,19 @@ import React from 'react';
 
 export default function Footer() {
     return (
-        <footer className="border-t border-white/5 bg-zinc-950 py-16 text-sm text-zinc-400">
+        <footer className="border-t border-border bg-background py-16 text-sm text-muted-foreground">
             <div className="mx-auto mb-12 grid max-w-7xl grid-cols-1 gap-12 px-6 md:grid-cols-4">
                 {/* Columna de Marca */}
                 <div className="space-y-4 md:col-span-1">
-                    <h3 className="font-serif text-xl font-bold tracking-wide text-white">
+                    <h3 className="font-serif text-xl font-bold tracking-wide text-foreground">
                         Tubarber
                     </h3>
-                    <p className="leading-relaxed font-light text-zinc-400">
+                    <p className="leading-relaxed font-light text-muted-foreground">
                         Elevando el estándar del cuidado personal y el estilo
                         clásico con un enfoque moderno.
                     </p>
                     {/* Indicador de estatus para UX/Conversión */}
-                    <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-zinc-300">
+                    <div className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-1.5 text-xs text-muted-foreground">
                         <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-500"></span>
                         <span>Abierto ahora • Citas disponibles</span>
                     </div>
@@ -22,14 +22,14 @@ export default function Footer() {
 
                 {/* Enlaces Rápidos */}
                 <div className="space-y-4">
-                    <h4 className="text-xs font-semibold tracking-wider text-white uppercase">
+                    <h4 className="text-xs font-semibold tracking-wider text-foreground uppercase">
                         Navegación
                     </h4>
                     <ul className="space-y-2.5 font-light">
                         <li>
                             <a
                                 href="#servicios"
-                                className="rounded transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:outline-none"
+                                className="rounded transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                             >
                                 Servicios
                             </a>
@@ -37,7 +37,7 @@ export default function Footer() {
                         <li>
                             <a
                                 href="#barberos"
-                                className="rounded transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:outline-none"
+                                className="rounded transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                             >
                                 Barberos
                             </a>
@@ -45,7 +45,7 @@ export default function Footer() {
                         <li>
                             <a
                                 href="#galeria"
-                                className="rounded transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:outline-none"
+                                className="rounded transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                             >
                                 Galería
                             </a>
@@ -53,7 +53,7 @@ export default function Footer() {
                         <li>
                             <a
                                 href="/booking"
-                                className="rounded transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:outline-none"
+                                className="rounded transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                             >
                                 Reservar Cita
                             </a>
@@ -63,21 +63,21 @@ export default function Footer() {
 
                 {/* Horarios */}
                 <div className="space-y-4">
-                    <h4 className="text-xs font-semibold tracking-wider text-white uppercase">
+                    <h4 className="text-xs font-semibold tracking-wider text-foreground uppercase">
                         Horarios
                     </h4>
                     <ul className="space-y-2.5 font-light">
                         <li className="flex items-center justify-between">
-                            <span className="text-zinc-400">
+                            <span className="text-muted-foreground">
                                 Lunes - Sábado:
                             </span>
-                            <span className="font-medium text-white">
+                            <span className="font-medium text-foreground">
                                 9:00 AM - 8:00 PM
                             </span>
                         </li>
                         <li className="flex items-center justify-between">
-                            <span className="text-zinc-400">Domingo:</span>
-                            <span className="font-medium text-white">
+                            <span className="text-muted-foreground">Domingo:</span>
+                            <span className="font-medium text-foreground">
                                 10:00 AM - 4:00 PM
                             </span>
                         </li>
@@ -86,10 +86,10 @@ export default function Footer() {
 
                 {/* Contacto / Redes */}
                 <div className="space-y-4">
-                    <h4 className="text-xs font-semibold tracking-wider text-white uppercase">
+                    <h4 className="text-xs font-semibold tracking-wider text-foreground uppercase">
                         Contacto
                     </h4>
-                    <p className="font-light text-zinc-400">
+                    <p className="font-light text-muted-foreground">
                         Naguanagua, Valencia, Venezuela
                     </p>
                     <div className="flex items-center gap-3 pt-2">
@@ -97,7 +97,7 @@ export default function Footer() {
                             href="https://instagram.com/tu-usuario"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-zinc-300 transition-all hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:outline-none"
+                            className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-muted text-muted-foreground transition-all hover:border-ring/40 hover:bg-muted/80 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                             aria-label="Instagram de la barbería"
                         >
                             <svg
@@ -118,7 +118,7 @@ export default function Footer() {
                             href="https://tiktok.com/@tu-usuario"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-zinc-300 transition-all hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:outline-none"
+                            className="flex h-10 w-10 items-center justify-center rounded-xl border border-border bg-muted text-muted-foreground transition-all hover:border-ring/40 hover:bg-muted/80 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                             aria-label="TikTok de la barbería"
                         >
                             <svg
@@ -140,7 +140,7 @@ export default function Footer() {
             </div>
 
             {/* Copyright */}
-            <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 border-t border-white/5 px-6 pt-8 text-xs font-light text-zinc-500 md:flex-row">
+            <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 border-t border-border px-6 pt-8 text-xs font-light text-muted-foreground md:flex-row">
                 <p>
                     © {new Date().getFullYear()} Tubarber. Todos los derechos
                     reservados.
@@ -148,13 +148,13 @@ export default function Footer() {
                 <div className="flex gap-6">
                     <a
                         href="/privacy"
-                        className="rounded transition-colors hover:text-zinc-300 focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:outline-none"
+                        className="rounded transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                     >
                         Política de Privacidad
                     </a>
                     <a
                         href="/terms"
-                        className="rounded transition-colors hover:text-zinc-300 focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:outline-none"
+                        className="rounded transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
                     >
                         Términos de Servicio
                     </a>

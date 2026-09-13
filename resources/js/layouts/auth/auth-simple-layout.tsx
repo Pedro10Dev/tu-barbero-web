@@ -7,7 +7,7 @@ export default function AuthSimpleLayout({
     description,
 }: AuthLayoutProps) {
     return (
-        <div className="flex min-h-screen w-full items-center justify-center bg-zinc-950 p-4">
+        <div className="flex min-h-screen w-full items-center justify-center bg-background p-4">
             <div className="w-full max-w-sm">
                 <div className="flex flex-col gap-6">
                     {title && (
@@ -24,11 +24,11 @@ export default function AuthSimpleLayout({
                             </Link>
 
                             <div className="space-y-1 text-center">
-                                <h1 className="text-xl font-bold tracking-tight text-white">
+                                <h1 className="text-xl font-bold tracking-tight text-foreground">
                                     {title}
                                 </h1>
                                 {description && (
-                                    <p className="max-w-xs text-center text-sm text-zinc-400">
+                                    <p className="max-w-xs text-center text-sm text-muted-foreground">
                                         {description}
                                     </p>
                                 )}

@@ -81,15 +81,15 @@ export default function Dashboard({
 
             <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 p-4 sm:p-6 lg:p-8">
                 {/* Cabecera y Acciones Rápidas */}
-                <div className="flex flex-col gap-4 border-b border-zinc-800/80 pb-5 sm:flex-row sm:items-end sm:justify-between">
+                <div className="flex flex-col gap-4 border-b border-border pb-5 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                         <div className="mb-1.5 flex items-center gap-2">
                             <span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></span>
-                            <span className="text-xs font-bold tracking-widest text-zinc-400 uppercase">
+                            <span className="text-xs font-bold tracking-widest text-muted-foreground uppercase">
                                 Panel de Control
                             </span>
                         </div>
-                        <h1 className="text-3xl font-extrabold tracking-tight text-white">
+                        <h1 className="text-3xl font-extrabold tracking-tight text-foreground">
                             Hola, {barberName}
                         </h1>
                     </div>
@@ -97,7 +97,7 @@ export default function Dashboard({
                     <div className="flex w-full items-center gap-2 sm:w-auto">
                         <Link
                             href="/agenda/nuevo-turno"
-                            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-zinc-900 shadow-sm transition-colors hover:bg-zinc-200 sm:flex-none"
+                            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 sm:flex-none"
                         >
                             <UserPlus className="h-4 w-4" /> Nuevo Turno
                         </Link>
@@ -105,7 +105,7 @@ export default function Dashboard({
                 </div>
 
                 {/* Banner de Próxima Cita */}
-                <div className="relative flex flex-col justify-between gap-5 overflow-hidden rounded-2xl border border-slate-800/60 bg-gradient-to-r from-slate-900 to-zinc-950 p-5 shadow-xl sm:p-6 md:flex-row md:items-center">
+                <div className="relative flex flex-col justify-between gap-5 overflow-hidden rounded-2xl border border-slate-800/60 bg-gradient-to-r from-slate-900 to-slate-950 p-5 shadow-xl sm:p-6 md:flex-row md:items-center">
                     {/* Decoración de fondo */}
                     <div className="absolute top-0 right-0 -mt-4 -mr-4 text-slate-800/30">
                         <Clock className="h-32 w-32 -rotate-12 transform" />
@@ -121,7 +121,7 @@ export default function Dashboard({
                                     <p className="mb-1 text-xs font-semibold tracking-wider text-slate-400 uppercase">
                                         Tu siguiente cliente
                                     </p>
-                                    <h3 className="flex items-center gap-2 text-xl font-bold text-white sm:text-2xl">
+                                    <h3 className="flex items-center gap-2 text-xl font-bold text-foreground sm:text-2xl">
                                         {nextAppointment.client}
                                         <span className="text-lg font-medium text-slate-400">
                                             ·{' '}
@@ -145,50 +145,50 @@ export default function Dashboard({
 
                 {/* Grid de Métricas Principales */}
                 <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-                    <div className="rounded-2xl border border-zinc-800/80 bg-zinc-900/60 p-5 transition-colors hover:border-zinc-700">
+                    <div className="rounded-2xl border border-border bg-card p-5 transition-colors hover:border-foreground/40">
                         <div className="mb-3 flex items-center justify-between">
-                            <span className="text-xs font-semibold tracking-wider text-zinc-400 uppercase">
+                            <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                                 Cortes de la Semana
                             </span>
                             <Sparkles className="h-4.5 w-4.5 text-emerald-400" />
                         </div>
-                        <p className="text-2xl font-black text-white sm:text-3xl">
+                        <p className="text-2xl font-black text-foreground sm:text-3xl">
                             {stats.weeklyCuts}
                         </p>
                     </div>
 
-                    <div className="rounded-2xl border border-zinc-800/80 bg-zinc-900/60 p-5 transition-colors hover:border-zinc-700">
+                    <div className="rounded-2xl border border-border bg-card p-5 transition-colors hover:border-foreground/40">
                         <div className="mb-3 flex items-center justify-between">
-                            <span className="text-xs font-semibold tracking-wider text-zinc-400 uppercase">
+                            <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                                 Citas de Hoy
                             </span>
                             <Calendar className="h-4.5 w-4.5 text-blue-400" />
                         </div>
-                        <p className="text-2xl font-black text-white sm:text-3xl">
+                        <p className="text-2xl font-black text-foreground sm:text-3xl">
                             {stats.todayAppointments}
                         </p>
                     </div>
 
-                    <div className="rounded-2xl border border-zinc-800/80 bg-zinc-900/60 p-5 transition-colors hover:border-zinc-700">
+                    <div className="rounded-2xl border border-border bg-card p-5 transition-colors hover:border-foreground/40">
                         <div className="mb-3 flex items-center justify-between">
-                            <span className="text-xs font-semibold tracking-wider text-zinc-400 uppercase">
+                            <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                                 Total Mensual
                             </span>
-                            <Scissors className="h-4.5 w-4.5 text-slate-300" />
+                            <Scissors className="h-4.5 w-4.5 text-muted-foreground" />
                         </div>
-                        <p className="text-2xl font-black text-white sm:text-3xl">
+                        <p className="text-2xl font-black text-foreground sm:text-3xl">
                             {stats.monthlyCuts}
                         </p>
                     </div>
 
-                    <div className="rounded-2xl border border-zinc-800/80 bg-zinc-900/60 p-5 transition-colors hover:border-zinc-700">
+                    <div className="rounded-2xl border border-border bg-card p-5 transition-colors hover:border-foreground/40">
                         <div className="mb-3 flex items-center justify-between">
-                            <span className="text-xs font-semibold tracking-wider text-zinc-400 uppercase">
+                            <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                                 Histórico
                             </span>
-                            <TrendingUp className="h-4.5 w-4.5 text-zinc-500" />
+                            <TrendingUp className="h-4.5 w-4.5 text-muted-foreground" />
                         </div>
-                        <p className="text-2xl font-black text-white sm:text-3xl">
+                        <p className="text-2xl font-black text-foreground sm:text-3xl">
                             {stats.totalCuts}
                         </p>
                     </div>
@@ -197,30 +197,30 @@ export default function Dashboard({
                 {/* Sección dividida: Pendientes y Actividad */}
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                     {/* Citas Pendientes (Ocupa 2 columnas) */}
-                    <div className="flex flex-col rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-5 sm:p-6 lg:col-span-2">
+                    <div className="flex flex-col rounded-2xl border border-border bg-card p-5 sm:p-6 lg:col-span-2">
                         <div className="mb-5 flex items-center justify-between">
                             <div>
-                                <h2 className="text-lg font-bold tracking-tight text-white">
+                                <h2 className="text-lg font-bold tracking-tight text-foreground">
                                     Citas Pendientes
                                 </h2>
-                                <p className="mt-0.5 text-xs text-zinc-400">
+                                <p className="mt-0.5 text-xs text-muted-foreground">
                                     Solicitudes esperando tu aprobación
                                 </p>
                             </div>
-                            <span className="rounded-md border border-zinc-700 bg-zinc-800/80 px-2.5 py-1 text-xs font-bold text-zinc-300">
+                            <span className="rounded-md border border-border bg-muted px-2.5 py-1 text-xs font-bold text-foreground">
                                 {pendingAppointments.length}
                             </span>
                         </div>
 
                         {pendingAppointments.length === 0 ? (
-                            <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-dashed border-zinc-800/80 bg-zinc-900/20 py-10">
-                                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800">
-                                    <CheckCircle2 className="h-5 w-5 text-zinc-400" />
+                            <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card py-10">
+                                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-muted">
+                                    <CheckCircle2 className="h-5 w-5 text-muted-foreground" />
                                 </div>
-                                <p className="text-sm font-medium text-zinc-300">
+                                <p className="text-sm font-medium text-foreground">
                                     Agenda al día
                                 </p>
-                                <p className="mt-1 text-xs text-zinc-500">
+                                <p className="mt-1 text-xs text-muted-foreground">
                                     No hay solicitudes pendientes.
                                 </p>
                             </div>
@@ -229,17 +229,17 @@ export default function Dashboard({
                                 {pendingAppointments.map((appointment) => (
                                     <div
                                         key={appointment.id}
-                                        className="flex flex-col justify-between gap-4 rounded-xl border border-zinc-800/80 bg-zinc-950 p-4 transition hover:border-zinc-700 sm:flex-row sm:items-center"
+                                        className="flex flex-col justify-between gap-4 rounded-xl border border-border bg-muted p-4 transition hover:border-foreground/40 sm:flex-row sm:items-center"
                                     >
                                         <div className="flex items-start gap-3">
-                                            <div className="mt-0.5 shrink-0 rounded-lg border border-zinc-800 bg-zinc-900 p-2 text-slate-300 sm:mt-0">
+                                            <div className="mt-0.5 shrink-0 rounded-lg border border-border bg-muted p-2 text-muted-foreground sm:mt-0">
                                                 <Calendar className="h-4 w-4" />
                                             </div>
                                             <div>
-                                                <p className="text-sm font-semibold text-white">
+                                                <p className="text-sm font-semibold text-foreground">
                                                     {appointment.client}
                                                 </p>
-                                                <p className="mt-0.5 text-xs text-zinc-400">
+                                                <p className="mt-0.5 text-xs text-muted-foreground">
                                                     {appointment.service} ·{' '}
                                                     {formatDateTimeAMPM(
                                                         appointment.start_time,
@@ -247,7 +247,7 @@ export default function Dashboard({
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="flex w-full items-center gap-2 border-t border-zinc-900 pt-2 sm:w-auto sm:border-t-0 sm:pt-0">
+                                        <div className="flex w-full items-center gap-2 border-t border-border pt-2 sm:w-auto sm:border-t-0 sm:pt-0">
                                             <button
                                                 onClick={() =>
                                                     decide(
@@ -292,16 +292,16 @@ export default function Dashboard({
                     </div>
 
                     {/* Actividad Reciente (Ocupa 1 columna) */}
-                    <div className="flex flex-col rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-5 sm:p-6">
+                    <div className="flex flex-col rounded-2xl border border-border bg-card p-5 sm:p-6">
                         <div className="mb-5 flex items-center justify-between">
-                            <h2 className="text-lg font-bold tracking-tight text-white">
+                            <h2 className="text-lg font-bold tracking-tight text-foreground">
                                 Actividad
                             </h2>
-                            <History className="h-4.5 w-4.5 text-zinc-500" />
+                            <History className="h-4.5 w-4.5 text-muted-foreground" />
                         </div>
 
                         {activity.length === 0 ? (
-                            <div className="flex flex-1 items-center justify-center rounded-xl border border-dashed border-zinc-800/80 bg-zinc-900/20 py-10 text-center text-xs text-zinc-500">
+                            <div className="flex flex-1 items-center justify-center rounded-xl border border-dashed border-border bg-card py-10 text-center text-xs text-muted-foreground">
                                 Aún no hay actividad registrada.
                             </div>
                         ) : (
@@ -312,18 +312,18 @@ export default function Dashboard({
                                         className="relative flex items-start gap-4"
                                     >
                                         {index < activity.length - 1 && (
-                                            <div className="absolute top-7 bottom-[-16px] left-[11px] w-[1px] bg-zinc-800"></div>
+                                            <div className="absolute top-7 bottom-[-16px] left-[11px] w-[1px] bg-muted"></div>
                                         )}
-                                        <div className="relative z-10 mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-zinc-700 bg-zinc-900">
+                                        <div className="relative z-10 mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-border bg-muted">
                                             <div
                                                 className={`h-2 w-2 rounded-full ${toneDot[item.tone]}`}
                                             ></div>
                                         </div>
                                         <div>
-                                            <p className="text-sm font-semibold text-zinc-200">
+                                            <p className="text-sm font-semibold text-foreground">
                                                 {item.title}
                                             </p>
-                                            <p className="mt-0.5 text-xs text-zinc-400">
+                                            <p className="mt-0.5 text-xs text-muted-foreground">
                                                 {item.description}
                                             </p>
                                         </div>
@@ -334,7 +334,7 @@ export default function Dashboard({
 
                         <Link
                             href="/productividad"
-                            className="mt-6 w-full rounded-lg border border-zinc-800/80 bg-zinc-800/40 py-2 text-center text-xs font-semibold text-zinc-400 transition-colors hover:bg-zinc-800 hover:text-white"
+                            className="mt-6 w-full rounded-lg border border-border bg-muted py-2 text-center text-xs font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                         >
                             Ver historial completo
                         </Link>

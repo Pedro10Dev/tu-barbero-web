@@ -97,26 +97,26 @@ export default function BookingIndex() {
     return (
         <>
             <Navbar />
-            <div className="min-h-screen bg-zinc-950 px-4 py-12 text-zinc-100 sm:px-6 lg:px-8">
+            <div className="min-h-screen bg-background px-4 py-12 text-foreground sm:px-6 lg:px-8">
                 <Head title="Reservar Cita - Barbería" />
 
                 <div className="mx-auto max-w-3xl">
                     {/* Header */}
                     <div className="mb-10 text-center">
-                        <span className="text-xs font-bold tracking-widest text-zinc-400 uppercase">
+                        <span className="text-xs font-bold tracking-widest text-muted-foreground uppercase">
                             Barbería Studio
                         </span>
-                        <h1 className="mt-1 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                        <h1 className="mt-1 text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
                             Reserva tu experiencia
                         </h1>
-                        <p className="mt-2 text-sm text-zinc-400">
+                        <p className="mt-2 text-sm text-muted-foreground">
                             Selecciona el servicio, tu barbero de preferencia y
                             el horario ideal.
                         </p>
                     </div>
 
                     {/* Stepper Header */}
-                    <div className="mb-8 flex items-center justify-between border-b border-zinc-800 pb-4">
+                    <div className="mb-8 flex items-center justify-between border-b border-border pb-4">
                         {[
                             { num: 1, label: 'Servicio' },
                             { num: 2, label: 'Barbero' },
@@ -129,19 +129,19 @@ export default function BookingIndex() {
                                 onClick={() => s.num < step && setStep(s.num)}
                                 className={`flex items-center gap-2 text-sm font-medium transition-colors ${
                                     step === s.num
-                                        ? 'text-white'
+                                        ? 'text-foreground'
                                         : step > s.num
                                           ? 'cursor-pointer text-emerald-400'
-                                          : 'cursor-not-allowed text-zinc-600'
+                                          : 'cursor-not-allowed text-muted-foreground'
                                 }`}
                             >
                                 <span
                                     className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${
                                         step === s.num
-                                            ? 'bg-zinc-100 text-zinc-950'
+                                            ? 'bg-primary text-primary-foreground'
                                             : step > s.num
                                               ? 'border border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
-                                              : 'border border-zinc-800 bg-zinc-900 text-zinc-600'
+                                              : 'border border-border bg-card text-muted-foreground'
                                     }`}
                                 >
                                     {step > s.num ? '✓' : s.num}
@@ -157,7 +157,7 @@ export default function BookingIndex() {
                         {/* PASO 1: SERVICIOS */}
                         {step === 1 && (
                             <div className="space-y-4">
-                                <h2 className="mb-4 text-xl font-bold tracking-tight text-white">
+                                <h2 className="mb-4 text-xl font-bold tracking-tight text-foreground">
                                     Selecciona un servicio
                                 </h2>
                                 <div className="grid grid-cols-1 gap-3">
@@ -179,15 +179,15 @@ export default function BookingIndex() {
                                                 }}
                                                 className={`flex cursor-pointer items-center justify-between rounded-2xl border p-5 transition-all ${
                                                     isSelected
-                                                        ? 'border-zinc-100 bg-zinc-900/80 shadow-lg shadow-black/50'
-                                                        : 'border-zinc-800 bg-zinc-900/30 hover:border-zinc-700 hover:bg-zinc-900/50'
+                                                        ? 'border-primary bg-accent shadow-lg shadow-foreground/10'
+                                                        : 'border-border bg-card hover:border-foreground/40 hover:bg-card'
                                                 }`}
                                             >
                                                 <div>
-                                                    <h3 className="text-base font-semibold text-white">
+                                                    <h3 className="text-base font-semibold text-foreground">
                                                         {service.name}
                                                     </h3>
-                                                    <p className="mt-1 text-xs text-zinc-400">
+                                                    <p className="mt-1 text-xs text-muted-foreground">
                                                         {
                                                             service.duration_minutes
                                                         }{' '}
@@ -195,7 +195,7 @@ export default function BookingIndex() {
                                                     </p>
                                                 </div>
                                                 <div className="text-right">
-                                                    <span className="text-lg font-bold text-white">
+                                                    <span className="text-lg font-bold text-foreground">
                                                         ${service.price}
                                                     </span>
                                                 </div>
@@ -204,7 +204,7 @@ export default function BookingIndex() {
                                     })}
                                 </div>
                                 {errors.service_id && (
-                                    <p className="mt-2 text-xs text-red-400">
+                                    <p className="mt-2 text-xs text-destructive">
                                         {errors.service_id}
                                     </p>
                                 )}
@@ -214,7 +214,7 @@ export default function BookingIndex() {
                                         type="button"
                                         disabled={!data.service_id}
                                         onClick={() => setStep(2)}
-                                        className="rounded-xl bg-white px-6 py-3 text-sm font-semibold text-zinc-950 transition-all hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-40"
+                                        className="rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-40"
                                     >
                                         Continuar →
                                     </button>
@@ -225,7 +225,7 @@ export default function BookingIndex() {
                         {/* PASO 2: BARBEROS */}
                         {step === 2 && (
                             <div className="space-y-4">
-                                <h2 className="mb-4 text-xl font-bold tracking-tight text-white">
+                                <h2 className="mb-4 text-xl font-bold tracking-tight text-foreground">
                                     Selecciona a tu barbero
                                 </h2>
                                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -247,20 +247,20 @@ export default function BookingIndex() {
                                                 }}
                                                 className={`cursor-pointer rounded-2xl border p-5 transition-all ${
                                                     isSelected
-                                                        ? 'border-zinc-100 bg-zinc-900/80 shadow-lg shadow-black/50'
-                                                        : 'border-zinc-800 bg-zinc-900/30 hover:border-zinc-700 hover:bg-zinc-900/50'
+                                                        ? 'border-primary bg-accent shadow-lg shadow-foreground/10'
+                                                        : 'border-border bg-card hover:border-foreground/40 hover:bg-card'
                                                 }`}
                                             >
-                                                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full border border-zinc-700 bg-zinc-800 text-sm font-bold text-zinc-300">
+                                                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full border border-border bg-muted text-sm font-bold text-muted-foreground">
                                                     {barber.display_name
                                                         .substring(0, 2)
                                                         .toUpperCase()}
                                                 </div>
-                                                <h3 className="text-base font-semibold text-white">
+                                                <h3 className="text-base font-semibold text-foreground">
                                                     {barber.display_name}
                                                 </h3>
                                                 {barber.bio && (
-                                                    <p className="mt-1 line-clamp-2 text-xs text-zinc-400">
+                                                    <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
                                                         {barber.bio}
                                                     </p>
                                                 )}
@@ -269,7 +269,7 @@ export default function BookingIndex() {
                                     })}
                                 </div>
                                 {errors.barber_profile_id && (
-                                    <p className="mt-2 text-xs text-red-400">
+                                    <p className="mt-2 text-xs text-destructive">
                                         {errors.barber_profile_id}
                                     </p>
                                 )}
@@ -278,7 +278,7 @@ export default function BookingIndex() {
                                     <button
                                         type="button"
                                         onClick={() => setStep(1)}
-                                        className="rounded-xl border border-zinc-800 px-6 py-3 text-sm font-medium text-zinc-300 transition-all hover:bg-zinc-900"
+                                        className="rounded-xl border border-border px-6 py-3 text-sm font-medium text-muted-foreground transition-all hover:bg-accent"
                                     >
                                         Atrás
                                     </button>
@@ -286,7 +286,7 @@ export default function BookingIndex() {
                                         type="button"
                                         disabled={!data.barber_profile_id}
                                         onClick={() => setStep(3)}
-                                        className="rounded-xl bg-white px-6 py-3 text-sm font-semibold text-zinc-950 transition-all hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-40"
+                                        className="rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-40"
                                     >
                                         Continuar →
                                     </button>
@@ -297,12 +297,12 @@ export default function BookingIndex() {
                         {/* PASO 3: FECHA Y HORA */}
                         {step === 3 && (
                             <div className="space-y-6">
-                                <h2 className="text-xl font-bold tracking-tight text-white">
+                                <h2 className="text-xl font-bold tracking-tight text-foreground">
                                     Elige fecha y hora
                                 </h2>
 
                                 <div>
-                                    <label className="mb-2 block text-xs font-semibold tracking-wider text-zinc-400 uppercase">
+                                    <label className="mb-2 block text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                                         Fecha
                                     </label>
                                     <input
@@ -319,10 +319,10 @@ export default function BookingIndex() {
                                             setData('date', e.target.value);
                                             setData('time', '');
                                         }}
-                                        className="w-full rounded-xl border border-zinc-800 bg-zinc-900/60 p-3.5 text-sm text-white focus:border-zinc-500 focus:outline-none sm:w-1/2"
+                                        className="w-full rounded-xl border border-border bg-card p-3.5 text-sm text-foreground focus:border-ring focus:outline-none sm:w-1/2"
                                     />
                                     {errors.date && (
-                                        <p className="mt-2 text-xs text-red-400">
+                                        <p className="mt-2 text-xs text-destructive">
                                             {errors.date}
                                         </p>
                                     )}
@@ -330,11 +330,11 @@ export default function BookingIndex() {
 
                                 {data.date && (
                                     <div>
-                                        <label className="mb-2 block text-xs font-semibold tracking-wider text-zinc-400 uppercase">
+                                        <label className="mb-2 block text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                                             Horarios Disponibles
                                         </label>
                                         {loadingSlots ? (
-                                            <div className="py-8 text-center text-sm text-zinc-500">
+                                            <div className="py-8 text-center text-sm text-muted-foreground">
                                                 Buscando turnos disponibles...
                                             </div>
                                         ) : availableSlots.length > 0 ? (
@@ -355,8 +355,8 @@ export default function BookingIndex() {
                                                             }
                                                             className={`rounded-xl border p-3 text-center text-sm font-semibold transition-all ${
                                                                 isSelected
-                                                                    ? 'border-white bg-white text-zinc-950 shadow-md'
-                                                                    : 'border-zinc-800 bg-zinc-900/40 text-zinc-300 hover:border-zinc-700'
+                                                                    ? 'border-primary bg-primary text-primary-foreground shadow-md'
+                                                                    : 'border-border bg-card text-muted-foreground hover:border-foreground/40'
                                                             }`}
                                                         >
                                                             {formatTimeAMPM(
@@ -374,7 +374,7 @@ export default function BookingIndex() {
                                             </p>
                                         )}
                                         {errors.time && (
-                                            <p className="mt-2 text-xs text-red-400">
+                                            <p className="mt-2 text-xs text-destructive">
                                                 {errors.time}
                                             </p>
                                         )}
@@ -385,7 +385,7 @@ export default function BookingIndex() {
                                     <button
                                         type="button"
                                         onClick={() => setStep(2)}
-                                        className="rounded-xl border border-zinc-800 px-6 py-3 text-sm font-medium text-zinc-300 transition-all hover:bg-zinc-900"
+                                        className="rounded-xl border border-border px-6 py-3 text-sm font-medium text-muted-foreground transition-all hover:bg-accent"
                                     >
                                         Atrás
                                     </button>
@@ -393,7 +393,7 @@ export default function BookingIndex() {
                                         type="button"
                                         disabled={!data.date || !data.time}
                                         onClick={() => setStep(4)}
-                                        className="rounded-xl bg-white px-6 py-3 text-sm font-semibold text-zinc-950 transition-all hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-40"
+                                        className="rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-40"
                                     >
                                         Continuar →
                                     </button>
@@ -404,39 +404,39 @@ export default function BookingIndex() {
                         {/* PASO 4: CONFIRMACIÓN Y DATOS DE CONTACTO */}
                         {step === 4 && (
                             <div className="space-y-6">
-                                <h2 className="mb-2 text-xl font-bold tracking-tight text-white">
+                                <h2 className="mb-2 text-xl font-bold tracking-tight text-foreground">
                                     Tus Datos y Confirmación
                                 </h2>
 
                                 {/* Resumen de la Cita */}
-                                <div className="grid grid-cols-2 gap-4 rounded-2xl border border-zinc-800 bg-zinc-900/60 p-5 text-sm">
+                                <div className="grid grid-cols-2 gap-4 rounded-2xl border border-border bg-card p-5 text-sm">
                                     <div>
-                                        <span className="block text-xs tracking-wider text-zinc-500 uppercase">
+                                        <span className="block text-xs tracking-wider text-muted-foreground uppercase">
                                             Servicio
                                         </span>
-                                        <span className="font-semibold text-white">
+                                        <span className="font-semibold text-foreground">
                                             {selectedService?.name}
                                         </span>
                                     </div>
                                     <div>
-                                        <span className="block text-xs tracking-wider text-zinc-500 uppercase">
+                                        <span className="block text-xs tracking-wider text-muted-foreground uppercase">
                                             Barbero
                                         </span>
-                                        <span className="font-semibold text-white">
+                                        <span className="font-semibold text-foreground">
                                             {selectedBarber?.display_name}
                                         </span>
                                     </div>
                                     <div>
-                                        <span className="block text-xs tracking-wider text-zinc-500 uppercase">
+                                        <span className="block text-xs tracking-wider text-muted-foreground uppercase">
                                             Fecha y Hora
                                         </span>
-                                        <span className="font-semibold text-white">
+                                        <span className="font-semibold text-foreground">
                                             {data.date} a las{' '}
                                             {formatTimeAMPM(data.time)}
                                         </span>
                                     </div>
                                     <div>
-                                        <span className="block text-xs tracking-wider text-zinc-500 uppercase">
+                                        <span className="block text-xs tracking-wider text-muted-foreground uppercase">
                                             Total a pagar
                                         </span>
                                         <span className="font-semibold text-emerald-400">
@@ -448,7 +448,7 @@ export default function BookingIndex() {
                                 {/* Campos del Formulario */}
                                 <div className="space-y-4">
                                     <div>
-                                        <label className="mb-1 block text-xs font-semibold tracking-wider text-zinc-400 uppercase">
+                                        <label className="mb-1 block text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                                             Nombre Completo
                                         </label>
                                         <input
@@ -462,14 +462,14 @@ export default function BookingIndex() {
                                                 )
                                             }
                                             disabled={!!authClient}
-                                            className={`w-full rounded-xl border border-zinc-800 bg-zinc-900/60 p-3.5 text-sm text-white focus:border-zinc-500 focus:outline-none ${
+                                            className={`w-full rounded-xl border border-border bg-card p-3.5 text-sm text-foreground focus:border-ring focus:outline-none ${
                                                 authClient
-                                                    ? 'cursor-not-allowed bg-zinc-950/40 opacity-60'
+                                                    ? 'cursor-not-allowed bg-muted/60 opacity-60'
                                                     : ''
                                             }`}
                                         />
                                         {errors.client_name && (
-                                            <p className="mt-1 text-xs text-red-400">
+                                            <p className="mt-1 text-xs text-destructive">
                                                 {errors.client_name}
                                             </p>
                                         )}
@@ -477,7 +477,7 @@ export default function BookingIndex() {
 
                                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                         <div>
-                                            <Label className="mb-1 block text-xs font-semibold tracking-wider text-zinc-400 uppercase">
+                                            <Label className="mb-1 block text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                                                 Correo Electrónico
                                             </Label>
                                             <Input
@@ -491,14 +491,14 @@ export default function BookingIndex() {
                                                     )
                                                 }
                                                 disabled={!!authClient}
-                                                className={`h-11 w-full rounded-xl border border-zinc-800 bg-zinc-900/60 px-3 text-sm text-white focus:border-zinc-500 focus:outline-none ${
+                                                className={`h-11 w-full rounded-xl border border-border bg-card px-3 text-sm text-foreground focus:border-ring focus:outline-none ${
                                                     authClient
-                                                        ? 'cursor-not-allowed bg-zinc-950/40 opacity-60'
+                                                        ? 'cursor-not-allowed bg-muted/60 opacity-60'
                                                         : ''
                                                 }`}
                                             />
                                             {errors.client_email && (
-                                                <p className="mt-1 text-xs text-red-400">
+                                                <p className="mt-1 text-xs text-destructive">
                                                     {errors.client_email}
                                                 </p>
                                             )}
@@ -506,7 +506,7 @@ export default function BookingIndex() {
                                         <div>
                                             <Label
                                                 htmlFor="client_phone"
-                                                className="mb-1 block text-xs font-semibold tracking-wider text-zinc-400 uppercase"
+                                                className="mb-1 block text-xs font-semibold tracking-wider text-muted-foreground uppercase"
                                             >
                                                 Teléfono
                                             </Label>
@@ -518,7 +518,7 @@ export default function BookingIndex() {
                                                     type="text"
                                                     value={data.client_phone}
                                                     disabled
-                                                    className="h-11 w-full cursor-not-allowed rounded-xl border border-zinc-800 bg-zinc-950/40 px-3 text-sm text-white opacity-60"
+                                                    className="h-11 w-full cursor-not-allowed rounded-xl border border-border bg-muted/60 px-3 text-sm text-foreground opacity-60"
                                                 />
                                             ) : (
                                                 // Si no está autenticado, mostramos el select de prefijo y el input de 7 dígitos
@@ -568,7 +568,7 @@ export default function BookingIndex() {
                                                                         `${e.target.value}${phoneNumber}`,
                                                                     )
                                                                 }
-                                                                className="h-11 rounded-xl border border-zinc-800 bg-zinc-900/60 px-3 py-2 text-sm text-zinc-100 transition-all focus:border-zinc-500 focus:ring-zinc-500"
+                                                                className="h-11 rounded-xl border border-border bg-card px-3 py-2 text-sm text-foreground transition-all focus:border-ring focus:ring-ring"
                                                             >
                                                                 <option value="0412">
                                                                     0412
@@ -612,7 +612,7 @@ export default function BookingIndex() {
                                                                     );
                                                                 }}
                                                                 placeholder="1234567"
-                                                                className="h-11 w-full rounded-xl border border-zinc-800 bg-zinc-900/60 text-sm text-white transition-all focus:border-zinc-500 focus:outline-none"
+                                                                className="h-11 w-full rounded-xl border border-border bg-card text-sm text-foreground transition-all focus:border-ring focus:outline-none"
                                                             />
                                                         </div>
                                                     );
@@ -620,7 +620,7 @@ export default function BookingIndex() {
                                             )}
 
                                             {errors.client_phone && (
-                                                <p className="mt-1 text-xs text-red-400">
+                                                <p className="mt-1 text-xs text-destructive">
                                                     {errors.client_phone}
                                                 </p>
                                             )}
@@ -628,7 +628,7 @@ export default function BookingIndex() {
                                     </div>
 
                                     <div>
-                                        <label className="mb-1 block text-xs font-semibold tracking-wider text-zinc-400 uppercase">
+                                        <label className="mb-1 block text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                                             Notas o Peticiones Especiales
                                             (Opcional)
                                         </label>
@@ -639,7 +639,7 @@ export default function BookingIndex() {
                                             onChange={(e) =>
                                                 setData('notes', e.target.value)
                                             }
-                                            className="w-full resize-none rounded-xl border border-zinc-800 bg-zinc-900/60 p-3.5 text-sm text-white focus:border-zinc-500 focus:outline-none"
+                                            className="w-full resize-none rounded-xl border border-border bg-card p-3.5 text-sm text-foreground focus:border-ring focus:outline-none"
                                         />
                                     </div>
                                 </div>
@@ -648,14 +648,14 @@ export default function BookingIndex() {
                                     <button
                                         type="button"
                                         onClick={() => setStep(3)}
-                                        className="rounded-xl border border-zinc-800 px-6 py-3 text-sm font-medium text-zinc-300 transition-all hover:bg-zinc-900"
+                                        className="rounded-xl border border-border px-6 py-3 text-sm font-medium text-muted-foreground transition-all hover:bg-accent"
                                     >
                                         Atrás
                                     </button>
                                     <button
                                         type="submit"
                                         disabled={processing}
-                                        className="rounded-xl bg-white px-8 py-3.5 text-sm font-bold text-zinc-950 shadow-lg shadow-white/10 transition-all hover:bg-zinc-200 disabled:opacity-50"
+                                        className="rounded-xl bg-primary px-8 py-3.5 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:bg-primary/90 disabled:opacity-50"
                                     >
                                         {processing
                                             ? 'Procesando...'

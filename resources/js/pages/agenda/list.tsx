@@ -54,7 +54,7 @@ const statusConfig = {
     cancelled: {
         label: 'Cancelada',
         bar: 'bg-zinc-600',
-        chip: 'border-zinc-700/60 bg-zinc-800/80 text-zinc-400',
+        chip: 'border-border bg-muted text-muted-foreground',
         icon: XCircle,
     },
     completed: {
@@ -130,30 +130,30 @@ export default function AgendaList({
 
             <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 p-6 lg:p-8">
                 {/* Cabecera y Resumen Superior */}
-                <div className="flex flex-col justify-between gap-4 border-b border-zinc-800/80 pb-6 md:flex-row md:items-center">
+                <div className="flex flex-col justify-between gap-4 border-b border-border pb-6 md:flex-row md:items-center">
                     <div className="space-y-1">
-                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-white">
-                            <Calendar className="size-6 text-zinc-400" />
+                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-foreground">
+                            <Calendar className="size-6 text-muted-foreground" />
                             Gestión de Citas y Solicitudes
                         </h1>
-                        <p className="text-sm text-zinc-400">
+                        <p className="text-sm text-muted-foreground">
                             Revisa solicitudes pendientes por la web o
                             administra turnos de forma manual en estación.
                         </p>
                     </div>
 
                     {/* Tarjeta de Solicitudes Pendientes */}
-                    <div className="flex shrink-0 items-center gap-3 rounded-2xl border border-zinc-800/80 bg-zinc-900/60 px-4 py-3">
+                    <div className="flex shrink-0 items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3">
                         <div className="flex size-10 items-center justify-center rounded-xl border border-amber-500/20 bg-amber-500/10 text-amber-400">
                             <AlertCircle className="size-5" />
                         </div>
                         <div>
-                            <span className="block text-xs font-medium text-zinc-400">
+                            <span className="block text-xs font-medium text-muted-foreground">
                                 Solicitudes Pendientes
                             </span>
-                            <span className="text-base font-bold text-white">
+                            <span className="text-base font-bold text-foreground">
                                 {pendingCount}{' '}
-                                <span className="text-xs font-normal text-zinc-500">
+                                <span className="text-xs font-normal text-muted-foreground">
                                     por aprobar
                                 </span>
                             </span>
@@ -164,24 +164,24 @@ export default function AgendaList({
                 {/* Filtros y Búsqueda */}
                 <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
                     <div className="relative flex w-full items-center">
-                        <Search className="absolute left-3.5 size-4 text-zinc-500" />
+                        <Search className="absolute left-3.5 size-4 text-muted-foreground" />
                         <input
                             type="text"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             placeholder="Buscar cliente, teléfono o servicio..."
-                            className="w-full rounded-xl border border-zinc-800/80 bg-zinc-900/60 py-2.5 pr-4 pl-10 text-sm text-white placeholder-zinc-500 transition focus:border-zinc-700 focus:outline-none"
+                            className="w-full rounded-xl border border-border bg-card py-2.5 pr-4 pl-10 text-sm text-foreground placeholder:text-muted-foreground transition focus:border-ring focus:outline-none"
                         />
                     </div>
 
                     <div className="flex w-full shrink-0 items-center justify-between gap-3 sm:w-auto sm:justify-end">
-                        <div className="flex rounded-xl border border-zinc-800/80 bg-zinc-900/60 p-1">
+                        <div className="flex rounded-xl border border-border bg-card p-1">
                             <button
                                 onClick={() => setFilter('all')}
                                 className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
                                     filter === 'all'
-                                        ? 'bg-zinc-800 text-white shadow-sm'
-                                        : 'text-zinc-400 hover:text-white'
+                                        ? 'bg-muted text-foreground shadow-sm'
+                                        : 'text-muted-foreground hover:text-foreground'
                                 }`}
                             >
                                 Todas
@@ -190,8 +190,8 @@ export default function AgendaList({
                                 onClick={() => setFilter('pending')}
                                 className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
                                     filter === 'pending'
-                                        ? 'bg-zinc-800 text-white shadow-sm'
-                                        : 'text-zinc-400 hover:text-white'
+                                        ? 'bg-muted text-foreground shadow-sm'
+                                        : 'text-muted-foreground hover:text-foreground'
                                 }`}
                             >
                                 Solicitudes
@@ -200,8 +200,8 @@ export default function AgendaList({
                                 onClick={() => setFilter('confirmed')}
                                 className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
                                     filter === 'confirmed'
-                                        ? 'bg-zinc-800 text-white shadow-sm'
-                                        : 'text-zinc-400 hover:text-white'
+                                        ? 'bg-muted text-foreground shadow-sm'
+                                        : 'text-muted-foreground hover:text-foreground'
                                 }`}
                             >
                                 Confirmadas
@@ -210,7 +210,7 @@ export default function AgendaList({
 
                         <Link
                             href="/agenda/nuevo-turno"
-                            className="flex shrink-0 items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-zinc-200"
+                            className="flex shrink-0 items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-xs font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
                         >
                             <Plus className="size-4" />
                             Nuevo Turno
@@ -221,7 +221,7 @@ export default function AgendaList({
                 {/* Listado de Citas */}
                 <div className="flex flex-col gap-3">
                     {visibleAppointments.length === 0 ? (
-                        <div className="rounded-2xl border border-zinc-800/60 bg-zinc-900/30 py-12 text-center text-sm text-zinc-500">
+                        <div className="rounded-2xl border border-border bg-card py-12 text-center text-sm text-muted-foreground">
                             No hay citas que coincidan con este filtro.
                         </div>
                     ) : (
@@ -235,10 +235,10 @@ export default function AgendaList({
                             return (
                                 <div
                                     key={app.id}
-                                    className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-zinc-900/40 transition-all duration-300 ${
+                                    className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-card transition-all duration-300 ${
                                         isExpanded
-                                            ? 'border-zinc-700/80 shadow-lg shadow-black/20'
-                                            : 'border-zinc-800/80 hover:border-zinc-700/80'
+                                            ? 'border-border shadow-lg shadow-foreground/10'
+                                            : 'border-border hover:border-foreground/40'
                                     }`}
                                 >
                                     <div
@@ -259,7 +259,7 @@ export default function AgendaList({
 
                                             <div className="space-y-1">
                                                 <div className="flex flex-wrap items-center gap-2.5">
-                                                    <h3 className="text-base font-semibold text-white">
+                                                    <h3 className="text-base font-semibold text-foreground">
                                                         {app.client}
                                                     </h3>
                                                     <span
@@ -269,13 +269,13 @@ export default function AgendaList({
                                                     </span>
                                                 </div>
 
-                                                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-zinc-400">
-                                                    <span className="flex items-center gap-1.5 font-medium text-zinc-300">
-                                                        <Scissors className="size-3.5 text-zinc-500" />
+                                                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+                                                    <span className="flex items-center gap-1.5 font-medium text-foreground">
+                                                        <Scissors className="size-3.5 text-muted-foreground" />
                                                         {app.service}
                                                     </span>
                                                     <span className="flex items-center gap-1.5">
-                                                        <Clock className="size-3.5 text-zinc-500" />
+                                                        <Clock className="size-3.5 text-muted-foreground" />
                                                         {app.start_time}{' '}
                                                         {formatTimeAMPM(
                                                             app.time,
@@ -283,7 +283,7 @@ export default function AgendaList({
                                                     </span>
                                                     {app.phoneFormatted && (
                                                         <span className="flex items-center gap-1.5">
-                                                            <Phone className="size-3.5 text-zinc-500" />
+                                                            <Phone className="size-3.5 text-muted-foreground" />
                                                             {app.phoneFormatted}
                                                         </span>
                                                     )}
@@ -350,7 +350,7 @@ export default function AgendaList({
                                                             )
                                                         }
                                                         disabled={isUpdating}
-                                                        className="flex items-center gap-1.5 rounded-xl border border-zinc-600/50 bg-zinc-800/60 px-3.5 py-2 text-xs font-semibold text-zinc-300 transition hover:bg-zinc-700 hover:text-white disabled:opacity-50"
+                                                        className="flex items-center gap-1.5 rounded-xl border border-border bg-muted px-3.5 py-2 text-xs font-semibold text-foreground transition hover:bg-accent hover:text-foreground disabled:opacity-50"
                                                     >
                                                         <CalendarOff className="size-4" />
                                                         Cancelar
@@ -362,7 +362,7 @@ export default function AgendaList({
                                                 onClick={() =>
                                                     toggleExpand(app.id)
                                                 }
-                                                className="ml-1 flex items-center gap-2 rounded-xl border border-zinc-700/50 bg-zinc-800/60 px-3.5 py-2 text-xs font-medium text-zinc-300 transition hover:bg-zinc-700 hover:text-white"
+                                                className="ml-1 flex items-center gap-2 rounded-xl border border-border bg-muted px-3.5 py-2 text-xs font-medium text-foreground transition hover:bg-accent hover:text-foreground"
                                             >
                                                 <span>
                                                     {isExpanded
@@ -381,24 +381,24 @@ export default function AgendaList({
                                         className={`grid transition-all duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
                                     >
                                         <div className="overflow-hidden">
-                                            <div className="flex flex-col justify-between gap-6 border-t border-zinc-800/60 bg-zinc-950/40 px-6 pt-4 pb-6 md:flex-row md:items-center">
+                                            <div className="flex flex-col justify-between gap-6 border-t border-border bg-muted/60 px-6 pt-4 pb-6 md:flex-row md:items-center">
                                                 <div className="grid grid-cols-1 gap-6 text-xs sm:grid-cols-2 lg:grid-cols-3">
                                                     <div className="space-y-1">
-                                                        <span className="block font-semibold tracking-wider text-zinc-500 uppercase">
+                                                        <span className="block font-semibold tracking-wider text-muted-foreground uppercase">
                                                             Correo Electrónico
                                                         </span>
-                                                        <div className="flex items-center gap-2 text-zinc-300">
-                                                            <Mail className="size-3.5 text-zinc-500" />
+                                                        <div className="flex items-center gap-2 text-foreground">
+                                                            <Mail className="size-3.5 text-muted-foreground" />
                                                             {app.email || '—'}
                                                         </div>
                                                     </div>
 
                                                     <div className="space-y-1">
-                                                        <span className="block font-semibold tracking-wider text-zinc-500 uppercase">
+                                                        <span className="block font-semibold tracking-wider text-muted-foreground uppercase">
                                                             Detalles del
                                                             Servicio
                                                         </span>
-                                                        <span className="block font-medium text-zinc-300">
+                                                        <span className="block font-medium text-foreground">
                                                             {formatPrice(
                                                                 app.price,
                                                             )}
@@ -409,11 +409,11 @@ export default function AgendaList({
                                                     </div>
 
                                                     <div className="space-y-1 sm:col-span-2 lg:col-span-1">
-                                                        <span className="block font-semibold tracking-wider text-zinc-500 uppercase">
+                                                        <span className="block font-semibold tracking-wider text-muted-foreground uppercase">
                                                             Notas /
                                                             Observaciones
                                                         </span>
-                                                        <p className="text-zinc-400 italic">
+                                                        <p className="text-muted-foreground italic">
                                                             {app.notes
                                                                 ? `"${app.notes}"`
                                                                 : 'Sin notas'}
@@ -421,20 +421,20 @@ export default function AgendaList({
                                                     </div>
                                                 </div>
 
-                                                <div className="flex shrink-0 items-center border-t border-zinc-800/40 pt-4 md:border-t-0 md:pt-0">
+                                                <div className="flex shrink-0 items-center border-t border-border pt-4 md:border-t-0 md:pt-0">
                                                     {app.phone ? (
                                                         <a
                                                             href={`https://wa.me/${app.phone}?text=Hola%20${encodeURIComponent(app.client)},%20te%20contacto%20desde%20TuBarbero%20en%20relación%20a%20tu%20cita%20de%20${encodeURIComponent(app.service)}...`}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
-                                                            className="flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-600/20 px-4 py-2.5 text-xs font-semibold text-emerald-300 shadow-sm transition-all hover:border-emerald-500 hover:bg-emerald-600/30 md:w-auto"
+                                                            className="flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-600/20 px-4 py-2.5 text-xs font-semibold text-emerald-600 shadow-sm transition-all hover:border-emerald-500 hover:bg-emerald-600/30 dark:text-emerald-300 md:w-auto"
                                                         >
                                                             <MessageSquare className="size-4 text-emerald-400" />
                                                             Escribir por
                                                             WhatsApp
                                                         </a>
                                                     ) : (
-                                                        <span className="text-xs text-zinc-500">
+                                                        <span className="text-xs text-muted-foreground">
                                                             Sin teléfono de
                                                             contacto
                                                         </span>

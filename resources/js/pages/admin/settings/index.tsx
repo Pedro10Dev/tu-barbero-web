@@ -32,9 +32,9 @@ export default function AdminSettings({ business }: { business: Business }) {
     };
 
     const inputClass =
-        'w-full rounded-xl border border-zinc-800/80 bg-zinc-900/60 px-4 py-2.5 text-sm text-white placeholder-zinc-500 transition focus:border-zinc-700 focus:outline-none';
+        'w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground transition focus:border-ring focus:outline-none';
     const labelClass =
-        'mb-1.5 block text-xs font-semibold tracking-wider text-zinc-400 uppercase';
+        'mb-1.5 block text-xs font-semibold tracking-wider text-muted-foreground uppercase';
 
     const fields: {
         key: keyof Business;
@@ -46,31 +46,31 @@ export default function AdminSettings({ business }: { business: Business }) {
         {
             key: 'business_name',
             label: 'Nombre del negocio',
-            icon: <Building2 className="size-4 text-zinc-300" />,
+            icon: <Building2 className="size-4 text-foreground" />,
             placeholder: 'Ej. TuBarbero',
         },
         {
             key: 'business_phone',
             label: 'Teléfono',
-            icon: <Phone className="size-4 text-zinc-300" />,
+            icon: <Phone className="size-4 text-foreground" />,
             placeholder: 'Ej. 0412 123 4567',
         },
         {
             key: 'business_whatsapp',
             label: 'WhatsApp',
-            icon: <MessageCircle className="size-4 text-zinc-300" />,
+            icon: <MessageCircle className="size-4 text-foreground" />,
             placeholder: 'Ej. 0412 123 4567',
         },
         {
             key: 'business_address',
             label: 'Dirección',
-            icon: <MapPin className="size-4 text-zinc-300" />,
+            icon: <MapPin className="size-4 text-foreground" />,
             placeholder: 'Ej. Av. Principal, local 5, Caracas',
         },
         {
             key: 'business_hours',
             label: 'Horario de atención',
-            icon: <Clock className="size-4 text-zinc-300" />,
+            icon: <Clock className="size-4 text-foreground" />,
             textarea: true,
             placeholder: 'Ej. Lun a Sáb 9:00 - 19:00',
         },
@@ -82,13 +82,13 @@ export default function AdminSettings({ business }: { business: Business }) {
 
             <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 p-6 lg:p-8">
                 {/* Cabecera */}
-                <div className="flex flex-col justify-between gap-4 border-b border-zinc-800/80 pb-6 md:flex-row md:items-center">
+                <div className="flex flex-col justify-between gap-4 border-b border-border pb-6 md:flex-row md:items-center">
                     <div className="space-y-1">
-                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-white">
-                            <Store className="size-6 text-zinc-400" />
+                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-foreground">
+                            <Store className="size-6 text-muted-foreground" />
                             Configuración
                         </h1>
-                        <p className="text-sm text-zinc-400">
+                        <p className="text-sm text-muted-foreground">
                             Ficha pública del negocio que se muestra a tus
                             clientes.
                         </p>
@@ -96,7 +96,7 @@ export default function AdminSettings({ business }: { business: Business }) {
                 </div>
 
                 <form onSubmit={submit} className="flex flex-col gap-6">
-                    <div className="flex flex-col gap-5 rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-6">
+                    <div className="flex flex-col gap-5 rounded-2xl border border-border bg-card p-6">
                         {fields.map((field) => (
                             <div key={field.key} className="space-y-1">
                                 <label

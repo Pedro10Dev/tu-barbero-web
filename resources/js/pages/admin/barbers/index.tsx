@@ -56,29 +56,29 @@ export default function AdminBarbers({ barbers }: { barbers: Barber[] }) {
 
             <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 p-6 lg:p-8">
                 {/* Cabecera */}
-                <div className="flex flex-col justify-between gap-4 border-b border-zinc-800/80 pb-6 md:flex-row md:items-center">
+                <div className="flex flex-col justify-between gap-4 border-b border-border pb-6 md:flex-row md:items-center">
                     <div className="space-y-1">
-                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-white">
-                            <Scissors className="size-6 text-zinc-400" />
+                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-foreground">
+                            <Scissors className="size-6 text-muted-foreground" />
                             Barberos
                         </h1>
-                        <p className="text-sm text-zinc-400">
+                        <p className="text-sm text-muted-foreground">
                             Equipo de barberos y perfiles de estación.
                         </p>
                     </div>
 
                     <div className="flex flex-wrap items-center gap-3">
-                        <div className="flex shrink-0 items-center gap-3 rounded-2xl border border-zinc-800/80 bg-zinc-900/60 px-4 py-3">
+                        <div className="flex shrink-0 items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3">
                             <div className="flex size-10 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-500/10 text-emerald-400">
                                 <UserCheck className="size-5" />
                             </div>
                             <div>
-                                <span className="block text-xs font-medium text-zinc-400">
+                                <span className="block text-xs font-medium text-muted-foreground">
                                     Activos
                                 </span>
-                                <span className="text-base font-bold text-white">
+                                <span className="text-base font-bold text-foreground">
                                     {activeCount}{' '}
-                                    <span className="text-xs font-normal text-zinc-500">
+                                    <span className="text-xs font-normal text-muted-foreground">
                                         de {barbers.length}
                                     </span>
                                 </span>
@@ -87,7 +87,7 @@ export default function AdminBarbers({ barbers }: { barbers: Barber[] }) {
 
                         <Link
                             href="/admin/barbers/create"
-                            className="flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-xs font-semibold text-zinc-950 shadow-sm transition hover:bg-zinc-200"
+                            className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-xs font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
                         >
                             <Plus className="size-4" />
                             Nuevo Barbero
@@ -98,25 +98,25 @@ export default function AdminBarbers({ barbers }: { barbers: Barber[] }) {
                 {/* Grid de barberos */}
                 <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
                     {barbers.length === 0 ? (
-                        <div className="rounded-2xl border border-zinc-800/60 bg-zinc-900/30 py-12 text-center text-sm text-zinc-500 md:col-span-2 lg:col-span-3">
+                        <div className="rounded-2xl border border-border bg-card py-12 text-center text-sm text-muted-foreground md:col-span-2 lg:col-span-3">
                             Aún no hay barberos registrados.
                         </div>
                     ) : (
                         barbers.map((barber) => (
                             <div
                                 key={barber.id}
-                                className="group relative flex flex-col overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-6 transition-all duration-300 hover:border-zinc-700"
+                                className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:border-foreground/40"
                             >
                                 <div
                                     className={`absolute top-0 bottom-0 left-0 w-1.5 ${barber.is_active ? 'bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.4)]' : 'bg-zinc-600'}`}
                                 />
 
                                 <div className="flex items-start justify-between gap-3">
-                                    <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-zinc-700/50 bg-zinc-800/60 text-zinc-300">
+                                    <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border bg-muted text-foreground">
                                         <Scissors className="size-5" />
                                     </div>
                                     <span
-                                        className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-medium ${barber.is_active ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400' : 'border-zinc-700/60 bg-zinc-800/80 text-zinc-400'}`}
+                                        className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-medium ${barber.is_active ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400' : 'border-border bg-muted text-muted-foreground'}`}
                                     >
                                         {barber.is_active
                                             ? 'Activo'
@@ -125,47 +125,47 @@ export default function AdminBarbers({ barbers }: { barbers: Barber[] }) {
                                 </div>
 
                                 <div className="mt-4 space-y-1">
-                                    <h3 className="text-base font-semibold text-white">
+                                    <h3 className="text-base font-semibold text-foreground">
                                         {barber.display_name}
                                     </h3>
-                                    <p className="text-xs text-zinc-400">
+                                    <p className="text-xs text-muted-foreground">
                                         {barber.email}
                                     </p>
                                     {barber.phone && (
-                                        <p className="flex items-center gap-1.5 text-xs text-zinc-400">
-                                            <Phone className="size-3.5 text-zinc-500" />
+                                        <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                                            <Phone className="size-3.5 text-muted-foreground" />
                                             {barber.phone}
                                         </p>
                                     )}
                                 </div>
 
-                                <p className="mt-3 line-clamp-2 text-xs text-zinc-500 italic">
+                                <p className="mt-3 line-clamp-2 text-xs text-muted-foreground italic">
                                     {barber.bio || 'Sin descripción.'}
                                 </p>
 
-                                <div className="mt-5 grid grid-cols-2 gap-3 border-t border-zinc-800/60 pt-4">
+                                <div className="mt-5 grid grid-cols-2 gap-3 border-t border-border pt-4">
                                     <div>
-                                        <span className="block text-[10px] font-semibold tracking-wider text-zinc-500 uppercase">
+                                        <span className="block text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
                                             Citas
                                         </span>
-                                        <span className="text-lg font-bold text-white">
+                                        <span className="text-lg font-bold text-foreground">
                                             {barber.appointmentCount}
                                         </span>
                                     </div>
                                     <div>
-                                        <span className="block text-[10px] font-semibold tracking-wider text-zinc-500 uppercase">
+                                        <span className="block text-[10px] font-semibold tracking-wider text-muted-foreground uppercase">
                                             Completadas (Mes)
                                         </span>
-                                        <span className="text-lg font-bold text-white">
+                                        <span className="text-lg font-bold text-foreground">
                                             {barber.monthlyCompleted}
                                         </span>
                                     </div>
                                 </div>
 
-                                <div className="mt-5 flex items-center gap-2 border-t border-zinc-800/60 pt-4">
+                                <div className="mt-5 flex items-center gap-2 border-t border-border pt-4">
                                     <Link
                                         href={`/admin/barbers/${barber.id}/edit`}
-                                        className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-zinc-700/50 bg-zinc-800/60 px-3 py-2 text-xs font-semibold text-zinc-300 transition hover:bg-zinc-700 hover:text-white"
+                                        className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-border bg-muted px-3 py-2 text-xs font-semibold text-foreground transition hover:bg-accent hover:text-foreground"
                                     >
                                         <Pencil className="size-3.5" />
                                         Editar
@@ -198,7 +198,7 @@ export default function AdminBarbers({ barbers }: { barbers: Barber[] }) {
                     }
                 }}
             >
-                <DialogContent className="border-zinc-800 bg-zinc-900 text-white sm:max-w-md">
+                <DialogContent className="border-border bg-muted text-foreground sm:max-w-md">
                     <DialogHeader>
                         <DialogTitle className="flex items-center gap-2 text-rose-400">
                             <AlertTriangle className="size-5" />
@@ -206,7 +206,7 @@ export default function AdminBarbers({ barbers }: { barbers: Barber[] }) {
                         </DialogTitle>
                         <DialogDescription>
                             Se eliminará el usuario de{' '}
-                            <strong className="text-white">
+                            <strong className="text-foreground">
                                 {barberToDelete?.display_name}
                             </strong>{' '}
                             y su perfil; ya no podrá iniciar sesión en la
@@ -220,14 +220,14 @@ export default function AdminBarbers({ barbers }: { barbers: Barber[] }) {
                         administrativo.
                     </div>
 
-                    <p className="text-xs text-zinc-400">
+                    <p className="text-xs text-muted-foreground">
                         Esta acción no se puede deshacer.
                     </p>
 
                     <DialogFooter>
                         <button
                             onClick={() => setBarberToDelete(null)}
-                            className="rounded-xl border border-zinc-700/50 bg-zinc-800/60 px-4 py-2.5 text-xs font-semibold text-zinc-300 transition hover:bg-zinc-700 hover:text-white"
+                            className="rounded-xl border border-border bg-muted px-4 py-2.5 text-xs font-semibold text-foreground transition hover:bg-accent hover:text-foreground"
                         >
                             Cancelar
                         </button>

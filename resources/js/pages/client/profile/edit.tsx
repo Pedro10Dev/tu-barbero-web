@@ -39,16 +39,16 @@ export default function ClientProfileEdit({ user }: Props) {
     };
 
     return (
-        <div className="flex min-h-screen flex-col bg-[#09090b] text-zinc-100 selection:bg-zinc-800">
+        <div className="flex min-h-screen flex-col bg-[#09090b] text-foreground selection:bg-muted">
             <Navbar />
 
             <main className="flex flex-grow items-center justify-center px-4 py-28 md:py-36">
-                <div className="relative w-full max-w-xl rounded-3xl border border-zinc-800/80 bg-zinc-900/40 p-8 shadow-2xl backdrop-blur-xl">
-                    <div className="mb-6 border-b border-zinc-800/80 pb-4">
-                        <h1 className="text-xl font-bold tracking-tight text-white">
+                <div className="relative w-full max-w-xl rounded-3xl border border-border bg-card p-8 shadow-2xl backdrop-blur-xl">
+                    <div className="mb-6 border-b border-border pb-4">
+                        <h1 className="text-xl font-bold tracking-tight text-foreground">
                             Información Personal
                         </h1>
-                        <p className="mt-1 text-xs text-zinc-400">
+                        <p className="mt-1 text-xs text-muted-foreground">
                             Actualiza tus datos personales de contacto.
                         </p>
                     </div>
@@ -57,9 +57,9 @@ export default function ClientProfileEdit({ user }: Props) {
                         <div className="grid gap-2">
                             <Label
                                 htmlFor="name"
-                                className="flex items-center gap-2 text-xs font-medium text-zinc-300"
+                                className="flex items-center gap-2 text-xs font-medium text-foreground"
                             >
-                                <User className="h-3.5 w-3.5 text-zinc-500" />{' '}
+                                <User className="h-3.5 w-3.5 text-muted-foreground" />{' '}
                                 Nombre Completo
                             </Label>
                             <Input
@@ -70,7 +70,7 @@ export default function ClientProfileEdit({ user }: Props) {
                                     setData('name', e.target.value)
                                 }
                                 required
-                                className="h-11 rounded-xl border-zinc-800 bg-zinc-950/60 text-sm text-zinc-100 transition-all focus:border-zinc-500 focus:ring-zinc-500"
+                                className="h-11 rounded-xl border-border bg-muted/60 text-sm text-foreground transition-all focus:border-ring focus:ring-ring"
                             />
                             {errors.name && (
                                 <p className="text-xs text-red-400">
@@ -83,12 +83,12 @@ export default function ClientProfileEdit({ user }: Props) {
                             <div className="flex items-center justify-between">
                                 <Label
                                     htmlFor="email"
-                                    className="flex items-center gap-2 text-xs font-medium text-zinc-400"
+                                    className="flex items-center gap-2 text-xs font-medium text-muted-foreground"
                                 >
-                                    <Mail className="h-3.5 w-3.5 text-zinc-600" />{' '}
+                                    <Mail className="h-3.5 w-3.5 text-muted-foreground" />{' '}
                                     Correo Electrónico
                                 </Label>
-                                <span className="rounded-md bg-zinc-800/50 px-2 py-0.5 text-[10px] text-zinc-500">
+                                <span className="rounded-md bg-muted px-2 py-0.5 text-[10px] text-muted-foreground">
                                     No Editable
                                 </span>
                             </div>
@@ -97,16 +97,16 @@ export default function ClientProfileEdit({ user }: Props) {
                                 type="email"
                                 value={data.email}
                                 disabled
-                                className="h-11 cursor-not-allowed rounded-xl border-zinc-800/50 bg-zinc-950/20 text-sm text-zinc-500"
+                                className="h-11 cursor-not-allowed rounded-xl border-border bg-muted/60 text-sm text-muted-foreground"
                             />
                         </div>
 
                         <div className="grid gap-2">
                             <Label
                                 htmlFor="phone"
-                                className="flex items-center gap-2 text-xs font-medium text-zinc-300"
+                                className="flex items-center gap-2 text-xs font-medium text-foreground"
                             >
-                                <Phone className="h-3.5 w-3.5 text-zinc-500" />{' '}
+                                <Phone className="h-3.5 w-3.5 text-muted-foreground" />{' '}
                                 Teléfono de Contacto
                             </Label>
 
@@ -119,7 +119,7 @@ export default function ClientProfileEdit({ user }: Props) {
                                             `${e.target.value}${phoneNumber}`,
                                         )
                                     }
-                                    className="h-11 rounded-xl border border-zinc-800 bg-zinc-950/60 px-3 py-2 text-sm text-zinc-100 transition-all focus:border-zinc-500 focus:ring-zinc-500"
+                                    className="h-11 rounded-xl border border-border bg-muted/60 px-3 py-2 text-sm text-foreground transition-all focus:border-ring focus:ring-ring"
                                 >
                                     <option value="0412">0412</option>
                                     <option value="0414">0414</option>
@@ -146,7 +146,7 @@ export default function ClientProfileEdit({ user }: Props) {
                                         );
                                     }}
                                     placeholder="1234567"
-                                    className="h-11 rounded-xl border-zinc-800 bg-zinc-950/60 text-sm text-zinc-100 transition-all focus:border-zinc-500 focus:ring-zinc-500"
+                                    className="h-11 rounded-xl border-border bg-muted/60 text-sm text-foreground transition-all focus:border-ring focus:ring-ring"
                                 />
                             </div>
 
@@ -157,11 +157,11 @@ export default function ClientProfileEdit({ user }: Props) {
                             )}
                         </div>
 
-                        <div className="flex items-center justify-between border-t border-zinc-800/80 pt-6">
+                        <div className="flex items-center justify-between border-t border-border pt-6">
                             <Button
                                 type="submit"
                                 disabled={processing}
-                                className="flex h-11 items-center gap-2 rounded-xl bg-white px-6 text-sm font-medium text-zinc-950 shadow-lg transition-all hover:bg-zinc-200"
+                                className="flex h-11 items-center gap-2 rounded-xl bg-primary px-6 text-sm font-medium text-primary-foreground shadow-lg transition-all hover:bg-primary/90"
                             >
                                 {processing && (
                                     <Loader2 className="h-4 w-4 animate-spin" />

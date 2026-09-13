@@ -3,7 +3,6 @@ import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
@@ -72,15 +71,6 @@ export default function Login({ status, canResetPassword }: Props) {
                                 <InputError message={errors.password} />
                             </div>
 
-                            <div className="flex items-center space-x-3">
-                                <Checkbox
-                                    id="remember"
-                                    name="remember"
-                                    tabIndex={3}
-                                />
-                                <Label htmlFor="remember">Recuérdame</Label>
-                            </div>
-
                             <Button
                                 type="submit"
                                 className="mt-4 w-full"
@@ -95,10 +85,10 @@ export default function Login({ status, canResetPassword }: Props) {
 
                         <div className="relative my-2">
                             <div className="absolute inset-0 flex items-center">
-                                <div className="w-full border-t border-gray-700" />
+                                <div className="w-full border-t border-border" />
                             </div>
                             <div className="relative flex justify-center text-sm">
-                                <span className="bg-black px-2 text-white">
+                                <span className="bg-background px-2 text-muted-foreground">
                                     o
                                 </span>
                             </div>
@@ -106,7 +96,7 @@ export default function Login({ status, canResetPassword }: Props) {
 
                         <a
                             href="/auth/google"
-                            className="flex w-full items-center justify-center gap-3 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm transition-all duration-200 hover:bg-gray-50 hover:shadow focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none"
+                            className="flex w-full items-center justify-center gap-3 rounded-md border border-border bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm transition-all duration-200 hover:bg-secondary/80 hover:shadow focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-none"
                         >
                             <svg className="h-4 w-4" viewBox="0 0 24 24">
                                 <path

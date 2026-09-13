@@ -48,7 +48,7 @@ const statusConfig = {
     },
     cancelled: {
         label: 'Cancelada',
-        chip: 'border-zinc-700/60 bg-zinc-800/80 text-zinc-400',
+        chip: 'border-border bg-muted text-muted-foreground',
         bar: 'bg-zinc-600',
         icon: XCircle,
     },
@@ -109,26 +109,26 @@ export default function AdminAppointments({
 
             <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 p-6 lg:p-8">
                 {/* Cabecera */}
-                <div className="flex flex-col justify-between gap-4 border-b border-zinc-800/80 pb-6 md:flex-row md:items-center">
+                <div className="flex flex-col justify-between gap-4 border-b border-border pb-6 md:flex-row md:items-center">
                     <div className="space-y-1">
-                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-white">
-                            <CalendarDays className="size-6 text-zinc-400" />
+                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-foreground">
+                            <CalendarDays className="size-6 text-muted-foreground" />
                             Gestión de Citas
                         </h1>
-                        <p className="text-sm text-zinc-400">
+                        <p className="text-sm text-muted-foreground">
                             Historial completo de reservas de todos los
                             barberos.
                         </p>
                     </div>
-                    <div className="flex shrink-0 items-center gap-3 rounded-2xl border border-zinc-800/80 bg-zinc-900/60 px-4 py-3">
-                        <div className="flex size-10 items-center justify-center rounded-xl border border-zinc-700/50 bg-zinc-800/80 text-zinc-300">
+                    <div className="flex shrink-0 items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3">
+                        <div className="flex size-10 items-center justify-center rounded-xl border border-border bg-muted text-foreground">
                             <CalendarDays className="size-5" />
                         </div>
                         <div>
-                            <span className="block text-xs font-medium text-zinc-400">
+                            <span className="block text-xs font-medium text-muted-foreground">
                                 Total de citas
                             </span>
-                            <span className="text-base font-bold text-white">
+                            <span className="text-base font-bold text-foreground">
                                 {appointments.length}
                             </span>
                         </div>
@@ -138,13 +138,13 @@ export default function AdminAppointments({
                 {/* Filtros y búsqueda */}
                 <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
                     <div className="relative flex w-full items-center">
-                        <Search className="absolute left-3.5 size-4 text-zinc-500" />
+                        <Search className="absolute left-3.5 size-4 text-muted-foreground" />
                         <input
                             type="text"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             placeholder="Buscar cliente, barbero o servicio..."
-                            className="w-full rounded-xl border border-zinc-800/80 bg-zinc-900/60 py-2.5 pr-4 pl-10 text-sm text-white placeholder-zinc-500 transition focus:border-zinc-700 focus:outline-none"
+                            className="w-full rounded-xl border border-border bg-card py-2.5 pr-4 pl-10 text-sm text-foreground placeholder:text-muted-foreground transition focus:border-ring focus:outline-none"
                         />
                     </div>
 
@@ -162,8 +162,8 @@ export default function AdminAppointments({
                                 onClick={() => setFilter(key)}
                                 className={`rounded-lg px-3.5 py-2 text-xs font-semibold transition-all ${
                                     filter === key
-                                        ? 'bg-zinc-800 text-white shadow-sm'
-                                        : 'text-zinc-400 hover:text-white'
+                                        ? 'bg-muted text-foreground shadow-sm'
+                                        : 'text-muted-foreground hover:text-foreground'
                                 }`}
                             >
                                 {label}
@@ -175,7 +175,7 @@ export default function AdminAppointments({
                 {/* Listado */}
                 <div className="flex flex-col gap-3">
                     {visibleAppointments.length === 0 ? (
-                        <div className="rounded-2xl border border-zinc-800/60 bg-zinc-900/30 py-12 text-center text-sm text-zinc-500">
+                        <div className="rounded-2xl border border-border bg-card py-12 text-center text-sm text-muted-foreground">
                             No hay citas que coincidan con este filtro.
                         </div>
                     ) : (
@@ -187,10 +187,10 @@ export default function AdminAppointments({
                             return (
                                 <div
                                     key={app.id}
-                                    className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-zinc-900/40 transition-all duration-300 ${
+                                    className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-card transition-all duration-300 ${
                                         isExpanded
-                                            ? 'border-zinc-700/80 shadow-lg shadow-black/20'
-                                            : 'border-zinc-800/80 hover:border-zinc-700/80'
+                                            ? 'border-border shadow-lg shadow-foreground/10'
+                                            : 'border-border hover:border-foreground/40'
                                     }`}
                                 >
                                     <div
@@ -214,7 +214,7 @@ export default function AdminAppointments({
 
                                             <div className="space-y-1">
                                                 <div className="flex flex-wrap items-center gap-2.5">
-                                                    <h3 className="text-base font-semibold text-white">
+                                                    <h3 className="text-base font-semibold text-foreground">
                                                         {app.client}
                                                     </h3>
                                                     <span
@@ -223,27 +223,27 @@ export default function AdminAppointments({
                                                         {config.label}
                                                     </span>
                                                 </div>
-                                                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-zinc-400">
+                                                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
                                                     <span className="flex items-center gap-1.5">
-                                                        <Clock className="size-3.5 text-zinc-500" />
+                                                        <Clock className="size-3.5 text-muted-foreground" />
                                                         {app.start_time}{' '}
                                                         {formatTimeAMPM(
                                                             app.time,
                                                         )}
                                                     </span>
                                                     <span className="flex items-center gap-1.5">
-                                                        <User className="size-3.5 text-zinc-500" />
+                                                        <User className="size-3.5 text-muted-foreground" />
                                                         {app.barber}
                                                     </span>
                                                     <span className="flex items-center gap-1.5">
-                                                        <Scissors className="size-3.5 text-zinc-500" />
+                                                        <Scissors className="size-3.5 text-muted-foreground" />
                                                         {app.service}
                                                     </span>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <button className="flex items-center gap-2 self-end rounded-xl border border-zinc-700/50 bg-zinc-800/60 px-4 py-2 text-xs font-semibold text-zinc-300 transition hover:bg-zinc-700 hover:text-white sm:self-center">
+                                        <button className="flex items-center gap-2 self-end rounded-xl border border-border bg-muted px-4 py-2 text-xs font-semibold text-foreground transition hover:bg-accent hover:text-foreground sm:self-center">
                                             <span>
                                                 {isExpanded
                                                     ? 'Ocultar'
@@ -260,12 +260,12 @@ export default function AdminAppointments({
                                         className={`grid transition-all duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
                                     >
                                         <div className="overflow-hidden">
-                                            <div className="grid grid-cols-1 gap-6 border-t border-zinc-800/60 bg-zinc-950/40 px-6 pt-4 pb-6 text-xs sm:grid-cols-2 lg:grid-cols-3">
+                                            <div className="grid grid-cols-1 gap-6 border-t border-border bg-muted/60 px-6 pt-4 pb-6 text-xs sm:grid-cols-2 lg:grid-cols-3">
                                                 <div className="space-y-1">
-                                                    <span className="block font-semibold tracking-wider text-zinc-500 uppercase">
+                                                    <span className="block font-semibold tracking-wider text-muted-foreground uppercase">
                                                         Precio en la reserva
                                                     </span>
-                                                    <span className="font-medium text-zinc-300">
+                                                    <span className="font-medium text-foreground">
                                                         {formatPrice(app.price)}
                                                         {app.duration
                                                             ? ` • ${app.duration} min`
@@ -273,19 +273,19 @@ export default function AdminAppointments({
                                                     </span>
                                                 </div>
                                                 <div className="space-y-1">
-                                                    <span className="block font-semibold tracking-wider text-zinc-500 uppercase">
+                                                    <span className="block font-semibold tracking-wider text-muted-foreground uppercase">
                                                         Barbero asignado
                                                     </span>
-                                                    <span className="flex items-center gap-2 text-zinc-300">
-                                                        <Mail className="size-3.5 text-zinc-500" />
+                                                    <span className="flex items-center gap-2 text-foreground">
+                                                        <Mail className="size-3.5 text-muted-foreground" />
                                                         {app.barber}
                                                     </span>
                                                 </div>
                                                 <div className="space-y-1 sm:col-span-2 lg:col-span-1">
-                                                    <span className="block font-semibold tracking-wider text-zinc-500 uppercase">
+                                                    <span className="block font-semibold tracking-wider text-muted-foreground uppercase">
                                                         Notas
                                                     </span>
-                                                    <p className="text-zinc-400 italic">
+                                                    <p className="text-muted-foreground italic">
                                                         {app.notes
                                                             ? `"${app.notes}"`
                                                             : 'Sin notas'}
@@ -305,14 +305,14 @@ export default function AdminAppointments({
                     {Object.entries(statusConfig).map(([key, config]) => (
                         <div
                             key={key}
-                            className="rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-4"
+                            className="rounded-2xl border border-border bg-card p-4"
                         >
                             <span
                                 className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${config.chip}`}
                             >
                                 {config.label}
                             </span>
-                            <p className="mt-2 text-2xl font-bold text-white">
+                            <p className="mt-2 text-2xl font-bold text-foreground">
                                 {totals[key] ?? 0}
                             </p>
                         </div>

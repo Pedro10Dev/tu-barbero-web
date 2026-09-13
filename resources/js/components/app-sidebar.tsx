@@ -1,4 +1,4 @@
-import { Link, usePage } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 import {
     LayoutGrid,
     Calendar,
@@ -24,7 +24,6 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
-import AppLogo from './app-logo';
 
 const barberNavItems: ExtendedNavItem[] = [
     {
@@ -129,16 +128,16 @@ export function AppSidebar() {
                         >
                             <div className="flex w-full items-center gap-3 px-2 py-1.5">
                                 {/* Icono de Tijeras */}
-                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-zinc-700/60 bg-gradient-to-br from-zinc-800 to-zinc-900 text-white shadow-inner">
+                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-sidebar-border bg-sidebar-accent text-sidebar-accent-foreground shadow-inner">
                                     <Scissors className="h-5 w-5 -rotate-45 text-emerald-400" />
                                 </div>
 
                                 {/* Texto sin redundancia */}
                                 <div className="flex flex-col overflow-hidden text-left">
-                                    <span className="text-sm leading-none font-bold tracking-tight text-white">
+                                    <span className="text-sm leading-none font-bold tracking-tight text-sidebar-foreground">
                                         Gestión Central
                                     </span>
-                                    <span className="mt-1 truncate text-[11px] font-medium text-zinc-400">
+                                    <span className="mt-1 truncate text-[11px] font-medium text-sidebar-foreground/60">
                                         Administración
                                     </span>
                                 </div>

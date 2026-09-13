@@ -26,7 +26,11 @@ use Inertia\Inertia;
 use Spatie\Permission\Middleware\RoleMiddleware;
 
 Route::get('/', function () {
-    return Inertia::render('landing', [
+    if (request()->header('X-Inertia')) {
+        return Inertia::location(route('landing'));
+    }
+
+    return view('landing', [
         'services' => Service::all(),
     ]);
 })->name('landing');

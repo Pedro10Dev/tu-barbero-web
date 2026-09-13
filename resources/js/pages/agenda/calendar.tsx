@@ -188,19 +188,19 @@ export default function AgendaCalendar({
 
             <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 p-6 lg:p-8">
                 {/* Cabecera y Selector de Vista */}
-                <div className="flex flex-col justify-between gap-4 border-b border-zinc-800/80 pb-6 md:flex-row md:items-center">
+                <div className="flex flex-col justify-between gap-4 border-b border-border pb-6 md:flex-row md:items-center">
                     <div className="space-y-1">
-                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-white">
-                            <CalendarIcon className="size-6 text-zinc-400" />
+                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-foreground">
+                            <CalendarIcon className="size-6 text-muted-foreground" />
                             Mi Agenda
                         </h1>
-                        <p className="text-sm text-zinc-400">
+                        <p className="text-sm text-muted-foreground">
                             Visualiza tus bloques horarios y turnos programados
                             en estación.
                         </p>
                     </div>
 
-                    <div className="flex shrink-0 rounded-xl border border-zinc-800/80 bg-zinc-900/60 p-1">
+                    <div className="flex shrink-0 rounded-xl border border-border bg-card p-1">
                         {(['day', 'week', 'month'] as ViewMode[]).map(
                             (mode) => (
                                 <button
@@ -208,8 +208,8 @@ export default function AgendaCalendar({
                                     onClick={() => isViewChange(mode)}
                                     className={`rounded-lg px-3.5 py-2 text-xs font-semibold transition-all ${
                                         viewMode === mode
-                                            ? 'bg-zinc-800 text-white shadow-sm'
-                                            : 'text-zinc-400 hover:text-white'
+                                            ? 'bg-muted text-foreground shadow-sm'
+                                            : 'text-muted-foreground hover:text-foreground'
                                     }`}
                                 >
                                     {mode === 'day'
@@ -224,20 +224,20 @@ export default function AgendaCalendar({
                 </div>
 
                 {/* Barra de navegación de fechas */}
-                <div className="flex flex-col items-center justify-between gap-4 rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-5 sm:flex-row">
+                <div className="flex flex-col items-center justify-between gap-4 rounded-2xl border border-border bg-card p-5 sm:flex-row">
                     <div className="flex items-center gap-3.5">
-                        <div className="flex size-11 items-center justify-center rounded-xl border border-zinc-700/50 bg-zinc-800/80 text-zinc-300">
+                        <div className="flex size-11 items-center justify-center rounded-xl border border-border bg-muted text-foreground">
                             <CalendarIcon className="size-5" />
                         </div>
                         <div>
-                            <span className="block text-xs font-semibold tracking-wider text-zinc-500 uppercase">
+                            <span className="block text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                                 {viewMode === 'day'
                                     ? 'Fecha Seleccionada'
                                     : viewMode === 'week'
                                       ? 'Semana'
                                       : 'Mes'}
                             </span>
-                            <h2 className="text-base font-bold text-white">
+                            <h2 className="text-base font-bold text-foreground">
                                 {viewMode === 'day'
                                     ? formatHeader(date)
                                     : periodLabel}
@@ -246,22 +246,22 @@ export default function AgendaCalendar({
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <div className="flex items-center overflow-hidden rounded-xl border border-zinc-700/50 bg-zinc-800/60">
+                        <div className="flex items-center overflow-hidden rounded-xl border border-border bg-muted">
                             <button
                                 onClick={goPrev}
-                                className="p-2.5 text-zinc-400 transition hover:bg-zinc-700 hover:text-white"
+                                className="p-2.5 text-muted-foreground transition hover:bg-accent hover:text-foreground"
                             >
                                 <ChevronLeft className="size-4" />
                             </button>
                             <button
                                 onClick={goToday}
-                                className="border-x border-zinc-700/50 px-4 text-xs font-semibold text-zinc-200 transition hover:text-white"
+                                className="border-x border-border px-4 text-xs font-semibold text-foreground transition hover:text-foreground"
                             >
                                 Hoy
                             </button>
                             <button
                                 onClick={goNext}
-                                className="p-2.5 text-zinc-400 transition hover:bg-zinc-700 hover:text-white"
+                                className="p-2.5 text-muted-foreground transition hover:bg-accent hover:text-foreground"
                             >
                                 <ChevronRight className="size-4" />
                             </button>
@@ -270,16 +270,16 @@ export default function AgendaCalendar({
                 </div>
 
                 {/* Cuadrícula de la Agenda */}
-                <div className="min-h-[400px] overflow-hidden rounded-2xl border border-zinc-800/80 bg-zinc-900/40">
+                <div className="min-h-[400px] overflow-hidden rounded-2xl border border-border bg-card">
                     {days.length === 0 ? (
                         <div className="flex min-h-[400px] flex-col items-center justify-center p-8 text-center">
-                            <div className="mb-3 flex size-12 items-center justify-center rounded-2xl border border-zinc-700/50 bg-zinc-800/60 text-zinc-400">
+                            <div className="mb-3 flex size-12 items-center justify-center rounded-2xl border border-border bg-muted text-muted-foreground">
                                 <CalendarIcon className="size-6" />
                             </div>
-                            <h3 className="mb-1 text-sm font-semibold text-white">
+                            <h3 className="mb-1 text-sm font-semibold text-foreground">
                                 Sin turnos en este período
                             </h3>
-                            <p className="max-w-sm text-xs text-zinc-400">
+                            <p className="max-w-sm text-xs text-muted-foreground">
                                 Las citas programadas aparecerán aquí para la
                                 vista seleccionada.
                             </p>
@@ -292,40 +292,40 @@ export default function AgendaCalendar({
                                     className="flex flex-col rounded-none"
                                 >
                                     {viewMode !== 'day' && (
-                                        <div className="flex items-center justify-between border-b border-zinc-800/70 bg-zinc-950/50 px-5 py-2">
-                                            <span className="text-xs font-semibold tracking-wide text-zinc-400 uppercase">
+                                        <div className="flex items-center justify-between border-b border-border bg-muted/60 px-5 py-2">
+                                            <span className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                                                 {formatShortDate(day.date)}
                                             </span>
-                                            <span className="rounded-full bg-zinc-800/80 px-2 py-0.5 text-[11px] font-semibold text-zinc-300">
+                                            <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-semibold text-foreground">
                                                 {day.entries.length}
                                             </span>
                                         </div>
                                     )}
 
-                                    <div className="flex flex-col divide-y divide-zinc-800/70">
+                                    <div className="flex flex-col divide-y divide-border/70">
                                         {day.entries.map((entry) => (
                                             <div
                                                 key={entry.id}
-                                                className="flex flex-col gap-3 px-5 py-4 transition-colors hover:bg-zinc-900/60 sm:flex-row sm:items-center sm:justify-between"
+                                                className="flex flex-col gap-3 px-5 py-4 transition-colors hover:bg-accent/60 sm:flex-row sm:items-center sm:justify-between"
                                             >
                                                 <div className="flex items-start gap-4">
-                                                    <div className="flex w-16 shrink-0 flex-col items-center justify-center rounded-xl border border-zinc-700/50 bg-zinc-800/60 px-2 py-2 text-center">
-                                                        <span className="text-sm font-bold text-white">
+                                                    <div className="flex w-16 shrink-0 flex-col items-center justify-center rounded-xl border border-border bg-muted px-2 py-2 text-center">
+                                                        <span className="text-sm font-bold text-foreground">
                                                             {formatTimeAMPM(
                                                                 entry.start_time,
                                                             )}
                                                         </span>
-                                                        <span className="text-[10px] text-zinc-500">
+                                                        <span className="text-[10px] text-muted-foreground">
                                                             {formatTimeAMPM(
                                                                 entry.end_time,
                                                             )}
                                                         </span>
                                                     </div>
                                                     <div className="space-y-0.5">
-                                                        <h3 className="text-sm font-semibold text-white">
+                                                        <h3 className="text-sm font-semibold text-foreground">
                                                             {entry.client}
                                                         </h3>
-                                                        <p className="text-xs text-zinc-400">
+                                                        <p className="text-xs text-muted-foreground">
                                                             {entry.service}
                                                         </p>
                                                     </div>
@@ -366,7 +366,7 @@ export default function AgendaCalendar({
                                                                         entry,
                                                                     )
                                                                 }
-                                                                className="flex items-center gap-1.5 rounded-xl border border-zinc-600/50 bg-zinc-800/60 px-2.5 py-1.5 text-[11px] font-semibold text-zinc-300 transition hover:bg-zinc-700 hover:text-white"
+                                                                className="flex items-center gap-1.5 rounded-xl border border-border bg-muted px-2.5 py-1.5 text-[11px] font-semibold text-foreground transition hover:bg-accent hover:text-foreground"
                                                             >
                                                                 <XCircle className="size-3.5" />
                                                                 Cancelar

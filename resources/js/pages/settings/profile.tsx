@@ -52,7 +52,7 @@ export default function Profile({
     };
 
     const inputClass =
-        'mt-1 block w-full rounded-xl border border-zinc-800/80 bg-zinc-900/60 px-4 py-2.5 text-sm text-white placeholder-zinc-500 transition focus:border-zinc-700 focus:outline-none';
+        'mt-1 block w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground transition focus:border-ring focus:outline-none';
 
     return (
         <>
@@ -83,17 +83,17 @@ export default function Profile({
                     <div className="grid gap-2">
                         <Label htmlFor="email">Correo electrónico</Label>
                         <div className="relative">
-                            <Mail className="absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-zinc-500" />
+                            <Mail className="absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground" />
                             <Input
                                 id="email"
                                 type="email"
-                                className={`${inputClass} cursor-not-allowed bg-zinc-950/40 pl-10 opacity-70`}
+                                className={`${inputClass} cursor-not-allowed bg-muted/60 pl-10 opacity-70`}
                                 defaultValue={auth.user.email}
                                 disabled
                                 readOnly
                             />
                         </div>
-                        <p className="text-xs text-zinc-500">
+                        <p className="text-xs text-muted-foreground">
                             El correo no se puede modificar.
                         </p>
                     </div>
@@ -101,7 +101,7 @@ export default function Profile({
                     {mustVerifyEmail &&
                         auth.user.email_verified_at === null && (
                             <div>
-                                <p className="text-sm text-zinc-400">
+                                <p className="text-sm text-muted-foreground">
                                     Tu correo electrónico no está verificado.{' '}
                                     <Link
                                         href={send()}
@@ -127,7 +127,7 @@ export default function Profile({
                             <select
                                 value={phonePrefix}
                                 onChange={(e) => changePrefix(e.target.value)}
-                                className="rounded-xl border border-zinc-800/80 bg-zinc-900/60 px-3 py-2.5 text-sm text-zinc-100 transition focus:border-zinc-700 focus:outline-none"
+                                className="rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground transition focus:border-ring focus:outline-none"
                             >
                                 {VALID_PREFIXES.map((prefix) => (
                                     <option key={prefix} value={prefix}>
@@ -149,7 +149,7 @@ export default function Profile({
                         <InputError className="mt-2" message={errors.phone} />
                     </div>
 
-                    <div className="flex items-center gap-4 border-t border-zinc-800/60 pt-5">
+                    <div className="flex items-center gap-4 border-t border-border pt-5">
                         <Button
                             disabled={processing}
                             data-test="update-profile-button"

@@ -32,17 +32,17 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
 
     return (
         <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-8 p-4 sm:p-6 lg:p-8">
-            <div className="border-b border-zinc-800/80 pb-6">
+            <div className="border-b border-border pb-6">
                 <div className="mb-1.5 flex items-center gap-2">
                     <span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></span>
-                    <span className="text-xs font-bold tracking-widest text-zinc-400 uppercase">
+                    <span className="text-xs font-bold tracking-widest text-muted-foreground uppercase">
                         Configuración
                     </span>
                 </div>
-                <h1 className="text-2xl font-extrabold tracking-tight text-white sm:text-3xl">
+                <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
                     Ajustes de tu cuenta
                 </h1>
-                <p className="mt-1 text-sm text-zinc-400">
+                <p className="mt-1 text-sm text-muted-foreground">
                     Administra tu perfil, seguridad y preferencias de
                     apariencia.
                 </p>
@@ -65,8 +65,8 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                                     className={cn(
                                         'flex shrink-0 items-center gap-2.5 rounded-xl border px-4 py-2.5 text-sm font-semibold transition',
                                         active
-                                            ? 'border-emerald-500/40 bg-emerald-500/15 text-emerald-300'
-                                            : 'border-zinc-800/80 bg-zinc-900/40 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200',
+                                            ? 'border-emerald-500/40 bg-emerald-500/15 text-emerald-600 dark:text-emerald-300'
+                                            : 'border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground',
                                     )}
                                 >
                                     <Icon className="size-4" />
@@ -77,7 +77,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                     </nav>
                 </aside>
 
-                <div className="min-w-0 flex-1 rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-5 sm:p-6">
+                <div className="min-w-0 flex-1 rounded-2xl border border-border bg-card p-5 sm:p-6">
                     {children}
                 </div>
             </div>

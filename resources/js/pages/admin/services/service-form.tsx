@@ -42,20 +42,20 @@ export default function ServiceForm({
     };
 
     const inputClass =
-        'w-full rounded-xl border border-zinc-800/80 bg-zinc-900/60 px-4 py-2.5 text-sm text-white placeholder-zinc-500 transition focus:border-zinc-700 focus:outline-none';
+        'w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground transition focus:border-ring focus:outline-none';
     const labelClass =
-        'mb-1.5 block text-xs font-semibold tracking-wider text-zinc-400 uppercase';
+        'mb-1.5 block text-xs font-semibold tracking-wider text-muted-foreground uppercase';
 
     return (
         <>
             <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 p-6 lg:p-8">
-                <div className="flex flex-col justify-between gap-4 border-b border-zinc-800/80 pb-6 md:flex-row md:items-center">
+                <div className="flex flex-col justify-between gap-4 border-b border-border pb-6 md:flex-row md:items-center">
                     <div className="space-y-1">
-                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-white">
-                            <Briefcase className="size-6 text-zinc-400" />
+                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-foreground">
+                            <Briefcase className="size-6 text-muted-foreground" />
                             {service ? 'Editar Servicio' : 'Nuevo Servicio'}
                         </h1>
-                        <p className="text-sm text-zinc-400">
+                        <p className="text-sm text-muted-foreground">
                             Los servicios publicados están disponibles para
                             reserva web.
                         </p>
@@ -63,7 +63,7 @@ export default function ServiceForm({
 
                     <Link
                         href="/admin/services"
-                        className="flex shrink-0 items-center gap-2 rounded-xl border border-zinc-700/50 bg-zinc-800/60 px-4 py-2.5 text-xs font-semibold text-zinc-300 transition hover:bg-zinc-700 hover:text-white"
+                        className="flex shrink-0 items-center gap-2 rounded-xl border border-border bg-muted px-4 py-2.5 text-xs font-semibold text-foreground transition hover:bg-accent hover:text-foreground"
                     >
                         <ChevronLeft className="size-4" />
                         Volver
@@ -72,7 +72,7 @@ export default function ServiceForm({
 
                 <form
                     onSubmit={submit}
-                    className="flex flex-col gap-6 rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-6"
+                    className="flex flex-col gap-6 rounded-2xl border border-border bg-card p-6"
                 >
                     <div className="space-y-1">
                         <label className={labelClass} htmlFor="name">
@@ -141,10 +141,10 @@ export default function ServiceForm({
                         </div>
                     </div>
 
-                    <div className="flex justify-end gap-3 border-t border-zinc-800/60 pt-5">
+                    <div className="flex justify-end gap-3 border-t border-border pt-5">
                         <Link
                             href="/admin/services"
-                            className="rounded-xl border border-zinc-700/50 bg-zinc-800/60 px-4 py-2.5 text-xs font-semibold text-zinc-300 transition hover:bg-zinc-700 hover:text-white"
+                            className="rounded-xl border border-border bg-muted px-4 py-2.5 text-xs font-semibold text-foreground transition hover:bg-accent hover:text-foreground"
                         >
                             Cancelar
                         </Link>

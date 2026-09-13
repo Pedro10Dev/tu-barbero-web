@@ -88,22 +88,22 @@ export default function AgendaCreate({
     };
 
     const inputClass =
-        'w-full rounded-xl border border-zinc-800/80 bg-zinc-900/60 px-4 py-2.5 text-sm text-white placeholder-zinc-500 transition focus:border-zinc-700 focus:outline-none';
+        'w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground transition focus:border-ring focus:outline-none';
     const labelClass =
-        'mb-1.5 block text-xs font-semibold tracking-wider text-zinc-400 uppercase';
+        'mb-1.5 block text-xs font-semibold tracking-wider text-muted-foreground uppercase';
 
     return (
         <>
             <Head title="Nuevo Turno" />
 
             <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 p-6 lg:p-8">
-                <div className="flex flex-col justify-between gap-4 border-b border-zinc-800/80 pb-6 md:flex-row md:items-center">
+                <div className="flex flex-col justify-between gap-4 border-b border-border pb-6 md:flex-row md:items-center">
                     <div className="space-y-1">
-                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-white">
-                            <CalendarPlus className="size-6 text-zinc-400" />
+                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-foreground">
+                            <CalendarPlus className="size-6 text-muted-foreground" />
                             Nuevo Turno en Estación
                         </h1>
-                        <p className="text-sm text-zinc-400">
+                        <p className="text-sm text-muted-foreground">
                             Agenda un cliente directamente, sin esperar
                             aprobación web.
                         </p>
@@ -111,7 +111,7 @@ export default function AgendaCreate({
 
                     <Link
                         href="/agenda/calendario"
-                        className="flex shrink-0 items-center gap-2 rounded-xl border border-zinc-700/50 bg-zinc-800/60 px-4 py-2.5 text-xs font-semibold text-zinc-300 transition hover:bg-zinc-700 hover:text-white"
+                        className="flex shrink-0 items-center gap-2 rounded-xl border border-border bg-muted px-4 py-2.5 text-xs font-semibold text-foreground transition hover:bg-accent hover:text-foreground"
                     >
                         <ArrowLeft className="size-4" />
                         Volver a Agenda
@@ -119,14 +119,14 @@ export default function AgendaCreate({
                 </div>
 
                 {barberProfileId === null ? (
-                    <div className="rounded-2xl border border-zinc-800/60 bg-zinc-900/30 p-8 text-center text-sm text-zinc-500">
+                    <div className="rounded-2xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
                         No tienes un perfil de barbero configurado. Pide al
                         administrador que lo active.
                     </div>
                 ) : (
                     <form
                         onSubmit={submit}
-                        className="flex flex-col gap-6 rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-6"
+                        className="flex flex-col gap-6 rounded-2xl border border-border bg-card p-6"
                     >
                         <div className="space-y-1">
                             <label className={labelClass} htmlFor="service_id">
@@ -177,16 +177,16 @@ export default function AgendaCreate({
                             </div>
 
                             <div className="space-y-1">
-                                <span className="block text-xs font-semibold tracking-wider text-zinc-400 uppercase">
+                                <span className="block text-xs font-semibold tracking-wider text-muted-foreground uppercase">
                                     Hora
                                 </span>
                                 {loadingSlots ? (
-                                    <p className="flex items-center gap-2 rounded-xl border border-zinc-800/80 bg-zinc-900/60 px-4 py-2.5 text-sm text-zinc-400">
+                                    <p className="flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5 text-sm text-muted-foreground">
                                         <Clock className="size-4 animate-spin" />
                                         Cargando disponibilidad...
                                     </p>
                                 ) : slots.length === 0 ? (
-                                    <p className="flex items-center gap-2 rounded-xl border border-zinc-800/80 bg-zinc-900/60 px-4 py-2.5 text-sm text-zinc-400">
+                                    <p className="flex items-center gap-2 rounded-xl border border-border bg-card px-4 py-2.5 text-sm text-muted-foreground">
                                         Elige servicio y fecha para ver horas.
                                     </p>
                                 ) : (
@@ -215,7 +215,7 @@ export default function AgendaCreate({
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 gap-5 border-t border-zinc-800/60 pt-5 sm:grid-cols-2">
+                        <div className="grid grid-cols-1 gap-5 border-t border-border pt-5 sm:grid-cols-2">
                             <div className="space-y-1">
                                 <label
                                     className={labelClass}
@@ -277,7 +277,7 @@ export default function AgendaCreate({
                                                         `${e.target.value}${phoneNumber}`,
                                                     )
                                                 }
-                                                className="rounded-xl border border-zinc-800/80 bg-zinc-900/60 px-3 py-2.5 text-sm text-zinc-100 transition focus:border-zinc-700 focus:outline-none"
+                                                className="rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground transition focus:border-ring focus:outline-none"
                                             >
                                                 <option value="0412">
                                                     0412
@@ -343,8 +343,8 @@ export default function AgendaCreate({
                             />
                         </div>
 
-                        <div className="flex items-center justify-between gap-3 border-t border-zinc-800/60 pt-5">
-                            <p className="text-xs text-zinc-500">
+                        <div className="flex items-center justify-between gap-3 border-t border-border pt-5">
+                            <p className="text-xs text-muted-foreground">
                                 {selectedService ? (
                                     <>
                                         <Scissors className="mr-1 inline size-3.5" />
@@ -358,7 +358,7 @@ export default function AgendaCreate({
                             <div className="flex gap-3">
                                 <Link
                                     href="/agenda/calendario"
-                                    className="rounded-xl border border-zinc-700/50 bg-zinc-800/60 px-4 py-2.5 text-xs font-semibold text-zinc-300 transition hover:bg-zinc-700 hover:text-white"
+                                    className="rounded-xl border border-border bg-muted px-4 py-2.5 text-xs font-semibold text-foreground transition hover:bg-accent hover:text-foreground"
                                 >
                                     Cancelar
                                 </Link>
