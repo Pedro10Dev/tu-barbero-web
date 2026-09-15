@@ -2,13 +2,13 @@ import { Link, useForm } from '@inertiajs/react';
 import {
     ChevronLeft,
     Save,
-    UserPlus,
     Phone,
     Lock,
     Upload,
     Trash2,
     Plus,
 } from 'lucide-react';
+import { PageHeader } from '@/components/page-header';
 import PasswordInput from '@/components/password-input';
 
 type SocialLink = {
@@ -109,39 +109,35 @@ export default function BarberForm({
     };
 
     const inputClass =
-        'w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground transition focus:border-ring focus:outline-none';
+        'w-full rounded-lg border border-border bg-card px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground transition focus:border-ring focus:outline-none';
     const labelClass =
         'mb-1.5 block text-xs font-semibold tracking-wider text-muted-foreground uppercase';
 
     return (
         <>
-            <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 p-6 lg:p-8">
-                <div className="flex flex-col justify-between gap-4 border-b border-border pb-6 md:flex-row md:items-center">
-                    <div className="space-y-1">
-                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-foreground">
-                            <UserPlus className="size-6 text-muted-foreground" />
-                            {isEditing ? 'Editar Barbero' : 'Nuevo Barbero'}
-                        </h1>
-                        <p className="text-sm text-muted-foreground">
-                            {isEditing
-                                ? 'Actualiza los datos del perfil y su usuario.'
-                                : 'Se creará un usuario para que el barbero acceda a su cuenta.'}
-                        </p>
-                    </div>
-
-                    <Link
-                        href="/admin/barbers"
-                        className="flex shrink-0 items-center gap-2 rounded-xl border border-border bg-muted px-4 py-2.5 text-xs font-semibold text-foreground transition hover:bg-accent hover:text-foreground"
-                    >
-                        <ChevronLeft className="size-4" />
-                        Volver
-                    </Link>
-                </div>
+            <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 p-4 sm:p-6 lg:p-8">
+                <PageHeader
+                    title={isEditing ? 'Editar Barbero' : 'Nuevo Barbero'}
+                    description={
+                        isEditing
+                            ? 'Actualiza los datos del perfil y su usuario.'
+                            : 'Se creará un usuario para que el barbero acceda a su cuenta.'
+                    }
+                    actions={
+                        <Link
+                            href="/admin/barbers"
+                            className="flex shrink-0 items-center gap-2 rounded-lg border border-border bg-muted px-4 py-2.5 text-xs font-semibold text-foreground transition hover:bg-accent"
+                        >
+                            <ChevronLeft className="size-4" />
+                            Volver
+                        </Link>
+                    }
+                />
 
                 <form
                     onSubmit={submit}
                     encType="multipart/form-data"
-                    className="flex flex-col gap-6 rounded-2xl border border-border bg-card p-6"
+                    className="flex flex-col gap-6 rounded-xl border border-border bg-card p-6"
                 >
                     <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                         <div className="space-y-1">
@@ -158,7 +154,7 @@ export default function BarberForm({
                                 placeholder="Nombre real del usuario"
                             />
                             {errors.name && (
-                                <p className="text-xs text-rose-400">
+                                <p className="text-xs text-destructive">
                                     {errors.name}
                                 </p>
                             )}
@@ -179,7 +175,7 @@ export default function BarberForm({
                                 placeholder="correo@example.com"
                             />
                             {errors.email && (
-                                <p className="text-xs text-rose-400">
+                                <p className="text-xs text-destructive">
                                     {errors.email}
                                 </p>
                             )}
@@ -196,7 +192,7 @@ export default function BarberForm({
                                 onChange={(e) =>
                                     setData('phone_prefix', e.target.value)
                                 }
-                                className="rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground transition focus:border-ring focus:outline-none"
+                                className="rounded-lg border border-border bg-card px-3 py-2.5 text-sm text-foreground transition focus:border-ring focus:outline-none"
                             >
                                 {PHONE_PREFIXES.map((prefix) => (
                                     <option key={prefix} value={prefix}>
@@ -224,11 +220,11 @@ export default function BarberForm({
                             />
                         </div>
                         {errors.phone_number || errors.phone_prefix ? (
-                            <p className="text-xs text-rose-400">
+                            <p className="text-xs text-destructive">
                                 {errors.phone_number ?? errors.phone_prefix}
                             </p>
                         ) : null}
-                        <p className="flex items-center gap-1.5 text-xs text-emerald-400/80">
+                        <p className="flex items-center gap-1.5 text-xs text-success/80">
                             <Phone className="size-3.5" />
                             Obligatorio para el ingreso del barbero.
                         </p>
@@ -245,7 +241,7 @@ export default function BarberForm({
                                 </label>
                                 <PasswordInput
                                     id="password"
-                                    className="w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm text-foreground transition placeholder:text-muted-foreground focus:border-ring focus:outline-none"
+                                    className="w-full rounded-lg border border-border bg-card px-4 py-2.5 text-sm text-foreground transition placeholder:text-muted-foreground focus:border-ring focus:outline-none"
                                     value={data.password}
                                     onChange={(e) =>
                                         setData('password', e.target.value)
@@ -254,7 +250,7 @@ export default function BarberForm({
                                     passwordrules={passwordRules}
                                 />
                                 {errors.password && (
-                                    <p className="text-xs text-rose-400">
+                                    <p className="text-xs text-destructive">
                                         {errors.password}
                                     </p>
                                 )}
@@ -269,7 +265,7 @@ export default function BarberForm({
                                 </label>
                                 <PasswordInput
                                     id="password_confirmation"
-                                    className="w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm text-foreground transition placeholder:text-muted-foreground focus:border-ring focus:outline-none"
+                                    className="w-full rounded-lg border border-border bg-card px-4 py-2.5 text-sm text-foreground transition placeholder:text-muted-foreground focus:border-ring focus:outline-none"
                                     value={data.password_confirmation}
                                     onChange={(e) =>
                                         setData(
@@ -281,7 +277,7 @@ export default function BarberForm({
                                     passwordrules={passwordRules}
                                 />
                                 {errors.password_confirmation && (
-                                    <p className="text-xs text-rose-400">
+                                    <p className="text-xs text-destructive">
                                         {errors.password_confirmation}
                                     </p>
                                 )}
@@ -311,7 +307,7 @@ export default function BarberForm({
                             placeholder="Cómo aparece en la agenda"
                         />
                         {errors.display_name && (
-                            <p className="text-xs text-rose-400">
+                            <p className="text-xs text-destructive">
                                 {errors.display_name}
                             </p>
                         )}
@@ -322,7 +318,7 @@ export default function BarberForm({
                             <label className={labelClass}>Foto de perfil</label>
                             <label
                                 htmlFor="photo"
-                                className="flex aspect-[4/5] w-full cursor-pointer items-center justify-center overflow-hidden rounded-2xl border border-dashed border-border bg-muted transition hover:border-ring"
+                                className="flex aspect-[4/5] w-full cursor-pointer items-center justify-center overflow-hidden rounded-xl border border-dashed border-border bg-muted transition hover:border-ring"
                             >
                                 {previewUrl ? (
                                     <img
@@ -354,7 +350,7 @@ export default function BarberForm({
                                 <button
                                     type="button"
                                     onClick={() => setData('photo', null)}
-                                    className="flex items-center gap-1.5 text-xs text-rose-400 transition hover:text-rose-300"
+                                    className="flex items-center gap-1.5 text-xs text-destructive transition hover:text-destructive/80"
                                 >
                                     <Trash2 className="size-3.5" />
                                     Quitar foto seleccionada
@@ -367,7 +363,7 @@ export default function BarberForm({
                                     onClick={() =>
                                         setData('remove_photo', true)
                                     }
-                                    className="flex items-center gap-1.5 text-xs text-rose-400 transition hover:text-rose-300"
+                                    className="flex items-center gap-1.5 text-xs text-destructive transition hover:text-destructive/80"
                                 >
                                     <Trash2 className="size-3.5" />
                                     Quitar foto
@@ -384,12 +380,12 @@ export default function BarberForm({
                                 </button>
                             ) : null}
                             {data.remove_photo && !data.photo && (
-                                <p className="text-xs text-amber-400">
+                                <p className="text-xs text-warning">
                                     Se eliminará la foto al guardar.
                                 </p>
                             )}
                             {errors.photo && (
-                                <p className="text-xs text-rose-400">
+                                <p className="text-xs text-destructive">
                                     {errors.photo}
                                 </p>
                             )}
@@ -408,7 +404,7 @@ export default function BarberForm({
                                 placeholder="Especialidades, experiencia, estilo..."
                             />
                             {errors.bio && (
-                                <p className="text-xs text-rose-400">
+                                <p className="text-xs text-destructive">
                                     {errors.bio}
                                 </p>
                             )}
@@ -424,7 +420,7 @@ export default function BarberForm({
                                 type="button"
                                 onClick={addSocialLink}
                                 disabled={data.social_links.length >= 6}
-                                className="flex items-center gap-1.5 rounded-xl border border-border bg-muted px-3 py-2 text-xs font-semibold text-foreground transition hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40"
+                                className="flex items-center gap-1.5 rounded-lg border border-border bg-muted px-3 py-2 text-xs font-semibold text-foreground transition hover:bg-accent disabled:cursor-not-allowed disabled:opacity-40"
                             >
                                 <Plus className="size-4" />
                                 Agregar red social
@@ -432,21 +428,21 @@ export default function BarberForm({
                         </div>
 
                         {errors.social_links && (
-                            <p className="text-xs text-rose-400">
+                            <p className="text-xs text-destructive">
                                 {errors.social_links}
                             </p>
                         )}
 
                         <div className="space-y-2">
                             {data.social_links.length === 0 ? (
-                                <p className="rounded-xl border border-dashed border-border px-4 py-4 text-center text-xs text-muted-foreground">
+                                <p className="rounded-lg border border-dashed border-border px-4 py-4 text-center text-xs text-muted-foreground">
                                     Aún no hay redes sociales agregadas.
                                 </p>
                             ) : (
                                 data.social_links.map((link, index) => (
                                     <div
                                         key={index}
-                                        className="flex flex-col gap-2 rounded-xl border border-border bg-muted/40 p-3 sm:flex-row"
+                                        className="flex flex-col gap-2 rounded-lg border border-border bg-muted/40 p-3 sm:flex-row"
                                     >
                                         <select
                                             value={link.platform}
@@ -457,7 +453,7 @@ export default function BarberForm({
                                                     e.target.value,
                                                 )
                                             }
-                                            className="rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground transition focus:border-ring focus:outline-none sm:w-40"
+                                            className="rounded-lg border border-border bg-card px-3 py-2.5 text-sm text-foreground transition focus:border-ring focus:outline-none sm:w-40"
                                         >
                                             {SOCIAL_PLATFORMS.map(
                                                 (platform) => (
@@ -491,7 +487,7 @@ export default function BarberForm({
                                                 removeSocialLink(index)
                                             }
                                             aria-label={`Eliminar ${link.platform}`}
-                                            className="flex shrink-0 items-center justify-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-xs font-semibold text-rose-300 transition hover:bg-rose-500/20"
+                                            className="flex shrink-0 items-center justify-center gap-1.5 rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs font-semibold text-destructive transition hover:bg-destructive/20"
                                         >
                                             <Trash2 className="size-4" />
                                         </button>
@@ -503,7 +499,10 @@ export default function BarberForm({
                         {Object.keys(errors)
                             .filter((key) => key.startsWith('social_links'))
                             .map((key) => (
-                                <p key={key} className="text-xs text-rose-400">
+                                <p
+                                    key={key}
+                                    className="text-xs text-destructive"
+                                >
                                     {(errors as Record<string, string>)[key]}
                                 </p>
                             ))}
@@ -516,7 +515,7 @@ export default function BarberForm({
                             onChange={(e) =>
                                 setData('is_active', e.target.checked)
                             }
-                            className="size-4 rounded border-border bg-muted accent-emerald-500"
+                            className="size-4 rounded border-border bg-muted accent-brand"
                         />
                         <span className="text-sm font-medium text-foreground">
                             Barbero activo en estación
@@ -526,14 +525,14 @@ export default function BarberForm({
                     <div className="flex justify-end gap-3 border-t border-border pt-5">
                         <Link
                             href="/admin/barbers"
-                            className="rounded-xl border border-border bg-muted px-4 py-2.5 text-xs font-semibold text-foreground transition hover:bg-accent hover:text-foreground"
+                            className="rounded-lg border border-border bg-muted px-4 py-2.5 text-xs font-semibold text-foreground transition hover:bg-accent"
                         >
                             Cancelar
                         </Link>
                         <button
                             type="submit"
                             disabled={processing}
-                            className="flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-500 disabled:opacity-50"
+                            className="flex items-center gap-2 rounded-lg bg-brand px-5 py-2.5 text-xs font-semibold text-brand-foreground shadow-sm transition hover:bg-brand/90 disabled:opacity-50"
                         >
                             <Save className="size-4" />
                             {processing

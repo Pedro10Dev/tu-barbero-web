@@ -25,9 +25,12 @@ export interface ExtendedNavItem extends NavItem {
     }[];
 }
 
+const menuItemClass =
+    'rounded-lg text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground data-[active=true]:bg-brand/15 data-[active=true]:font-medium data-[active=true]:text-brand';
+
 export function NavMain({
     items = [],
-    label = 'Menú Barbero',
+    label = 'Estación',
 }: {
     items: ExtendedNavItem[];
     label?: string;
@@ -58,7 +61,7 @@ export function NavMain({
                                     <SidebarMenuButton
                                         tooltip={{ children: item.title }}
                                         isActive={isAnySubItemActive}
-                                        className="flex w-full justify-between text-sidebar-foreground transition-colors hover:bg-sidebar-accent"
+                                        className={`${menuItemClass} flex w-full justify-between`}
                                     >
                                         <div className="flex items-center gap-2">
                                             {item.icon && (
@@ -72,9 +75,8 @@ export function NavMain({
                                     </SidebarMenuButton>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
-                                    {/* Contenedor sin línea izquierda (border-none sobreescribe el estilo por defecto) */}
-                                    <SidebarMenuSub className="ml-4 flex flex-col border-none py-2 pr-2 pl-1">
-                                        {item.items?.map((subItem, index) => {
+                                    <SidebarMenuSub>
+                                        {item.items?.map((subItem) => {
                                             const active = isCurrentUrl(
                                                 subItem.href,
                                             );
@@ -82,37 +84,33 @@ export function NavMain({
                                             return (
                                                 <SidebarMenuSubItem
                                                     key={subItem.title}
-                                                    className="list-none"
                                                 >
                                                     <SidebarMenuSubButton
                                                         asChild
                                                         isActive={active}
-                                                        className={`flex w-full items-center rounded-lg border px-3 py-2.5 text-sm transition-all duration-200 ${
+                                                        className={`h-8 rounded-lg transition-colors ${
                                                             active
-                                                                ? 'border-sidebar-border bg-sidebar-accent font-medium text-sidebar-accent-foreground shadow-sm'
-                                                                : 'cursor-pointer border-transparent bg-transparent text-sidebar-foreground/60 hover:border-sidebar-border hover:bg-sidebar-accent/60 hover:text-sidebar-foreground'
+                                                                ? 'bg-brand/10 font-medium text-brand'
+                                                                : 'text-sidebar-foreground/65 hover:bg-sidebar-accent hover:text-sidebar-foreground'
                                                         }`}
                                                     >
                                                         <Link
                                                             href={subItem.href}
                                                             prefetch
-                                                            className="flex w-full items-center gap-3"
+                                                            className="flex w-full items-center gap-2.5"
                                                         >
-                                                            <div
-                                                                className={`size-1.5 rounded-full transition-colors ${active ? 'bg-sidebar-primary' : 'bg-sidebar-foreground/30'}`}
+                                                            <span
+                                                                className={`size-1.5 shrink-0 rounded-full transition-colors ${
+                                                                    active
+                                                                        ? 'bg-brand'
+                                                                        : 'bg-sidebar-foreground/30'
+                                                                }`}
                                                             />
                                                             <span>
                                                                 {subItem.title}
                                                             </span>
                                                         </Link>
                                                     </SidebarMenuSubButton>
-
-                                                    {/* Línea divisora entre elementos (se omite en el último) */}
-                                                    {index <
-                                                        item.items!.length -
-                                                            1 && (
-                                                        <div className="mx-2 my-1.5 h-[1px] bg-sidebar-border" />
-                                                    )}
                                                 </SidebarMenuSubItem>
                                             );
                                         })}
@@ -126,7 +124,7 @@ export function NavMain({
                                 asChild
                                 isActive={isCurrentUrl(item.href)}
                                 tooltip={{ children: item.title }}
-                                className="text-sidebar-foreground transition-colors hover:bg-sidebar-accent"
+                                className={menuItemClass}
                             >
                                 <Link
                                     href={item.href}

@@ -73,6 +73,20 @@ class AdminDashboardController extends Controller
 
         $recentActivity = $recentActivity->take(8)->values();
 
+        $appointmentsTrend = collect(range(6, 0))
+            ->map(function (int $daysAgo): array {
+                $day = Carbon::today()->subDays($daysAgo);
+                $count = Appointment::whereBetween('start_time', [$day->copy()->startOfDay(), $day->copy()->endOfDay()])
+                    ->count();
+
+                return [
+                    'label' => $day->format('d/m'),
+                    'value' => $count,
+                ];
+            })
+            ->values()
+            ->all();
+
         return Inertia::render('admin/dashboard', [
             'stats' => [
                 'totalUsers' => User::count(),
@@ -83,6 +97,7 @@ class AdminDashboardController extends Controller
                     ->count(),
                 'totalServices' => Service::count(),
             ],
+            'trend' => $appointmentsTrend,
             'recentAppointments' => $recentAppointments,
             'recentActivity' => $recentActivity,
         ]);

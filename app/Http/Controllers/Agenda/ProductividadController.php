@@ -24,6 +24,7 @@ class ProductividadController extends Controller
         if ($barberProfile === null) {
             return Inertia::render('productividad/index', [
                 'summary' => $this->emptySummary(),
+                'weeklySeries' => [],
                 'recentActivity' => [],
             ]);
         }
@@ -81,8 +82,25 @@ class ProductividadController extends Controller
             ];
         }
 
-        return Inertia::render('productividad/index', [
+        $weeklySeries = collect(range(6, 0))
+            ->map(function (int $daysAgo) use ($barberProfile): array {
+                $day = CarbonImmutable::today()->subDays($daysAgo);
+                $count = Appointment::where('barber_profile_id', $barberProfile->id)
+                    ->where('status', 'completed')
+                    ->whereBetween('start_time', [$day->startOfDay(), $day->endOfDay()])
+                    ->count();
+
+                return [
+                    'label' => $day->format('d/m'),
+                    'value' => $count,
+                ];
+            })
+            ->values()
+            ->all();
+
+return Inertia::render('productividad/index', [
             'summary' => $summary,
+            'weeklySeries' => $weeklySeries,
             'recentActivity' => $recentActivity,
         ]);
     }

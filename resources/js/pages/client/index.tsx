@@ -12,6 +12,7 @@ import {
     Users,
 } from 'lucide-react';
 import { useState } from 'react';
+import { PageHeader } from '@/components/page-header';
 
 type Client = {
     id: number;
@@ -63,40 +64,31 @@ export default function ClientsIndex({ clients }: { clients: Client[] }) {
         <>
             <Head title="Mis Clientes" />
 
-            <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 p-6 lg:p-8">
-                {/* Cabecera y Resumen Superior */}
-                <div className="flex flex-col justify-between gap-4 border-b border-border pb-6 md:flex-row md:items-center">
-                    <div className="space-y-1">
-                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-foreground">
-                            <Users className="size-6 text-muted-foreground" />
-                            Directorio de Clientes
-                        </h1>
-                        <p className="text-sm text-muted-foreground">
-                            Consulta el historial, notas y preferencias de tus
-                            clientes registrados en estación.
-                        </p>
-                    </div>
-
-                    {/* Tarjeta de Resumen Rápido */}
-                    <div className="flex shrink-0 items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3">
-                        <div className="flex size-10 items-center justify-center rounded-xl border border-border bg-muted text-foreground">
-                            <UserCheck className="size-5" />
-                        </div>
-                        <div>
-                            <span className="block text-xs font-medium text-muted-foreground">
-                                Total Registrados
-                            </span>
-                            <span className="text-base font-bold text-foreground">
-                                {clients.length}{' '}
-                                <span className="text-xs font-normal text-muted-foreground">
-                                    clientes
+            <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 p-4 sm:p-6 lg:p-8">
+                <PageHeader
+                    title="Directorio de Clientes"
+                    description="Consulta el historial, notas y preferencias de tus clientes registrados en estación."
+                    actions={
+                        <div className="flex shrink-0 items-center gap-3 rounded-xl border border-border bg-card px-4 py-3">
+                            <div className="flex size-10 items-center justify-center rounded-lg border border-border bg-muted text-brand">
+                                <Users className="size-5" />
+                            </div>
+                            <div>
+                                <span className="block text-xs font-medium text-muted-foreground">
+                                    Total Registrados
                                 </span>
-                            </span>
+                                <span className="tabular text-base font-bold text-foreground">
+                                    {clients.length}{' '}
+                                    <span className="text-xs font-normal text-muted-foreground">
+                                        clientes
+                                    </span>
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    }
+                />
 
-                {/* Barra de Búsqueda y Selector de Ordenamiento */}
+                {/* Búsqueda y ordenamiento */}
                 <div className="flex flex-col items-center gap-3 sm:flex-row">
                     <div className="relative flex w-full items-center">
                         <Search className="absolute left-3.5 size-4 text-muted-foreground" />
@@ -105,7 +97,7 @@ export default function ClientsIndex({ clients }: { clients: Client[] }) {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             placeholder="Buscar por nombre, teléfono o correo electrónico..."
-                            className="w-full rounded-xl border border-border bg-card py-2.5 pr-4 pl-10 text-sm text-foreground placeholder:text-muted-foreground transition focus:border-ring focus:outline-none"
+                            className="w-full rounded-lg border border-border bg-card py-2.5 pr-4 pl-10 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none"
                         />
                     </div>
 
@@ -116,7 +108,7 @@ export default function ClientsIndex({ clients }: { clients: Client[] }) {
                             onChange={(e) =>
                                 setSortOption(e.target.value as SortOption)
                             }
-                            className="w-full cursor-pointer rounded-xl border border-border bg-card px-4 py-2.5 text-sm text-foreground transition focus:border-ring focus:outline-none sm:w-auto"
+                            className="w-full cursor-pointer rounded-lg border border-border bg-card px-4 py-2.5 text-sm text-foreground transition focus:border-ring focus:outline-none sm:w-auto"
                         >
                             <option
                                 value="asc"
@@ -146,10 +138,10 @@ export default function ClientsIndex({ clients }: { clients: Client[] }) {
                     </div>
                 </div>
 
-                {/* Listado de Clientes */}
+                {/* Listado */}
                 <div className="flex flex-col gap-3">
                     {sortedClients.length === 0 ? (
-                        <div className="rounded-2xl border border-border bg-card py-12 text-center text-sm text-muted-foreground">
+                        <div className="rounded-xl border border-border bg-card py-12 text-center text-sm text-muted-foreground">
                             No se encontraron clientes que coincidan con la
                             búsqueda.
                         </div>
@@ -160,18 +152,17 @@ export default function ClientsIndex({ clients }: { clients: Client[] }) {
                             return (
                                 <div
                                     key={client.id}
-                                    className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-card transition-all duration-300 ${
+                                    className={`group relative flex flex-col overflow-hidden rounded-xl border bg-card transition-all duration-300 ${
                                         isExpanded
                                             ? 'border-border shadow-lg shadow-foreground/10'
                                             : 'border-border hover:border-foreground/40'
                                     }`}
                                 >
-                                    {/* Barra indicadora lateral */}
                                     <div
-                                        className={`absolute top-0 bottom-0 left-0 w-1.5 transition-colors duration-300 ${
+                                        className={`absolute top-0 bottom-0 left-0 w-1 transition-colors duration-300 ${
                                             isExpanded
-                                                ? 'bg-foreground/40'
-                                                : 'bg-muted group-hover:bg-foreground/40'
+                                                ? 'bg-brand'
+                                                : 'bg-muted group-hover:bg-foreground/30'
                                         }`}
                                     />
 
@@ -181,7 +172,7 @@ export default function ClientsIndex({ clients }: { clients: Client[] }) {
                                         className="flex cursor-pointer flex-col justify-between gap-4 p-5 pl-6 select-none sm:flex-row sm:items-center"
                                     >
                                         <div className="flex items-start gap-4">
-                                            <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border bg-muted text-foreground">
+                                            <div className="flex size-11 shrink-0 items-center justify-center rounded-lg border border-border bg-muted text-foreground">
                                                 <UserCheck className="size-5" />
                                             </div>
 
@@ -190,7 +181,7 @@ export default function ClientsIndex({ clients }: { clients: Client[] }) {
                                                     <h3 className="text-base font-semibold text-foreground">
                                                         {client.name}
                                                     </h3>
-                                                    <span className="inline-flex items-center rounded-full border border-border bg-muted px-2.5 py-0.5 text-[11px] font-medium text-foreground">
+                                                    <span className="tabular inline-flex items-center rounded-full border border-border bg-muted px-2.5 py-0.5 text-[11px] font-medium text-foreground">
                                                         {client.totalVisits}{' '}
                                                         visitas registradas
                                                     </span>
@@ -221,7 +212,7 @@ export default function ClientsIndex({ clients }: { clients: Client[] }) {
                                                     e.stopPropagation();
                                                     toggleExpand(client.id);
                                                 }}
-                                                className="flex items-center gap-2 rounded-xl border border-border bg-muted px-4 py-2 text-xs font-semibold text-foreground transition hover:bg-accent hover:text-foreground"
+                                                className="flex items-center gap-2 rounded-lg border border-border bg-muted px-4 py-2 text-xs font-semibold text-foreground transition hover:bg-accent"
                                             >
                                                 <span>
                                                     {isExpanded
@@ -235,7 +226,7 @@ export default function ClientsIndex({ clients }: { clients: Client[] }) {
                                         </div>
                                     </div>
 
-                                    {/* Contenido Desplegable */}
+                                    {/* Contenido desplegable */}
                                     <div
                                         className={`grid transition-all duration-300 ease-in-out ${isExpanded ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
                                     >
@@ -280,9 +271,9 @@ export default function ClientsIndex({ clients }: { clients: Client[] }) {
                                                             href={`https://wa.me/${client.phone}?text=Hola%20${encodeURIComponent(client.name)},%20te%20escribo%20desde%20TuBarbero...`}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
-                                                            className="flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-600/20 px-4 py-2.5 text-xs font-semibold text-emerald-300 shadow-sm transition-all hover:border-emerald-500 hover:bg-emerald-600/30 md:w-auto"
+                                                            className="flex w-full items-center justify-center gap-2 rounded-lg border border-success/30 bg-success/10 px-4 py-2.5 text-xs font-semibold text-success transition hover:bg-success/20 md:w-auto"
                                                         >
-                                                            <MessageSquare className="size-4 text-emerald-400" />
+                                                            <MessageSquare className="size-4" />
                                                             Contactar por
                                                             WhatsApp
                                                         </a>

@@ -8,6 +8,7 @@ import {
     Clock,
     Store,
 } from 'lucide-react';
+import { PageHeader } from '@/components/page-header';
 
 type Business = {
     business_name: string;
@@ -32,7 +33,7 @@ export default function AdminSettings({ business }: { business: Business }) {
     };
 
     const inputClass =
-        'w-full rounded-xl border border-border bg-card px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground transition focus:border-ring focus:outline-none';
+        'w-full rounded-lg border border-border bg-card px-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground transition focus:border-ring focus:outline-none';
     const labelClass =
         'mb-1.5 block text-xs font-semibold tracking-wider text-muted-foreground uppercase';
 
@@ -80,23 +81,29 @@ export default function AdminSettings({ business }: { business: Business }) {
         <>
             <Head title="Configuración" />
 
-            <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 p-6 lg:p-8">
-                {/* Cabecera */}
-                <div className="flex flex-col justify-between gap-4 border-b border-border pb-6 md:flex-row md:items-center">
-                    <div className="space-y-1">
-                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-foreground">
-                            <Store className="size-6 text-muted-foreground" />
-                            Configuración
-                        </h1>
-                        <p className="text-sm text-muted-foreground">
-                            Ficha pública del negocio que se muestra a tus
-                            clientes.
-                        </p>
-                    </div>
-                </div>
+            <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 p-4 sm:p-6 lg:p-8">
+                <PageHeader
+                    title="Configuración"
+                    description="Ficha pública del negocio que se muestra a tus clientes."
+                    actions={
+                        <div className="flex shrink-0 items-center gap-3 rounded-xl border border-border bg-card px-4 py-3">
+                            <div className="flex size-10 items-center justify-center rounded-lg border border-border bg-muted text-brand">
+                                <Store className="size-5" />
+                            </div>
+                            <div>
+                                <span className="block text-xs font-medium text-muted-foreground">
+                                    Negocio
+                                </span>
+                                <span className="text-base font-bold text-foreground">
+                                    {business.business_name}
+                                </span>
+                            </div>
+                        </div>
+                    }
+                />
 
                 <form onSubmit={submit} className="flex flex-col gap-6">
-                    <div className="flex flex-col gap-5 rounded-2xl border border-border bg-card p-6">
+                    <div className="flex flex-col gap-5 rounded-xl border border-border bg-card p-6">
                         {fields.map((field) => (
                             <div key={field.key} className="space-y-1">
                                 <label
@@ -130,7 +137,7 @@ export default function AdminSettings({ business }: { business: Business }) {
                                     />
                                 )}
                                 {errors[field.key] && (
-                                    <p className="text-xs text-rose-400">
+                                    <p className="text-xs text-destructive">
                                         {errors[field.key]}
                                     </p>
                                 )}
@@ -142,7 +149,7 @@ export default function AdminSettings({ business }: { business: Business }) {
                         <button
                             type="submit"
                             disabled={processing}
-                            className="flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-500 disabled:opacity-50"
+                            className="flex items-center gap-2 rounded-lg bg-brand px-5 py-2.5 text-xs font-semibold text-brand-foreground shadow-sm transition hover:bg-brand/90 disabled:opacity-50"
                         >
                             <Save className="size-4" />
                             {processing ? 'Guardando...' : 'Guardar cambios'}

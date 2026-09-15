@@ -7,6 +7,8 @@ import {
     XCircle,
 } from 'lucide-react';
 import { useState } from 'react';
+import { PageHeader } from '@/components/page-header';
+import { appointmentStatus } from '@/lib/status';
 import { formatTimeAMPM } from '@/lib/utils';
 
 type ViewMode = 'day' | 'week' | 'month';
@@ -186,47 +188,40 @@ export default function AgendaCalendar({
         <>
             <Head title="Mi Agenda" />
 
-            <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 p-6 lg:p-8">
-                {/* Cabecera y Selector de Vista */}
-                <div className="flex flex-col justify-between gap-4 border-b border-border pb-6 md:flex-row md:items-center">
-                    <div className="space-y-1">
-                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-foreground">
-                            <CalendarIcon className="size-6 text-muted-foreground" />
-                            Mi Agenda
-                        </h1>
-                        <p className="text-sm text-muted-foreground">
-                            Visualiza tus bloques horarios y turnos programados
-                            en estación.
-                        </p>
-                    </div>
-
-                    <div className="flex shrink-0 rounded-xl border border-border bg-card p-1">
-                        {(['day', 'week', 'month'] as ViewMode[]).map(
-                            (mode) => (
-                                <button
-                                    key={mode}
-                                    onClick={() => isViewChange(mode)}
-                                    className={`rounded-lg px-3.5 py-2 text-xs font-semibold transition-all ${
-                                        viewMode === mode
-                                            ? 'bg-muted text-foreground shadow-sm'
-                                            : 'text-muted-foreground hover:text-foreground'
-                                    }`}
-                                >
-                                    {mode === 'day'
-                                        ? 'Día'
-                                        : mode === 'week'
-                                          ? 'Semana'
-                                          : 'Mes'}
-                                </button>
-                            ),
-                        )}
-                    </div>
-                </div>
+            <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 p-4 sm:p-6 lg:p-8">
+                <PageHeader
+                    title="Mi Agenda"
+                    description="Visualiza tus bloques horarios y turnos programados en estación."
+                    actions={
+                        <div className="flex shrink-0 items-center gap-1 rounded-lg border border-border bg-muted p-1">
+                            {(['day', 'week', 'month'] as ViewMode[]).map(
+                                (mode) => (
+                                    <button
+                                        key={mode}
+                                        onClick={() => isViewChange(mode)}
+                                        aria-pressed={viewMode === mode}
+                                        className={`rounded-md px-3.5 py-1.5 text-xs font-semibold transition-all ${
+                                            viewMode === mode
+                                                ? 'bg-card text-foreground shadow-sm'
+                                                : 'text-muted-foreground hover:text-foreground'
+                                        }`}
+                                    >
+                                        {mode === 'day'
+                                            ? 'Día'
+                                            : mode === 'week'
+                                              ? 'Semana'
+                                              : 'Mes'}
+                                    </button>
+                                ),
+                            )}
+                        </div>
+                    }
+                />
 
                 {/* Barra de navegación de fechas */}
-                <div className="flex flex-col items-center justify-between gap-4 rounded-2xl border border-border bg-card p-5 sm:flex-row">
+                <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-border bg-card p-5 sm:flex-row">
                     <div className="flex items-center gap-3.5">
-                        <div className="flex size-11 items-center justify-center rounded-xl border border-border bg-muted text-foreground">
+                        <div className="flex size-11 items-center justify-center rounded-lg border border-border bg-muted text-brand">
                             <CalendarIcon className="size-5" />
                         </div>
                         <div>
@@ -246,7 +241,7 @@ export default function AgendaCalendar({
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <div className="flex items-center overflow-hidden rounded-xl border border-border bg-muted">
+                        <div className="flex items-center overflow-hidden rounded-lg border border-border bg-muted">
                             <button
                                 onClick={goPrev}
                                 className="p-2.5 text-muted-foreground transition hover:bg-accent hover:text-foreground"
@@ -270,10 +265,10 @@ export default function AgendaCalendar({
                 </div>
 
                 {/* Cuadrícula de la Agenda */}
-                <div className="min-h-[400px] overflow-hidden rounded-2xl border border-border bg-card">
+                <div className="min-h-[400px] overflow-hidden rounded-xl border border-border bg-card">
                     {days.length === 0 ? (
                         <div className="flex min-h-[400px] flex-col items-center justify-center p-8 text-center">
-                            <div className="mb-3 flex size-12 items-center justify-center rounded-2xl border border-border bg-muted text-muted-foreground">
+                            <div className="mb-3 flex size-12 items-center justify-center rounded-xl border border-border bg-muted text-muted-foreground">
                                 <CalendarIcon className="size-6" />
                             </div>
                             <h3 className="mb-1 text-sm font-semibold text-foreground">
@@ -287,95 +282,90 @@ export default function AgendaCalendar({
                     ) : (
                         <div className="flex flex-col">
                             {days.map((day) => (
-                                <div
-                                    key={day.date}
-                                    className="flex flex-col rounded-none"
-                                >
+                                <div key={day.date} className="flex flex-col">
                                     {viewMode !== 'day' && (
                                         <div className="flex items-center justify-between border-b border-border bg-muted/60 px-5 py-2">
                                             <span className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
                                                 {formatShortDate(day.date)}
                                             </span>
-                                            <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-semibold text-foreground">
+                                            <span className="tabular rounded-full bg-muted px-2 py-0.5 text-[11px] font-semibold text-foreground">
                                                 {day.entries.length}
                                             </span>
                                         </div>
                                     )}
 
                                     <div className="flex flex-col divide-y divide-border/70">
-                                        {day.entries.map((entry) => (
-                                            <div
-                                                key={entry.id}
-                                                className="flex flex-col gap-3 px-5 py-4 transition-colors hover:bg-accent/60 sm:flex-row sm:items-center sm:justify-between"
-                                            >
-                                                <div className="flex items-start gap-4">
-                                                    <div className="flex w-16 shrink-0 flex-col items-center justify-center rounded-xl border border-border bg-muted px-2 py-2 text-center">
-                                                        <span className="text-sm font-bold text-foreground">
-                                                            {formatTimeAMPM(
-                                                                entry.start_time,
-                                                            )}
-                                                        </span>
-                                                        <span className="text-[10px] text-muted-foreground">
-                                                            {formatTimeAMPM(
-                                                                entry.end_time,
-                                                            )}
-                                                        </span>
-                                                    </div>
-                                                    <div className="space-y-0.5">
-                                                        <h3 className="text-sm font-semibold text-foreground">
-                                                            {entry.client}
-                                                        </h3>
-                                                        <p className="text-xs text-muted-foreground">
-                                                            {entry.service}
-                                                        </p>
-                                                    </div>
-                                                </div>
+                                        {day.entries.map((entry) => {
+                                            const status = appointmentStatus(
+                                                entry.status,
+                                            );
 
-                                                <div className="flex shrink-0 items-center gap-2">
-                                                    <span
-                                                        className={`inline-flex w-fit items-center rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${
-                                                            entry.status ===
-                                                            'confirmed'
-                                                                ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
-                                                                : 'border-amber-500/20 bg-amber-500/10 text-amber-400'
-                                                        }`}
-                                                    >
+                                            return (
+                                                <div
+                                                    key={entry.id}
+                                                    className="flex flex-col gap-3 px-5 py-4 transition-colors hover:bg-accent/60 sm:flex-row sm:items-center sm:justify-between"
+                                                >
+                                                    <div className="flex items-start gap-4">
+                                                        <div className="flex w-16 shrink-0 flex-col items-center justify-center rounded-lg border border-border bg-muted px-2 py-2 text-center">
+                                                            <span className="tabular text-sm font-bold text-foreground">
+                                                                {formatTimeAMPM(
+                                                                    entry.start_time,
+                                                                )}
+                                                            </span>
+                                                            <span className="tabular text-[10px] text-muted-foreground">
+                                                                {formatTimeAMPM(
+                                                                    entry.end_time,
+                                                                )}
+                                                            </span>
+                                                        </div>
+                                                        <div className="space-y-0.5">
+                                                            <h3 className="text-sm font-semibold text-foreground">
+                                                                {entry.client}
+                                                            </h3>
+                                                            <p className="text-xs text-muted-foreground">
+                                                                {entry.service}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="flex shrink-0 items-center gap-2">
+                                                        <span
+                                                            className={`inline-flex w-fit items-center rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${status.chip}`}
+                                                        >
+                                                            {status.label}
+                                                        </span>
+
                                                         {entry.status ===
-                                                        'confirmed'
-                                                            ? 'Confirmada'
-                                                            : 'Pendiente'}
-                                                    </span>
-
-                                                    {entry.status ===
-                                                        'confirmed' && (
-                                                        <>
-                                                            <button
-                                                                onClick={() =>
-                                                                    completeAppointment(
-                                                                        entry,
-                                                                    )
-                                                                }
-                                                                className="flex items-center gap-1.5 rounded-xl border border-blue-500/30 bg-blue-500/10 px-2.5 py-1.5 text-[11px] font-semibold text-blue-300 transition hover:bg-blue-500/20"
-                                                            >
-                                                                <CheckCircle2 className="size-3.5" />
-                                                                Completar
-                                                            </button>
-                                                            <button
-                                                                onClick={() =>
-                                                                    cancelAppointment(
-                                                                        entry,
-                                                                    )
-                                                                }
-                                                                className="flex items-center gap-1.5 rounded-xl border border-border bg-muted px-2.5 py-1.5 text-[11px] font-semibold text-foreground transition hover:bg-accent hover:text-foreground"
-                                                            >
-                                                                <XCircle className="size-3.5" />
-                                                                Cancelar
-                                                            </button>
-                                                        </>
-                                                    )}
+                                                            'confirmed' && (
+                                                            <>
+                                                                <button
+                                                                    onClick={() =>
+                                                                        completeAppointment(
+                                                                            entry,
+                                                                        )
+                                                                    }
+                                                                    className="flex items-center gap-1.5 rounded-lg border border-info/25 bg-info/10 px-2.5 py-1.5 text-[11px] font-semibold text-info transition hover:bg-info/20"
+                                                                >
+                                                                    <CheckCircle2 className="size-3.5" />
+                                                                    Completar
+                                                                </button>
+                                                                <button
+                                                                    onClick={() =>
+                                                                        cancelAppointment(
+                                                                            entry,
+                                                                        )
+                                                                    }
+                                                                    className="flex items-center gap-1.5 rounded-lg border border-border bg-muted px-2.5 py-1.5 text-[11px] font-semibold text-foreground transition hover:bg-accent"
+                                                                >
+                                                                    <XCircle className="size-3.5" />
+                                                                    Cancelar
+                                                                </button>
+                                                            </>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            );
+                                        })}
                                     </div>
                                 </div>
                             ))}

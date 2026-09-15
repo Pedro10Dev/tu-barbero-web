@@ -28,6 +28,7 @@ class BarberDashboardController extends Controller
                     'monthlyCuts' => 0,
                     'todayAppointments' => 0,
                 ],
+                'trend' => [],
                 'pendingAppointments' => [],
                 'nextAppointment' => null,
                 'activity' => [],
@@ -117,6 +118,22 @@ class BarberDashboardController extends Controller
             })
             ->values();
 
+        $weeklyTrend = collect(range(6, 0))
+            ->map(function (int $daysAgo) use ($barberId): array {
+                $day = Carbon::today()->subDays($daysAgo);
+                $count = Appointment::where('barber_profile_id', $barberId)
+                    ->where('status', 'completed')
+                    ->whereBetween('start_time', [$day->copy()->startOfDay(), $day->copy()->endOfDay()])
+                    ->count();
+
+                return [
+                    'label' => $day->format('d/m'),
+                    'value' => $count,
+                ];
+            })
+            ->values()
+            ->all();
+
         return Inertia::render('dashboard', [
             'stats' => [
                 'totalCuts' => $totalCuts,
@@ -124,6 +141,7 @@ class BarberDashboardController extends Controller
                 'monthlyCuts' => $monthlyCuts,
                 'todayAppointments' => $todayAppointments,
             ],
+            'trend' => $weeklyTrend,
             'pendingAppointments' => $pendingAppointments,
             'nextAppointment' => $nextAppointmentData,
             'activity' => $activity,

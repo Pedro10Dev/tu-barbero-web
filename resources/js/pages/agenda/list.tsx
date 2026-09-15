@@ -1,6 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
 import {
-    Calendar,
     CheckCircle2,
     Clock,
     Plus,
@@ -15,6 +14,8 @@ import {
     CalendarOff,
 } from 'lucide-react';
 import { useState } from 'react';
+import { PageHeader } from '@/components/page-header';
+import { appointmentStatus } from '@/lib/status';
 import { formatTimeAMPM } from '@/lib/utils';
 
 type Appointment = {
@@ -31,39 +32,6 @@ type Appointment = {
     notes?: string | null;
     status: 'pending' | 'confirmed' | 'rejected' | 'cancelled' | 'completed';
 };
-
-const statusConfig = {
-    pending: {
-        label: 'Pendiente de aprobación',
-        bar: 'bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.4)]',
-        chip: 'border-amber-500/20 bg-amber-500/10 text-amber-400',
-        icon: AlertCircle,
-    },
-    confirmed: {
-        label: 'Confirmada',
-        bar: 'bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.4)]',
-        chip: 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400',
-        icon: CheckCircle2,
-    },
-    rejected: {
-        label: 'Rechazada',
-        bar: 'bg-rose-500 shadow-[0_0_12px_rgba(244,63,94,0.4)]',
-        chip: 'border-rose-500/20 bg-rose-500/10 text-rose-400',
-        icon: XCircle,
-    },
-    cancelled: {
-        label: 'Cancelada',
-        bar: 'bg-zinc-600',
-        chip: 'border-border bg-muted text-muted-foreground',
-        icon: XCircle,
-    },
-    completed: {
-        label: 'Completada',
-        bar: 'bg-blue-500 shadow-[0_0_12px_rgba(59,130,246,0.4)]',
-        chip: 'border-blue-500/20 bg-blue-500/10 text-blue-400',
-        icon: CheckCircle2,
-    },
-} as const;
 
 function formatPrice(price: number): string {
     return `$${Number(price).toFixed(2)}`;
@@ -128,38 +96,29 @@ export default function AgendaList({
         <>
             <Head title="Gestión de Citas" />
 
-            <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 p-6 lg:p-8">
-                {/* Cabecera y Resumen Superior */}
-                <div className="flex flex-col justify-between gap-4 border-b border-border pb-6 md:flex-row md:items-center">
-                    <div className="space-y-1">
-                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-foreground">
-                            <Calendar className="size-6 text-muted-foreground" />
-                            Gestión de Citas y Solicitudes
-                        </h1>
-                        <p className="text-sm text-muted-foreground">
-                            Revisa solicitudes pendientes por la web o
-                            administra turnos de forma manual en estación.
-                        </p>
-                    </div>
-
-                    {/* Tarjeta de Solicitudes Pendientes */}
-                    <div className="flex shrink-0 items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3">
-                        <div className="flex size-10 items-center justify-center rounded-xl border border-amber-500/20 bg-amber-500/10 text-amber-400">
-                            <AlertCircle className="size-5" />
-                        </div>
-                        <div>
-                            <span className="block text-xs font-medium text-muted-foreground">
-                                Solicitudes Pendientes
-                            </span>
-                            <span className="text-base font-bold text-foreground">
-                                {pendingCount}{' '}
-                                <span className="text-xs font-normal text-muted-foreground">
-                                    por aprobar
+            <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 p-4 sm:p-6 lg:p-8">
+                <PageHeader
+                    title="Gestión de Citas y Solicitudes"
+                    description="Revisa solicitudes pendientes por la web o administra turnos de forma manual en estación."
+                    actions={
+                        <div className="flex shrink-0 items-center gap-3 rounded-xl border border-border bg-card px-4 py-3">
+                            <div className="flex size-10 items-center justify-center rounded-lg border border-warning/25 bg-warning/10 text-warning">
+                                <AlertCircle className="size-5" />
+                            </div>
+                            <div>
+                                <span className="block text-xs font-medium text-muted-foreground">
+                                    Solicitudes Pendientes
                                 </span>
-                            </span>
+                                <span className="tabular text-base font-bold text-foreground">
+                                    {pendingCount}{' '}
+                                    <span className="text-xs font-normal text-muted-foreground">
+                                        por aprobar
+                                    </span>
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    }
+                />
 
                 {/* Filtros y Búsqueda */}
                 <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
@@ -170,17 +129,18 @@ export default function AgendaList({
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             placeholder="Buscar cliente, teléfono o servicio..."
-                            className="w-full rounded-xl border border-border bg-card py-2.5 pr-4 pl-10 text-sm text-foreground placeholder:text-muted-foreground transition focus:border-ring focus:outline-none"
+                            className="w-full rounded-lg border border-border bg-card py-2.5 pr-4 pl-10 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none"
                         />
                     </div>
 
                     <div className="flex w-full shrink-0 items-center justify-between gap-3 sm:w-auto sm:justify-end">
-                        <div className="flex rounded-xl border border-border bg-card p-1">
+                        <div className="flex items-center gap-1 rounded-lg border border-border bg-muted p-1">
                             <button
                                 onClick={() => setFilter('all')}
-                                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                                aria-pressed={filter === 'all'}
+                                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
                                     filter === 'all'
-                                        ? 'bg-muted text-foreground shadow-sm'
+                                        ? 'bg-card text-foreground shadow-sm'
                                         : 'text-muted-foreground hover:text-foreground'
                                 }`}
                             >
@@ -188,9 +148,10 @@ export default function AgendaList({
                             </button>
                             <button
                                 onClick={() => setFilter('pending')}
-                                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                                aria-pressed={filter === 'pending'}
+                                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
                                     filter === 'pending'
-                                        ? 'bg-muted text-foreground shadow-sm'
+                                        ? 'bg-card text-foreground shadow-sm'
                                         : 'text-muted-foreground hover:text-foreground'
                                 }`}
                             >
@@ -198,9 +159,10 @@ export default function AgendaList({
                             </button>
                             <button
                                 onClick={() => setFilter('confirmed')}
-                                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all ${
+                                aria-pressed={filter === 'confirmed'}
+                                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition-all ${
                                     filter === 'confirmed'
-                                        ? 'bg-muted text-foreground shadow-sm'
+                                        ? 'bg-card text-foreground shadow-sm'
                                         : 'text-muted-foreground hover:text-foreground'
                                 }`}
                             >
@@ -210,7 +172,7 @@ export default function AgendaList({
 
                         <Link
                             href="/agenda/nuevo-turno"
-                            className="flex shrink-0 items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-xs font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
+                            className="flex shrink-0 items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-xs font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
                         >
                             <Plus className="size-4" />
                             Nuevo Turno
@@ -221,12 +183,12 @@ export default function AgendaList({
                 {/* Listado de Citas */}
                 <div className="flex flex-col gap-3">
                     {visibleAppointments.length === 0 ? (
-                        <div className="rounded-2xl border border-border bg-card py-12 text-center text-sm text-muted-foreground">
+                        <div className="rounded-xl border border-border bg-card py-12 text-center text-sm text-muted-foreground">
                             No hay citas que coincidan con este filtro.
                         </div>
                     ) : (
                         visibleAppointments.map((app) => {
-                            const config = statusConfig[app.status];
+                            const config = appointmentStatus(app.status);
                             const StatusIcon = config.icon;
                             const isExpanded = expandedId === app.id;
                             const isUpdating = updatingId === app.id;
@@ -235,14 +197,14 @@ export default function AgendaList({
                             return (
                                 <div
                                     key={app.id}
-                                    className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-card transition-all duration-300 ${
+                                    className={`group relative flex flex-col overflow-hidden rounded-xl border bg-card transition-all duration-300 ${
                                         isExpanded
                                             ? 'border-border shadow-lg shadow-foreground/10'
                                             : 'border-border hover:border-foreground/40'
                                     }`}
                                 >
                                     <div
-                                        className={`absolute top-0 bottom-0 left-0 w-1.5 transition-colors duration-300 ${config.bar}`}
+                                        className={`absolute top-0 bottom-0 left-0 w-1 transition-colors duration-300 ${config.bar}`}
                                     />
 
                                     {/* Cabecera */}
@@ -252,7 +214,7 @@ export default function AgendaList({
                                     >
                                         <div className="flex items-start gap-4">
                                             <div
-                                                className={`flex size-11 shrink-0 items-center justify-center rounded-xl border ${config.chip}`}
+                                                className={`flex size-11 shrink-0 items-center justify-center rounded-lg border ${config.chip}`}
                                             >
                                                 <StatusIcon className="size-5" />
                                             </div>
@@ -306,7 +268,7 @@ export default function AgendaList({
                                                             )
                                                         }
                                                         disabled={isUpdating}
-                                                        className="flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-500 disabled:opacity-50"
+                                                        className="flex items-center gap-1.5 rounded-lg bg-brand px-3.5 py-2 text-xs font-semibold text-brand-foreground shadow-sm transition hover:bg-brand/90 disabled:opacity-50"
                                                     >
                                                         <CheckCircle2 className="size-4" />
                                                         Aprobar
@@ -319,7 +281,7 @@ export default function AgendaList({
                                                             )
                                                         }
                                                         disabled={isUpdating}
-                                                        className="flex items-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 px-3.5 py-2 text-xs font-semibold text-rose-300 transition hover:bg-rose-500/20 disabled:opacity-50"
+                                                        className="flex items-center gap-1.5 rounded-lg border border-destructive/25 bg-destructive/10 px-3.5 py-2 text-xs font-semibold text-destructive transition hover:bg-destructive/20 disabled:opacity-50"
                                                     >
                                                         <XCircle className="size-4" />
                                                         Rechazar
@@ -337,7 +299,7 @@ export default function AgendaList({
                                                             )
                                                         }
                                                         disabled={isUpdating}
-                                                        className="flex items-center gap-1.5 rounded-xl bg-blue-600 px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-500 disabled:opacity-50"
+                                                        className="flex items-center gap-1.5 rounded-lg bg-info px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-info/90 disabled:opacity-50"
                                                     >
                                                         <CheckCircle2 className="size-4" />
                                                         Completar
@@ -350,7 +312,7 @@ export default function AgendaList({
                                                             )
                                                         }
                                                         disabled={isUpdating}
-                                                        className="flex items-center gap-1.5 rounded-xl border border-border bg-muted px-3.5 py-2 text-xs font-semibold text-foreground transition hover:bg-accent hover:text-foreground disabled:opacity-50"
+                                                        className="flex items-center gap-1.5 rounded-lg border border-border bg-muted px-3.5 py-2 text-xs font-semibold text-foreground transition hover:bg-accent disabled:opacity-50"
                                                     >
                                                         <CalendarOff className="size-4" />
                                                         Cancelar
@@ -362,7 +324,7 @@ export default function AgendaList({
                                                 onClick={() =>
                                                     toggleExpand(app.id)
                                                 }
-                                                className="ml-1 flex items-center gap-2 rounded-xl border border-border bg-muted px-3.5 py-2 text-xs font-medium text-foreground transition hover:bg-accent hover:text-foreground"
+                                                className="ml-1 flex items-center gap-2 rounded-lg border border-border bg-muted px-3.5 py-2 text-xs font-medium text-foreground transition hover:bg-accent"
                                             >
                                                 <span>
                                                     {isExpanded
@@ -398,7 +360,7 @@ export default function AgendaList({
                                                             Detalles del
                                                             Servicio
                                                         </span>
-                                                        <span className="block font-medium text-foreground">
+                                                        <span className="tabular block font-medium text-foreground">
                                                             {formatPrice(
                                                                 app.price,
                                                             )}
@@ -427,9 +389,9 @@ export default function AgendaList({
                                                             href={`https://wa.me/${app.phone}?text=Hola%20${encodeURIComponent(app.client)},%20te%20contacto%20desde%20TuBarbero%20en%20relación%20a%20tu%20cita%20de%20${encodeURIComponent(app.service)}...`}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
-                                                            className="flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500/40 bg-emerald-600/20 px-4 py-2.5 text-xs font-semibold text-emerald-600 shadow-sm transition-all hover:border-emerald-500 hover:bg-emerald-600/30 dark:text-emerald-300 md:w-auto"
+                                                            className="flex w-full items-center justify-center gap-2 rounded-lg border border-success/30 bg-success/10 px-4 py-2.5 text-xs font-semibold text-success transition hover:bg-success/20 md:w-auto"
                                                         >
-                                                            <MessageSquare className="size-4 text-emerald-400" />
+                                                            <MessageSquare className="size-4" />
                                                             Escribir por
                                                             WhatsApp
                                                         </a>

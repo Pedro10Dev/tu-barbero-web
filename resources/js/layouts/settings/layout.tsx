@@ -33,13 +33,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
     return (
         <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-8 p-4 sm:p-6 lg:p-8">
             <div className="border-b border-border pb-6">
-                <div className="mb-1.5 flex items-center gap-2">
-                    <span className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></span>
-                    <span className="text-xs font-bold tracking-widest text-muted-foreground uppercase">
-                        Configuración
-                    </span>
-                </div>
-                <h1 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+                <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
                     Ajustes de tu cuenta
                 </h1>
                 <p className="mt-1 text-sm text-muted-foreground">
@@ -65,7 +59,7 @@ export default function SettingsLayout({ children }: PropsWithChildren) {
                                     className={cn(
                                         'flex shrink-0 items-center gap-2.5 rounded-xl border px-4 py-2.5 text-sm font-semibold transition',
                                         active
-                                            ? 'border-emerald-500/40 bg-emerald-500/15 text-emerald-600 dark:text-emerald-300'
+                                            ? 'border-brand/40 bg-brand/10 text-brand'
                                             : 'border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground',
                                     )}
                                 >

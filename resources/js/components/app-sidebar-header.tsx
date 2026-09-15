@@ -1,5 +1,4 @@
 import { usePage } from '@inertiajs/react';
-import { ChevronsUpDown } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { Breadcrumbs } from '@/components/breadcrumbs';
 import { ModeToggle } from '@/components/mode-toggle';
@@ -13,6 +12,33 @@ import { UserInfo } from '@/components/user-info';
 import { UserMenuContent } from '@/components/user-menu-content';
 import { cn } from '@/lib/utils';
 import type { BreadcrumbItem as BreadcrumbItemType } from '@/types';
+
+const SECTION_TITLES: [string, string][] = [
+    ['/admin/schedules', 'Horarios y Turnos'],
+    ['/admin/appointments', 'Gestión de Citas'],
+    ['/admin/barbers', 'Barberos'],
+    ['/admin/services', 'Servicios'],
+    ['/admin/users', 'Usuarios'],
+    ['/admin/settings', 'Configuración'],
+    ['/admin/dashboard', 'Panel Administrador'],
+    ['/productividad', 'Productividad'],
+    ['/agenda/nuevo-turno', 'Nuevo Turno en Estación'],
+    ['/agenda/calendario', 'Agenda'],
+    ['/agenda/listado', 'Gestión de Citas'],
+    ['/clientes', 'Mis Clientes'],
+    ['/servicios', 'Servicios'],
+    ['/dashboard', 'Panel Principal'],
+];
+
+function sectionTitle(url: string): string {
+    for (const [path, title] of SECTION_TITLES) {
+        if (url.startsWith(path)) {
+            return title;
+        }
+    }
+
+    return 'TuBarbero';
+}
 
 function MobileSidebarTrigger() {
     const { openMobile, toggleSidebar } = useSidebar();
@@ -58,7 +84,9 @@ export function AppSidebarHeader({
 }: {
     breadcrumbs?: BreadcrumbItemType[];
 }) {
-    const { auth } = usePage().props;
+    const page = usePage();
+    const { auth } = page.props;
+    const url = page.url;
 
     if (!auth.user) {
         return null;
@@ -69,11 +97,10 @@ export function AppSidebarHeader({
             <DropdownMenuTrigger asChild>
                 <button
                     type="button"
-                    className="flex min-w-0 items-center rounded-lg p-1.5 text-left transition-colors hover:bg-sidebar-accent"
+                    className="flex max-w-44 min-w-0 items-center rounded-lg p-1 text-left transition-colors hover:bg-sidebar-accent"
                     data-test="sidebar-header-user"
                 >
                     <UserInfo user={auth.user} />
-                    <ChevronsUpDown className="ml-1 size-4 shrink-0" />
                 </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -86,35 +113,40 @@ export function AppSidebarHeader({
         </DropdownMenu>
     );
 
+    const context =
+        breadcrumbs.length > 0 ? (
+            <Breadcrumbs breadcrumbs={breadcrumbs} />
+        ) : (
+            <h1 className="truncate text-sm font-semibold tracking-tight text-foreground">
+                {sectionTitle(url)}
+            </h1>
+        );
+
     return (
-        <header className="relative flex h-16 shrink-0 items-center gap-2 border-b border-sidebar-border/50 px-4 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:px-6">
+        <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-2 border-b border-sidebar-border/80 bg-background px-4 md:px-6">
             {/* Versión móvil: hamburguesa animada, logo centrado, tema y usuario */}
             <div className="grid w-full grid-cols-[auto_1fr_auto] items-center gap-2 md:hidden">
                 <MobileSidebarTrigger />
                 <div className="flex min-w-0 items-center justify-center">
                     <AppLogo className="w-auto" />
                 </div>
-                <div className="flex min-w-0 items-center justify-end gap-0.5">
+                <div className="flex min-w-0 items-center justify-end gap-1.5">
                     <ModeToggle />
                     {userMenu}
                 </div>
             </div>
 
-            {/* Versión escritorio: logo, breadcrumbs, tema y usuario */}
-            <div className="hidden w-full grid-cols-3 items-center md:grid">
-                {/* Columna Izquierda: Breadcrumbs */}
+            {/* Versión escritorio: contexto de sección, tema y usuario */}
+            <div className="hidden w-full items-center justify-between gap-4 md:flex">
                 <div className="flex min-w-0 items-center justify-start gap-2">
-                    <Breadcrumbs breadcrumbs={breadcrumbs} />
+                    {context}
                 </div>
-
-                {/* Columna Central: Logo Centrado */}
-                <div className="flex items-center justify-center">
-                    <AppLogo className="w-auto" />
-                </div>
-
-                {/* Columna Derecha: Opciones y Menú de Usuario */}
-                <div className="flex items-center justify-end gap-1">
+                <div className="flex shrink-0 items-center gap-1.5">
                     <ModeToggle />
+                    <div
+                        className="mx-1 h-6 w-px bg-sidebar-border/70"
+                        aria-hidden="true"
+                    />
                     {userMenu}
                 </div>
             </div>

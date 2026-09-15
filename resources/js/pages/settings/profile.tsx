@@ -106,14 +106,14 @@ export default function Profile({
                                     <Link
                                         href={send()}
                                         as="button"
-                                        className="font-semibold text-emerald-400 underline underline-offset-4 transition hover:text-emerald-300"
+                                        className="font-semibold text-brand underline underline-offset-4 transition hover:text-brand/80"
                                     >
                                         Reenviar correo de verificación
                                     </Link>
                                 </p>
 
                                 {status === 'verification-link-sent' && (
-                                    <p className="mt-2 text-sm font-medium text-emerald-400">
+                                    <p className="mt-2 text-sm font-medium text-brand">
                                         Se envió un nuevo enlace de verificación
                                         a tu correo.
                                     </p>

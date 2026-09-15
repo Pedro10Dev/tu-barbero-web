@@ -127,18 +127,22 @@ export function AppSidebar() {
                             className="hover:bg-transparent"
                         >
                             <div className="flex w-full items-center gap-3 px-2 py-1.5">
-                                {/* Icono de Tijeras */}
-                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-sidebar-border bg-sidebar-accent text-sidebar-accent-foreground shadow-inner">
-                                    <Scissors className="h-5 w-5 -rotate-45 text-emerald-400" />
+                                {/* Logo */}
+                                <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-sidebar-border bg-sidebar-accent">
+                                    <img
+                                        src="/favicon.png"
+                                        alt="Logo TuBarbero"
+                                        className="size-7 object-contain"
+                                    />
                                 </div>
 
-                                {/* Texto sin redundancia */}
+                                {/* Marca y subtítulo neutro */}
                                 <div className="flex flex-col overflow-hidden text-left">
-                                    <span className="text-sm leading-none font-bold tracking-tight text-sidebar-foreground">
-                                        Gestión Central
+                                    <span className="text-sm leading-none font-black tracking-wider text-sidebar-foreground uppercase">
+                                        TuBarbero
                                     </span>
                                     <span className="mt-1 truncate text-[11px] font-medium text-sidebar-foreground/60">
-                                        Administración
+                                        Sistema de gestión
                                     </span>
                                 </div>
                             </div>
@@ -149,10 +153,10 @@ export function AppSidebar() {
 
             <SidebarContent>
                 {isAdmin && (
-                    <NavMain items={adminNavItems} label="Menú Administrador" />
+                    <NavMain items={adminNavItems} label="Administración" />
                 )}
                 {isBarber && (
-                    <NavMain items={barberNavItems} label="Menú Barbero" />
+                    <NavMain items={barberNavItems} label="Estación" />
                 )}
             </SidebarContent>
 

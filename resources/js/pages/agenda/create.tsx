@@ -1,6 +1,7 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 import { ArrowLeft, CalendarPlus, Scissors, Clock } from 'lucide-react';
 import { useRef, useState } from 'react';
+import { PageHeader } from '@/components/page-header';
 import { formatTimeAMPM } from '@/lib/utils';
 
 type Service = {
@@ -96,37 +97,30 @@ export default function AgendaCreate({
         <>
             <Head title="Nuevo Turno" />
 
-            <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 p-6 lg:p-8">
-                <div className="flex flex-col justify-between gap-4 border-b border-border pb-6 md:flex-row md:items-center">
-                    <div className="space-y-1">
-                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-foreground">
-                            <CalendarPlus className="size-6 text-muted-foreground" />
-                            Nuevo Turno en Estación
-                        </h1>
-                        <p className="text-sm text-muted-foreground">
-                            Agenda un cliente directamente, sin esperar
-                            aprobación web.
-                        </p>
-                    </div>
-
-                    <Link
-                        href="/agenda/calendario"
-                        className="flex shrink-0 items-center gap-2 rounded-xl border border-border bg-muted px-4 py-2.5 text-xs font-semibold text-foreground transition hover:bg-accent hover:text-foreground"
-                    >
-                        <ArrowLeft className="size-4" />
-                        Volver a Agenda
-                    </Link>
-                </div>
+            <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 p-4 sm:p-6 lg:p-8">
+                <PageHeader
+                    title="Nuevo Turno en Estación"
+                    description="Agenda un cliente directamente, sin esperar aprobación web."
+                    actions={
+                        <Link
+                            href="/agenda/calendario"
+                            className="flex shrink-0 items-center gap-2 rounded-lg border border-border bg-muted px-4 py-2.5 text-xs font-semibold text-foreground transition hover:bg-accent"
+                        >
+                            <ArrowLeft className="size-4" />
+                            Volver a Agenda
+                        </Link>
+                    }
+                />
 
                 {barberProfileId === null ? (
-                    <div className="rounded-2xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
+                    <div className="rounded-xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
                         No tienes un perfil de barbero configurado. Pide al
                         administrador que lo active.
                     </div>
                 ) : (
                     <form
                         onSubmit={submit}
-                        className="flex flex-col gap-6 rounded-2xl border border-border bg-card p-6"
+                        className="flex flex-col gap-6 rounded-xl border border-border bg-card p-6"
                     >
                         <div className="space-y-1">
                             <label className={labelClass} htmlFor="service_id">
@@ -150,7 +144,7 @@ export default function AgendaCreate({
                                 ))}
                             </select>
                             {errors.service_id && (
-                                <p className="text-xs text-rose-400">
+                                <p className="text-xs text-destructive">
                                     {errors.service_id}
                                 </p>
                             )}
@@ -170,7 +164,7 @@ export default function AgendaCreate({
                                     onChange={(e) => pickDate(e.target.value)}
                                 />
                                 {errors.date && (
-                                    <p className="text-xs text-rose-400">
+                                    <p className="text-xs text-destructive">
                                         {errors.date}
                                     </p>
                                 )}
@@ -208,7 +202,7 @@ export default function AgendaCreate({
                                     </select>
                                 )}
                                 {errors.time && (
-                                    <p className="text-xs text-rose-400">
+                                    <p className="text-xs text-destructive">
                                         {errors.time}
                                     </p>
                                 )}
@@ -233,7 +227,7 @@ export default function AgendaCreate({
                                     placeholder="Nombre del cliente"
                                 />
                                 {errors.client_name && (
-                                    <p className="text-xs text-rose-400">
+                                    <p className="text-xs text-destructive">
                                         {errors.client_name}
                                     </p>
                                 )}
@@ -320,7 +314,7 @@ export default function AgendaCreate({
                                     );
                                 })()}
                                 {errors.client_phone && (
-                                    <p className="text-xs text-rose-400">
+                                    <p className="text-xs text-destructive">
                                         {errors.client_phone}
                                     </p>
                                 )}
@@ -365,7 +359,7 @@ export default function AgendaCreate({
                                 <button
                                     type="submit"
                                     disabled={processing}
-                                    className="flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-500 disabled:opacity-50"
+                                    className="flex items-center gap-2 rounded-lg bg-brand px-5 py-2.5 text-xs font-semibold text-brand-foreground shadow-sm transition hover:bg-brand/90 disabled:opacity-50"
                                 >
                                     <CalendarPlus className="size-4" />
                                     {processing

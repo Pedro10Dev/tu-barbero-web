@@ -1,6 +1,7 @@
 import { Head, router } from '@inertiajs/react';
-import { Users, Search, ShieldCheck, BadgeCheck, Mail } from 'lucide-react';
+import { Users, Search, ShieldCheck, BadgeCheck } from 'lucide-react';
 import { useState } from 'react';
+import { PageHeader } from '@/components/page-header';
 
 type UserRecord = {
     id: number;
@@ -15,8 +16,8 @@ type UserRecord = {
 
 const roleChip: Record<string, string> = {
     client: 'border-border bg-muted text-foreground',
-    barber: 'border-blue-500/20 bg-blue-500/10 text-blue-400',
-    admin: 'border-purple-500/20 bg-purple-500/10 text-purple-400',
+    barber: 'border-info/25 bg-info/10 text-info',
+    admin: 'border-brand/30 bg-brand/10 text-brand',
 };
 
 export default function AdminUsers({ users }: { users: UserRecord[] }) {
@@ -46,33 +47,26 @@ export default function AdminUsers({ users }: { users: UserRecord[] }) {
         <>
             <Head title="Usuarios" />
 
-            <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 p-6 lg:p-8">
-                {/* Cabecera */}
-                <div className="flex flex-col justify-between gap-4 border-b border-border pb-6 md:flex-row md:items-center">
-                    <div className="space-y-1">
-                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-foreground">
-                            <Users className="size-6 text-muted-foreground" />
-                            Usuarios
-                        </h1>
-                        <p className="text-sm text-muted-foreground">
-                            Todos los usuarios del sistema y sus roles.
-                        </p>
-                    </div>
-
-                    <div className="flex shrink-0 items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3">
-                        <div className="flex size-10 items-center justify-center rounded-xl border border-border bg-muted text-foreground">
-                            <Users className="size-5" />
+            <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 p-4 sm:p-6 lg:p-8">
+                <PageHeader
+                    title="Usuarios"
+                    description="Todos los usuarios del sistema y sus roles."
+                    actions={
+                        <div className="flex shrink-0 items-center gap-3 rounded-xl border border-border bg-card px-4 py-3">
+                            <div className="flex size-10 items-center justify-center rounded-lg border border-border bg-muted text-brand">
+                                <Users className="size-5" />
+                            </div>
+                            <div>
+                                <span className="block text-xs font-medium text-muted-foreground">
+                                    Total
+                                </span>
+                                <span className="tabular text-base font-bold text-foreground">
+                                    {users.length}
+                                </span>
+                            </div>
                         </div>
-                        <div>
-                            <span className="block text-xs font-medium text-muted-foreground">
-                                Total
-                            </span>
-                            <span className="text-base font-bold text-foreground">
-                                {users.length}
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                    }
+                />
 
                 {/* Búsqueda */}
                 <div className="relative flex w-full items-center">
@@ -82,12 +76,12 @@ export default function AdminUsers({ users }: { users: UserRecord[] }) {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         placeholder="Buscar por nombre, email o teléfono..."
-                        className="w-full rounded-xl border border-border bg-card py-2.5 pr-4 pl-10 text-sm text-foreground placeholder:text-muted-foreground transition focus:border-ring focus:outline-none"
+                        className="w-full rounded-lg border border-border bg-card py-2.5 pr-4 pl-10 text-sm text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none"
                     />
                 </div>
 
                 {/* Tabla */}
-                <div className="overflow-hidden rounded-2xl border border-border bg-card">
+                <div className="overflow-hidden rounded-xl border border-border bg-card">
                     {visibleUsers.length === 0 ? (
                         <div className="py-12 text-center text-sm text-muted-foreground">
                             No se encontraron usuarios con esa búsqueda.
@@ -134,7 +128,7 @@ export default function AdminUsers({ users }: { users: UserRecord[] }) {
                                                         <p className="flex items-center gap-1.5 font-semibold text-foreground">
                                                             {user.name}
                                                             {user.emailVerified && (
-                                                                <BadgeCheck className="size-3.5 text-emerald-400" />
+                                                                <BadgeCheck className="size-3.5 text-success" />
                                                             )}
                                                         </p>
                                                         <p className="text-xs text-muted-foreground">
@@ -226,8 +220,8 @@ export default function AdminUsers({ users }: { users: UserRecord[] }) {
                 </div>
 
                 <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                    <Mail className="size-3.5" />
-                    La verificación de email se muestra con el ícono verde.
+                    <BadgeCheck className="size-3.5 text-success" />
+                    La verificación de email se marca con el ícono verde.
                 </p>
             </div>
         </>

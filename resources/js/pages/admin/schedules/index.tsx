@@ -1,12 +1,13 @@
 import { Head, router } from '@inertiajs/react';
 import {
-    Clock,
     ChevronLeft,
     ChevronRight,
     Scissors,
     CalendarDays,
 } from 'lucide-react';
 import { useState } from 'react';
+import { PageHeader } from '@/components/page-header';
+import { appointmentStatus } from '@/lib/status';
 import { formatTimeAMPM } from '@/lib/utils';
 
 type Slot = {
@@ -82,39 +83,31 @@ export default function AdminSchedules({
         <>
             <Head title="Horarios y Turnos" />
 
-            <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 p-6 lg:p-8">
-                {/* Cabecera */}
-                <div className="flex flex-col justify-between gap-4 border-b border-border pb-6 md:flex-row md:items-center">
-                    <div className="space-y-1">
-                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-foreground">
-                            <Clock className="size-6 text-muted-foreground" />
-                            Horarios y Turnos
-                        </h1>
-                        <p className="text-sm text-muted-foreground">
-                            Bloques ocupados por barbero, derivados de las citas
-                            del día.
-                        </p>
-                    </div>
-
-                    <div className="flex shrink-0 items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3">
-                        <div className="flex size-10 items-center justify-center rounded-xl border border-border bg-muted text-foreground">
-                            <CalendarDays className="size-5" />
+            <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 p-4 sm:p-6 lg:p-8">
+                <PageHeader
+                    title="Horarios y Turnos"
+                    description="Bloques ocupados por barbero, derivados de las citas del día."
+                    actions={
+                        <div className="flex shrink-0 items-center gap-3 rounded-xl border border-border bg-card px-4 py-3">
+                            <div className="flex size-10 items-center justify-center rounded-lg border border-border bg-muted text-brand">
+                                <CalendarDays className="size-5" />
+                            </div>
+                            <div>
+                                <span className="block text-xs font-medium text-muted-foreground">
+                                    Turnos del día
+                                </span>
+                                <span className="tabular text-base font-bold text-foreground">
+                                    {totalSlots}
+                                </span>
+                            </div>
                         </div>
-                        <div>
-                            <span className="block text-xs font-medium text-muted-foreground">
-                                Turnos del día
-                            </span>
-                            <span className="text-base font-bold text-foreground">
-                                {totalSlots}
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                    }
+                />
 
                 {/* Barra de fecha */}
-                <div className="flex flex-col items-center justify-between gap-4 rounded-2xl border border-border bg-card p-5 sm:flex-row">
+                <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-border bg-card p-5 sm:flex-row">
                     <div className="flex items-center gap-3.5">
-                        <div className="flex size-11 items-center justify-center rounded-xl border border-border bg-muted text-foreground">
+                        <div className="flex size-11 items-center justify-center rounded-lg border border-border bg-muted text-foreground">
                             <CalendarDays className="size-5" />
                         </div>
                         <div>
@@ -128,7 +121,7 @@ export default function AdminSchedules({
                     </div>
 
                     <div className="flex items-center gap-2">
-                        <div className="flex items-center overflow-hidden rounded-xl border border-border bg-muted">
+                        <div className="flex items-center overflow-hidden rounded-lg border border-border bg-muted">
                             <button
                                 onClick={() => navigate(shiftDate(date, -1))}
                                 className="p-2.5 text-muted-foreground transition hover:bg-accent hover:text-foreground"
@@ -155,9 +148,9 @@ export default function AdminSchedules({
                 <div className="flex flex-wrap items-center gap-2">
                     <button
                         onClick={() => setActiveBarber(null)}
-                        className={`rounded-xl border px-4 py-2 text-xs font-semibold transition-all ${
+                        className={`rounded-lg border px-4 py-2 text-xs font-semibold transition-all ${
                             activeBarber === null
-                                ? 'border-border bg-muted text-foreground'
+                                ? 'border-brand/25 bg-brand/10 text-brand'
                                 : 'border-border bg-card text-muted-foreground hover:text-foreground'
                         }`}
                     >
@@ -167,9 +160,9 @@ export default function AdminSchedules({
                         <button
                             key={barber.id}
                             onClick={() => setActiveBarber(barber.id)}
-                            className={`rounded-xl border px-4 py-2 text-xs font-semibold transition-all ${
+                            className={`rounded-lg border px-4 py-2 text-xs font-semibold transition-all ${
                                 activeBarber === barber.id
-                                    ? 'border-border bg-muted text-foreground'
+                                    ? 'border-brand/25 bg-brand/10 text-brand'
                                     : 'border-border bg-card text-muted-foreground hover:text-foreground'
                             }`}
                         >
@@ -181,18 +174,18 @@ export default function AdminSchedules({
                 {/* Bloques por barbero */}
                 <div className="flex flex-col gap-5">
                     {visibleBarbers.length === 0 ? (
-                        <div className="rounded-2xl border border-border bg-card py-12 text-center text-sm text-muted-foreground">
+                        <div className="rounded-xl border border-border bg-card py-12 text-center text-sm text-muted-foreground">
                             No hay barberos registrados.
                         </div>
                     ) : (
                         visibleBarbers.map((barber) => (
                             <div
                                 key={barber.id}
-                                className="overflow-hidden rounded-2xl border border-border bg-card"
+                                className="overflow-hidden rounded-xl border border-border bg-card"
                             >
                                 <div className="flex items-center justify-between gap-3 border-b border-border px-5 py-4">
                                     <div className="flex items-center gap-3">
-                                        <div className="flex size-9 items-center justify-center rounded-xl border border-border bg-muted text-foreground">
+                                        <div className="flex size-9 items-center justify-center rounded-lg border border-border bg-muted text-foreground">
                                             <Scissors className="size-4" />
                                         </div>
                                         <div>
@@ -208,7 +201,7 @@ export default function AdminSchedules({
                                     <span
                                         className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${
                                             barber.is_active
-                                                ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+                                                ? 'border-success/25 bg-success/10 text-success'
                                                 : 'border-border bg-muted text-muted-foreground'
                                         }`}
                                     >
@@ -224,48 +217,50 @@ export default function AdminSchedules({
                                     </div>
                                 ) : (
                                     <div className="flex flex-col divide-y divide-border/70">
-                                        {barber.slots.map((slot) => (
-                                            <div
-                                                key={slot.id}
-                                                className="flex flex-col gap-2 px-5 py-3.5 transition-colors hover:bg-accent/60 sm:flex-row sm:items-center sm:justify-between"
-                                            >
-                                                <div className="flex items-center gap-4">
-                                                    <div className="flex w-24 shrink-0 items-center justify-center rounded-xl border border-border bg-muted px-2 py-1.5 text-center">
-                                                        <span className="text-sm font-bold text-foreground">
-                                                            {formatTimeAMPM(
-                                                                slot.start_time,
-                                                            )}
-                                                        </span>
-                                                        <span className="text-[10px] text-muted-foreground">
-                                                            -{' '}
-                                                            {formatTimeAMPM(
-                                                                slot.end_time,
-                                                            )}
-                                                        </span>
-                                                    </div>
-                                                    <div>
-                                                        <p className="text-sm font-semibold text-foreground">
-                                                            {slot.client}
-                                                        </p>
-                                                        <p className="text-xs text-muted-foreground">
-                                                            {slot.service}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                                <span
-                                                    className={`inline-flex w-fit shrink-0 items-center rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${
-                                                        slot.status ===
-                                                        'confirmed'
-                                                            ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
-                                                            : 'border-amber-500/20 bg-amber-500/10 text-amber-400'
-                                                    }`}
+                                        {barber.slots.map((slot) => {
+                                            const config = appointmentStatus(
+                                                slot.status,
+                                            );
+
+                                            return (
+                                                <div
+                                                    key={slot.id}
+                                                    className="flex flex-col gap-2 px-5 py-3.5 transition-colors hover:bg-accent/60 sm:flex-row sm:items-center sm:justify-between"
                                                 >
-                                                    {slot.status === 'confirmed'
-                                                        ? 'Confirmado'
-                                                        : 'Pendiente'}
-                                                </span>
-                                            </div>
-                                        ))}
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="flex w-24 shrink-0 flex-col items-center justify-center rounded-lg border border-border bg-muted px-2 py-1.5 text-center">
+                                                            <span className="text-sm font-bold text-foreground">
+                                                                {formatTimeAMPM(
+                                                                    slot.start_time,
+                                                                )}
+                                                            </span>
+                                                            <span className="text-[10px] text-muted-foreground">
+                                                                -{' '}
+                                                                {formatTimeAMPM(
+                                                                    slot.end_time,
+                                                                )}
+                                                            </span>
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-sm font-semibold text-foreground">
+                                                                {slot.client}
+                                                            </p>
+                                                            <p className="text-xs text-muted-foreground">
+                                                                {slot.service}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <span
+                                                        className={`inline-flex w-fit shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${config.chip}`}
+                                                    >
+                                                        <span
+                                                            className={`size-1.5 rounded-full ${config.dot}`}
+                                                        />
+                                                        {config.label}
+                                                    </span>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 )}
                             </div>

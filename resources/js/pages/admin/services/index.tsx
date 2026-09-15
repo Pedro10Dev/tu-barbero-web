@@ -1,5 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { Briefcase, Plus, Clock, Trash2, Pencil } from 'lucide-react';
+import { PageHeader } from '@/components/page-header';
 
 type Service = {
     id: number;
@@ -26,48 +27,41 @@ export default function AdminServices({ services }: { services: Service[] }) {
         <>
             <Head title="Servicios" />
 
-            <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 p-6 lg:p-8">
-                {/* Cabecera */}
-                <div className="flex flex-col justify-between gap-4 border-b border-border pb-6 md:flex-row md:items-center">
-                    <div className="space-y-1">
-                        <h1 className="flex items-center gap-2.5 text-2xl font-bold tracking-tight text-foreground">
-                            <Briefcase className="size-6 text-muted-foreground" />
-                            Catálogo de Servicios
-                        </h1>
-                        <p className="text-sm text-muted-foreground">
-                            Servicios ofrecidos en todas las estaciones.
-                        </p>
-                    </div>
-
-                    <Link
-                        href="/admin/services/create"
-                        className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-xs font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
-                    >
-                        <Plus className="size-4" />
-                        Nuevo Servicio
-                    </Link>
-                </div>
+            <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 p-4 sm:p-6 lg:p-8">
+                <PageHeader
+                    title="Catálogo de Servicios"
+                    description="Servicios ofrecidos en todas las estaciones."
+                    actions={
+                        <Link
+                            href="/admin/services/create"
+                            className="flex items-center gap-2 rounded-lg bg-brand px-4 py-2.5 text-xs font-semibold text-brand-foreground shadow-sm transition hover:bg-brand/90"
+                        >
+                            <Plus className="size-4" />
+                            Nuevo Servicio
+                        </Link>
+                    }
+                />
 
                 {/* Grid de servicios */}
                 <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
                     {services.length === 0 ? (
-                        <div className="rounded-2xl border border-border bg-card py-12 text-center text-sm text-muted-foreground md:col-span-2 lg:col-span-3">
+                        <div className="rounded-xl border border-border bg-card py-12 text-center text-sm text-muted-foreground md:col-span-2 lg:col-span-3">
                             Aún no hay servicios registrados.
                         </div>
                     ) : (
                         services.map((service) => (
                             <div
                                 key={service.id}
-                                className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:border-foreground/40"
+                                className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-card p-6 transition-all duration-300 hover:border-foreground/40"
                             >
-                                <div className="absolute top-0 bottom-0 left-0 w-1.5 bg-blue-500 shadow-[0_0_12px_rgba(59,130,246,0.4)]" />
+                                <div className="absolute top-0 bottom-0 left-0 w-1 bg-brand" />
 
                                 <div className="space-y-3 pl-2">
                                     <div className="flex items-start justify-between gap-3">
-                                        <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-blue-500/20 bg-blue-500/10 text-blue-400">
+                                        <div className="flex size-11 shrink-0 items-center justify-center rounded-lg border border-brand/25 bg-brand/10 text-brand">
                                             <Briefcase className="size-5" />
                                         </div>
-                                        <span className="inline-flex items-center rounded-full border border-blue-500/30 bg-blue-500/10 px-2.5 py-1 text-[11px] font-medium text-blue-400">
+                                        <span className="inline-flex items-center rounded-full border border-border bg-muted px-2.5 py-1 text-[11px] font-medium text-foreground">
                                             En catálogo
                                         </span>
                                     </div>
@@ -81,8 +75,10 @@ export default function AdminServices({ services }: { services: Service[] }) {
                                             <Clock className="size-3.5 text-muted-foreground" />
                                             {service.duration_minutes} min
                                         </span>
-                                        <span className="text-muted-foreground">•</span>
-                                        <span className="font-semibold text-emerald-400">
+                                        <span className="text-muted-foreground">
+                                            •
+                                        </span>
+                                        <span className="tabular font-semibold text-success">
                                             {formatPrice(service.price)}
                                         </span>
                                     </div>
@@ -96,7 +92,7 @@ export default function AdminServices({ services }: { services: Service[] }) {
                                     <div className="flex items-center gap-2">
                                         <Link
                                             href={`/admin/services/${service.id}/edit`}
-                                            className="flex items-center gap-1.5 rounded-xl border border-border bg-muted px-3 py-2 text-xs font-semibold text-foreground transition hover:bg-accent hover:text-foreground"
+                                            className="flex items-center gap-1.5 rounded-lg border border-border bg-muted px-3 py-2 text-xs font-semibold text-foreground transition hover:bg-accent"
                                         >
                                             <Pencil className="size-3.5" />
                                             Editar
@@ -108,7 +104,7 @@ export default function AdminServices({ services }: { services: Service[] }) {
                                                     service.name,
                                                 )
                                             }
-                                            className="flex items-center gap-1.5 rounded-xl border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-xs font-semibold text-rose-300 transition hover:bg-rose-500/20"
+                                            className="flex items-center gap-1.5 rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs font-semibold text-destructive transition hover:bg-destructive/20"
                                         >
                                             <Trash2 className="size-3.5" />
                                             Eliminar
