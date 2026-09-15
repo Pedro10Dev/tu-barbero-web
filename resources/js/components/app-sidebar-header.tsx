@@ -117,8 +117,9 @@ export function AppSidebarHeader({
         breadcrumbs.length > 0 ? (
             <Breadcrumbs breadcrumbs={breadcrumbs} />
         ) : (
-            <h1 className="truncate text-sm font-semibold tracking-tight text-foreground">
-                {sectionTitle(url)}
+            <h1 className="flex min-w-0 items-center gap-2 truncate font-mono text-xs font-medium tracking-[0.2em] text-foreground uppercase">
+                <span className="size-1.5 shrink-0 bg-brand" aria-hidden="true" />
+                <span className="truncate">{sectionTitle(url)}</span>
             </h1>
         );
 

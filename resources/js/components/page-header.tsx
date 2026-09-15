@@ -19,8 +19,8 @@ export function PageHeader({
                 className,
             )}
         >
-            <div className="space-y-1">
-                <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+            <div className="space-y-1.5">
+                <h1 className="font-serif text-3xl font-normal tracking-tight text-foreground sm:text-4xl">
                     {title}
                 </h1>
                 {description && (
@@ -30,7 +30,7 @@ export function PageHeader({
                 )}
             </div>
             {actions && (
-                <div className="flex w-full shrink-0 items-center gap-2 sm:w-auto">
+                <div className="flex w-full shrink-0 flex-wrap items-center gap-2 sm:w-auto">
                     {actions}
                 </div>
             )}

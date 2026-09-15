@@ -30,14 +30,14 @@ export function StatCard({
     const DeltaIcon = positive ? ArrowUpRight : ArrowDownRight;
 
     return (
-        <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5 transition-colors hover:border-foreground/25">
+        <div className="flex h-full flex-col justify-between gap-5 bg-card p-5">
             <div className="flex items-center justify-between gap-2">
-                <span className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                <span className="font-mono text-[11px] font-medium tracking-[0.18em] text-muted-foreground uppercase">
                     {label}
                 </span>
                 {Icon && (
-                    <span className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-brand/20 bg-brand/10 text-brand dark:border-brand/40 dark:bg-brand/20 dark:text-brand">
-                        <Icon className="size-4" />
+                    <span className="flex size-8 shrink-0 items-center justify-center border border-brand/30 text-brand">
+                        <Icon className="size-3.5" />
                     </span>
                 )}
             </div>
@@ -45,7 +45,7 @@ export function StatCard({
             <div className="flex items-end justify-between gap-3">
                 <div className="min-w-0">
                     <div className="flex items-baseline gap-2">
-                        <span className="tabular text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+                        <span className="tabular font-mono text-3xl font-medium tracking-tight text-foreground">
                             {value}
                         </span>
                         {delta !== undefined && (
@@ -61,7 +61,7 @@ export function StatCard({
                         )}
                     </div>
                     {hint && (
-                        <p className="mt-1 text-xs text-muted-foreground">
+                        <p className="mt-1 font-mono text-[10px] tracking-[0.14em] text-muted-foreground uppercase">
                             {hint}
                         </p>
                     )}

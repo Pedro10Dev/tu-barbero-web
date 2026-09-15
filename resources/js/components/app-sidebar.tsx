@@ -128,7 +128,7 @@ export function AppSidebar() {
                         >
                             <div className="flex w-full items-center gap-3 px-2 py-1.5">
                                 {/* Logo */}
-                                <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-sidebar-border bg-sidebar-accent">
+                                <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden border border-sidebar-border bg-sidebar-accent">
                                     <img
                                         src="/favicon.png"
                                         alt="Logo TuBarbero"
@@ -141,7 +141,7 @@ export function AppSidebar() {
                                     <span className="text-sm leading-none font-black tracking-wider text-sidebar-foreground uppercase">
                                         TuBarbero
                                     </span>
-                                    <span className="mt-1 truncate text-[11px] font-medium text-sidebar-foreground/60">
+                                    <span className="mt-1 truncate font-mono text-[10px] tracking-[0.18em] text-sidebar-foreground/60 uppercase">
                                         Sistema de gestión
                                     </span>
                                 </div>

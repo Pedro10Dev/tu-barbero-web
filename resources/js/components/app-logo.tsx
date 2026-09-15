@@ -10,7 +10,7 @@ export default function AppLogo({ className }: { className?: string }) {
                 className,
             )}
         >
-            <div className="flex aspect-square size-8 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-sidebar-border bg-sidebar-accent shadow-md transition group-hover:border-sidebar-ring">
+            <div className="flex aspect-square size-8 shrink-0 items-center justify-center overflow-hidden border border-sidebar-border bg-sidebar-accent transition group-hover:border-sidebar-ring">
                 <img
                     src="/favicon.png"
                     alt="Logo TuBarbero"

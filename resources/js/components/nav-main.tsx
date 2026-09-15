@@ -26,7 +26,7 @@ export interface ExtendedNavItem extends NavItem {
 }
 
 const menuItemClass =
-    'rounded-lg text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground data-[active=true]:bg-brand/15 data-[active=true]:font-medium data-[active=true]:text-brand';
+    'rounded-md text-sidebar-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-foreground data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:text-brand';
 
 export function NavMain({
     items = [],
@@ -39,7 +39,7 @@ export function NavMain({
 
     return (
         <SidebarGroup className="px-2 py-0">
-            <SidebarGroupLabel className="mb-2 px-2 text-xs font-semibold tracking-wider text-sidebar-foreground/50 uppercase">
+            <SidebarGroupLabel className="mb-2 px-2 font-mono text-[10px] font-medium tracking-[0.22em] text-sidebar-foreground/50 uppercase">
                 {label}
             </SidebarGroupLabel>
             <SidebarMenu className="space-y-1">
@@ -64,6 +64,12 @@ export function NavMain({
                                         className={`${menuItemClass} flex w-full justify-between`}
                                     >
                                         <div className="flex items-center gap-2">
+                                            {isAnySubItemActive && (
+                                                <span
+                                                    className="size-1 shrink-0 bg-brand"
+                                                    aria-hidden="true"
+                                                />
+                                            )}
                                             {item.icon && (
                                                 <item.icon className="size-4" />
                                             )}
@@ -88,9 +94,9 @@ export function NavMain({
                                                     <SidebarMenuSubButton
                                                         asChild
                                                         isActive={active}
-                                                        className={`h-8 rounded-lg transition-colors ${
+                                                        className={`h-8 rounded-md transition-colors ${
                                                             active
-                                                                ? 'bg-brand/10 font-medium text-brand'
+                                                                ? 'bg-sidebar-accent font-medium text-brand'
                                                                 : 'text-sidebar-foreground/65 hover:bg-sidebar-accent hover:text-sidebar-foreground'
                                                         }`}
                                                     >
@@ -131,6 +137,12 @@ export function NavMain({
                                     prefetch
                                     className="flex items-center gap-2"
                                 >
+                                    {isCurrentUrl(item.href) && (
+                                        <span
+                                            className="size-1 shrink-0 bg-brand"
+                                            aria-hidden="true"
+                                        />
+                                    )}
                                     {item.icon && (
                                         <item.icon className="size-4" />
                                     )}

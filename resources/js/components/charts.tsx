@@ -61,7 +61,7 @@ export function Sparkline({ data, className }: ChartProps) {
                 pathLength="1"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2"
+                strokeWidth="1.5"
                 strokeLinecap="round"
                 strokeLinejoin="round"
                 className="sparkline-draw"

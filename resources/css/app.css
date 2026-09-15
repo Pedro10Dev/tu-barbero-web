@@ -91,88 +91,90 @@
 }
 
 :root {
-    --background: oklch(0.985 0.002 247);
-    --foreground: oklch(0.2 0.01 230);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.2 0.01 230);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.2 0.01 230);
-    --primary: oklch(0.205 0.01 230);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.967 0.003 230);
-    --secondary-foreground: oklch(0.205 0.01 230);
-    --muted: oklch(0.967 0.003 230);
-    --muted-foreground: oklch(0.54 0.015 230);
-    --accent: oklch(0.955 0.005 225);
-    --accent-foreground: oklch(0.205 0.01 230);
-    --destructive: oklch(0.577 0.245 27.325);
-    --destructive-foreground: oklch(0.985 0 0);
-    --border: oklch(0.915 0.004 230);
-    --input: oklch(0.915 0.004 230);
-    --ring: oklch(0.51 0.11 175);
-    --chart-1: oklch(0.57 0.11 175);
-    --chart-2: oklch(0.62 0.12 235);
-    --chart-3: oklch(0.72 0.13 70);
-    --chart-4: oklch(0.6 0.15 290);
-    --chart-5: oklch(0.6 0.15 15);
-    --radius: 0.625rem;
-    --sidebar: oklch(0.985 0.002 247);
-    --sidebar-foreground: oklch(0.2 0.01 230);
-    --sidebar-primary: oklch(0.51 0.11 175);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.945 0.006 225);
-    --sidebar-accent-foreground: oklch(0.2 0.01 230);
-    --sidebar-border: oklch(0.915 0.004 230);
-    --sidebar-ring: oklch(0.51 0.11 175);
+    /* La Imprenta · hoja de papel hueso (modo claro) */
+    --background: oklch(0.972 0.004 88);
+    --foreground: oklch(0.225 0.008 258);
+    --card: oklch(0.985 0.003 88);
+    --card-foreground: oklch(0.225 0.008 258);
+    --popover: oklch(0.985 0.003 88);
+    --popover-foreground: oklch(0.225 0.008 258);
+    --primary: oklch(0.225 0.008 258);
+    --primary-foreground: oklch(0.985 0.003 88);
+    --secondary: oklch(0.95 0.004 88);
+    --secondary-foreground: oklch(0.225 0.008 258);
+    --muted: oklch(0.95 0.004 88);
+    --muted-foreground: oklch(0.46 0.008 258);
+    --accent: oklch(0.928 0.005 88);
+    --accent-foreground: oklch(0.225 0.008 258);
+    --destructive: oklch(0.55 0.13 27);
+    --destructive-foreground: oklch(0.985 0.003 88);
+    --border: oklch(0.868 0.006 90);
+    --input: oklch(0.868 0.006 90);
+    --ring: oklch(0.62 0.1 66);
+    --chart-1: oklch(0.55 0.09 66);
+    --chart-2: oklch(0.62 0.09 75);
+    --chart-3: oklch(0.5 0.03 250);
+    --chart-4: oklch(0.52 0.12 27);
+    --chart-5: oklch(0.55 0.06 250);
+    --radius: 0.25rem;
+    --sidebar: oklch(0.16 0.008 258);
+    --sidebar-foreground: oklch(0.965 0.005 88);
+    --sidebar-primary: oklch(0.72 0.075 66);
+    --sidebar-primary-foreground: oklch(0.16 0.008 258);
+    --sidebar-accent: oklch(0.248 0.008 258);
+    --sidebar-accent-foreground: oklch(0.965 0.005 88);
+    --sidebar-border: oklch(0.29 0.008 258);
+    --sidebar-ring: oklch(0.72 0.075 66);
 
-    /* Acento y estados - modo claro */
-    --brand: oklch(0.51 0.11 175);
-    --brand-foreground: oklch(0.985 0 0);
-    --success: oklch(0.58 0.13 165);
-    --warning: oklch(0.68 0.13 70);
-    --info: oklch(0.57 0.12 235);
+    /* Acento y estados - hoja clara: un único oliva maderoso, ladrillo solo de estado */
+    --brand: oklch(0.48 0.09 66);
+    --brand-foreground: oklch(0.985 0.003 88);
+    --success: oklch(0.5 0.09 70);
+    --warning: oklch(0.56 0.1 75);
+    --info: oklch(0.48 0.035 250);
 }
 
 .dark {
-    --background: oklch(0.17 0.008 230);
-    --foreground: oklch(0.985 0.002 240);
-    --card: oklch(0.205 0.009 230);
-    --card-foreground: oklch(0.985 0.002 240);
-    --popover: oklch(0.205 0.009 230);
-    --popover-foreground: oklch(0.985 0.002 240);
-    --primary: oklch(0.985 0.002 240);
-    --primary-foreground: oklch(0.17 0.008 230);
-    --secondary: oklch(0.28 0.01 230);
-    --secondary-foreground: oklch(0.985 0.002 240);
-    --muted: oklch(0.28 0.01 230);
-    --muted-foreground: oklch(0.72 0.012 240);
-    --accent: oklch(0.28 0.01 230);
-    --accent-foreground: oklch(0.985 0.002 240);
-    --destructive: oklch(0.396 0.141 25.723);
-    --destructive-foreground: oklch(0.637 0.237 25.331);
-    --border: oklch(0.31 0.01 230);
-    --input: oklch(0.31 0.01 230);
-    --ring: oklch(0.68 0.12 175);
-    --chart-1: oklch(0.72 0.12 175);
-    --chart-2: oklch(0.7 0.12 235);
-    --chart-3: oklch(0.78 0.13 70);
-    --chart-4: oklch(0.72 0.14 290);
-    --chart-5: oklch(0.7 0.15 15);
-    --sidebar: oklch(0.145 0.006 230);
-    --sidebar-foreground: oklch(0.985 0.002 240);
-    --sidebar-primary: oklch(0.72 0.12 175);
-    --sidebar-primary-foreground: oklch(0.145 0.008 230);
-    --sidebar-accent: oklch(0.26 0.012 230);
-    --sidebar-accent-foreground: oklch(0.985 0.002 240);
-    --sidebar-border: oklch(0.28 0.01 230);
-    --sidebar-ring: oklch(0.68 0.12 175);
+    /* La Imprenta · hoja de tinta (modo oscuro) */
+    --background: oklch(0.145 0.008 258);
+    --foreground: oklch(0.985 0.004 88);
+    --card: oklch(0.18 0.008 258);
+    --card-foreground: oklch(0.985 0.004 88);
+    --popover: oklch(0.18 0.008 258);
+    --popover-foreground: oklch(0.985 0.004 88);
+    --primary: oklch(0.985 0.004 88);
+    --primary-foreground: oklch(0.145 0.008 258);
+    --secondary: oklch(0.235 0.008 258);
+    --secondary-foreground: oklch(0.985 0.004 88);
+    --muted: oklch(0.235 0.008 258);
+    --muted-foreground: oklch(0.745 0.005 90);
+    --accent: oklch(0.255 0.008 258);
+    --accent-foreground: oklch(0.985 0.004 88);
+    --destructive: oklch(0.72 0.12 27);
+    --destructive-foreground: oklch(0.13 0.006 258);
+    --border: oklch(0.3 0.008 258);
+    --input: oklch(0.3 0.008 258);
+    --ring: oklch(0.78 0.075 66);
+    --chart-1: oklch(0.76 0.09 66);
+    --chart-2: oklch(0.8 0.09 75);
+    --chart-3: oklch(0.74 0.03 250);
+    --chart-4: oklch(0.76 0.12 27);
+    --chart-5: oklch(0.75 0.06 250);
+    --sidebar: oklch(0.13 0.008 258);
+    --sidebar-foreground: oklch(0.965 0.005 88);
+    --sidebar-primary: oklch(0.78 0.075 66);
+    --sidebar-primary-foreground: oklch(0.145 0.008 258);
+    --sidebar-accent: oklch(0.235 0.008 258);
+    --sidebar-accent-foreground: oklch(0.965 0.005 88);
+    --sidebar-border: oklch(0.29 0.008 258);
+    --sidebar-ring: oklch(0.78 0.075 66);
 
-    /* Acento y estados - modo oscuro */
-    --brand: oklch(0.72 0.12 175);
-    --brand-foreground: oklch(0.145 0.008 230);
-    --success: oklch(0.72 0.13 165);
-    --warning: oklch(0.78 0.13 70);
-    --info: oklch(0.7 0.12 235);
+    /* Acento y estados - hoja de tinta: un único oliva maderoso, ladrillo solo de estado */
+    --brand: oklch(0.78 0.08 66);
+    --brand-foreground: oklch(0.145 0.008 258);
+    --success: oklch(0.78 0.09 66);
+    --warning: oklch(0.82 0.09 78);
+    --info: oklch(0.74 0.03 250);
 }
 
 @layer base {
@@ -183,6 +185,36 @@
     body {
         @apply bg-background text-foreground;
     }
+}
+
+/* Superficies del navegador de la app en hoja clara: selección, cursor, scrollbar */
+body:not(.site-dark) ::selection {
+    background: var(--color-brand);
+    color: var(--color-brand-foreground);
+}
+
+body:not(.site-dark) input,
+body:not(.site-dark) textarea,
+body:not(.site-dark) select {
+    caret-color: var(--color-brand);
+}
+
+body:not(.site-dark) ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+body:not(.site-dark) ::-webkit-scrollbar-track {
+    background: var(--color-background);
+}
+
+body:not(.site-dark) ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 9999px;
+}
+
+body:not(.site-dark) ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-muted-foreground);
 }
 
 /* ==========================================================================

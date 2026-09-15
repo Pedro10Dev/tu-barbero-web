@@ -59,11 +59,17 @@ export default function AdminDashboard({
     const { auth } = usePage().props;
     const trendValues = trend.map((point) => point.value);
 
+    const todayLabel = new Intl.DateTimeFormat('es-VE', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'short',
+    }).format(new Date());
+
     return (
         <>
-            <Head title="Panel de Administración" />
+            <Head title="Panel de Administración | TuBarbero" />
 
-            <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 p-4 sm:p-6 lg:p-8">
+            <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-8 p-4 sm:p-6 lg:p-8">
                 <PageHeader
                     title={`Bienvenido, ${auth.user.name}`}
                     description="Supervisa el flujo de la plataforma, gestiona tu equipo y controla los servicios."
@@ -71,14 +77,14 @@ export default function AdminDashboard({
                         <>
                             <Link
                                 href="/admin/barbers/create"
-                                className="inline-flex items-center gap-2 rounded-lg border border-border bg-muted px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+                                className="inline-flex items-center gap-2 border border-border bg-card px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:border-foreground/40"
                             >
                                 <UserPlus className="h-4 w-4 text-muted-foreground" />
                                 Nuevo Barbero
                             </Link>
                             <Link
                                 href="/admin/services/create"
-                                className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
+                                className="inline-flex items-center gap-2 bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
                             >
                                 <Plus className="h-4 w-4" />
                                 Nuevo Servicio
@@ -87,8 +93,23 @@ export default function AdminDashboard({
                     }
                 />
 
-                {/* KPIs */}
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+                <div className="flex flex-wrap items-center gap-x-5 gap-y-2 border-y border-border py-3 font-mono text-[11px] tracking-[0.16em] text-muted-foreground uppercase">
+                    <div className="flex items-center gap-2">
+                        <span className="size-1.5 bg-brand" aria-hidden="true" />
+                        <span className="text-foreground">Hoy · {todayLabel}</span>
+                    </div>
+                    <span aria-hidden="true" className="hidden h-3.5 w-px bg-border sm:block" />
+                    <span>Horario 9:00 — 20:00</span>
+                    <span aria-hidden="true" className="hidden h-3.5 w-px bg-border sm:block" />
+                    <span className="tabular text-foreground">
+                        Citas hoy {stats.appointmentsToday}
+                    </span>
+                    <span className="tabular text-foreground">
+                        Barberos {stats.activeBarbers}
+                    </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-px border border-border bg-border sm:grid-cols-3 lg:grid-cols-5">
                     <StatCard
                         label="Usuarios Totales"
                         value={stats.totalUsers}
@@ -122,36 +143,34 @@ export default function AdminDashboard({
                     />
                 </div>
 
-                {/* Citas recientes + actividad */}
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
-                    <div className="col-span-4 flex flex-col rounded-xl border border-border bg-card p-5 sm:p-6">
-                        <div className="mb-4 flex items-center justify-between">
-                            <h3 className="text-base font-semibold text-foreground">
-                                Últimas Citas Registradas
-                            </h3>
+                <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-7">
+                    <section className="lg:col-span-4">
+                        <div className="flex items-center justify-between border border-b-0 border-border bg-card px-5 py-4">
+                            <h2 className="font-mono text-xs tracking-[0.2em] text-foreground uppercase">
+                                Últimas citas
+                            </h2>
                             <Link
                                 href="/admin/appointments"
-                                className="flex items-center gap-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
+                                className="flex items-center gap-1 font-mono text-[10px] tracking-[0.16em] text-muted-foreground uppercase transition-colors hover:text-foreground"
                             >
-                                Ver todas{' '}
-                                <ArrowUpRight className="h-3.5 w-3.5" />
+                                Ver todas
+                                <ArrowUpRight className="size-3.5" />
                             </Link>
                         </div>
 
-                        <div className="flex flex-1 flex-col gap-3">
-                            {recentAppointments.length === 0 ? (
-                                <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card p-8 text-center">
-                                    <Calendar className="mb-2 h-8 w-8 text-muted-foreground" />
-                                    <p className="text-sm font-medium text-foreground">
-                                        No hay citas recientes registradas
-                                    </p>
-                                    <p className="mt-1 text-xs text-muted-foreground">
-                                        Las nuevas reservas aparecerán
-                                        automáticamente aquí.
-                                    </p>
-                                </div>
-                            ) : (
-                                recentAppointments.map((appointment) => {
+                        {recentAppointments.length === 0 ? (
+                            <div className="flex flex-col items-center gap-3 border border-border bg-card px-6 py-12 text-center">
+                                <Calendar className="size-5 text-muted-foreground" />
+                                <p className="font-mono text-xs tracking-[0.2em] text-foreground uppercase">
+                                    Sin citas registradas
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                    Las nuevas reservas aparecerán automáticamente aquí.
+                                </p>
+                            </div>
+                        ) : (
+                            <div className="divide-y divide-border border border-border bg-card">
+                                {recentAppointments.map((appointment) => {
                                     const status = appointmentStatus(
                                         appointment.status,
                                     );
@@ -159,22 +178,24 @@ export default function AdminDashboard({
                                     return (
                                         <div
                                             key={appointment.id}
-                                            className="flex items-start justify-between gap-3 rounded-lg border border-border bg-muted/40 p-3"
+                                            className="flex items-start justify-between gap-3 px-5 py-4"
                                         >
-                                            <div className="flex items-start gap-3">
-                                                <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border bg-muted text-muted-foreground">
-                                                    <Clock className="h-3.5 w-3.5" />
+                                            <div className="flex min-w-0 items-start gap-4">
+                                                <div
+                                                    aria-hidden="true"
+                                                    className="hidden h-8 w-8 shrink-0 place-items-center border border-border sm:grid"
+                                                >
+                                                    <Clock className="size-3.5 text-muted-foreground" />
                                                 </div>
-                                                <div>
-                                                    <p className="text-xs font-semibold text-foreground">
+                                                <div className="min-w-0">
+                                                    <p className="truncate text-sm font-semibold text-foreground">
                                                         {appointment.client}
                                                         <span className="font-normal text-muted-foreground">
                                                             {' '}
-                                                            ·{' '}
-                                                            {appointment.barber}
+                                                            · {appointment.barber}
                                                         </span>
                                                     </p>
-                                                    <p className="mt-0.5 text-[11px] text-muted-foreground">
+                                                    <p className="mt-0.5 truncate font-mono text-[10px] tracking-[0.12em] text-muted-foreground uppercase">
                                                         {appointment.service} ·{' '}
                                                         {formatDateTimeAMPM(
                                                             appointment.start_time,
@@ -182,53 +203,61 @@ export default function AdminDashboard({
                                                     </p>
                                                 </div>
                                             </div>
-                                            <span
-                                                className={`inline-flex shrink-0 items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${status.chip}`}
-                                            >
+                                            <span className="inline-flex shrink-0 items-center gap-1.5 border border-border px-2 py-0.5 font-mono text-[10px] tracking-[0.12em] text-foreground/70 uppercase">
+                                                <span
+                                                    aria-hidden="true"
+                                                    className={`size-1.5 ${status.dot}`}
+                                                />
                                                 {status.label}
                                             </span>
                                         </div>
                                     );
-                                })
-                            )}
-                        </div>
-                    </div>
+                                })}
+                            </div>
+                        )}
+                    </section>
 
-                    <div className="col-span-3 flex flex-col rounded-xl border border-border bg-card p-5 sm:p-6">
-                        <div className="mb-4 flex items-center gap-2">
-                            <Activity className="h-4 w-4 text-muted-foreground" />
-                            <h3 className="text-base font-semibold text-foreground">
-                                Actividad Reciente
-                            </h3>
+                    <section className="lg:col-span-3">
+                        <div className="flex items-center justify-between border border-b-0 border-border bg-card px-5 py-4">
+                            <h2 className="font-mono text-xs tracking-[0.2em] text-foreground uppercase">
+                                Actividad reciente
+                            </h2>
+                            <Activity className="size-4 text-muted-foreground" />
                         </div>
-
-                        <div className="flex flex-col gap-4">
+                        <div className="border border-border bg-card">
                             {recentActivity.length === 0 ? (
-                                <div className="rounded-xl border border-dashed border-border bg-card p-6 text-center text-xs text-muted-foreground">
-                                    Aún no hay actividad registrada.
+                                <div className="px-6 py-12 text-center font-mono text-[11px] tracking-[0.16em] text-muted-foreground uppercase">
+                                    Aún no hay actividad
                                 </div>
                             ) : (
-                                recentActivity.map((item) => (
-                                    <div
-                                        key={item.id}
-                                        className="flex items-start gap-3 rounded-lg border border-border bg-muted/40 p-3"
-                                    >
-                                        <div
-                                            className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${activityTone(item.tone)}`}
-                                        ></div>
-                                        <div className="flex-1">
-                                            <p className="text-xs font-medium text-foreground">
-                                                {item.title}
-                                            </p>
-                                            <p className="mt-0.5 text-[11px] text-muted-foreground">
-                                                {item.description}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ))
+                                <div className="p-5">
+                                    <ol className="space-y-5">
+                                        {recentActivity.map((item) => (
+                                            <li
+                                                key={item.id}
+                                                className="flex items-start gap-3"
+                                            >
+                                                <span
+                                                    aria-hidden="true"
+                                                    className={`mt-1.5 size-2 shrink-0 ${activityTone(
+                                                        item.tone,
+                                                    )}`}
+                                                />
+                                                <div className="min-w-0">
+                                                    <p className="text-sm font-semibold text-foreground">
+                                                        {item.title}
+                                                    </p>
+                                                    <p className="mt-0.5 font-mono text-[11px] text-muted-foreground">
+                                                        {item.description}
+                                                    </p>
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ol>
+                                </div>
                             )}
                         </div>
-                    </div>
+                    </section>
                 </div>
             </div>
         </>
