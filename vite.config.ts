@@ -15,6 +15,12 @@ export default defineConfig(({ command }) => ({
                 bunny('Instrument Sans', {
                     weights: [400, 500, 600],
                 }),
+                bunny('Instrument Serif', {
+                    weights: [400],
+                }),
+                bunny('JetBrains Mono', {
+                    weights: [400, 500],
+                }),
             ],
         }),
         inertia(),

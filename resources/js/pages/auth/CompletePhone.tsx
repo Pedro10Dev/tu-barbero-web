@@ -111,7 +111,7 @@ export default function CompletePhone() {
                         </div>
 
                         {errors.phone && (
-                            <p className="px-1 text-xs text-destructive">
+                            <p className="px-1 text-xs font-medium text-foreground">
                                 {errors.phone}
                             </p>
                         )}

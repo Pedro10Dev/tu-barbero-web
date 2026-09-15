@@ -62,10 +62,14 @@
 
     @fonts
 
-    @vite(['resources/css/app.css'])
+    <script>
+        document.documentElement.classList.add('js');
+    </script>
+
+    @vite(['resources/css/app.css', 'resources/js/landing.ts'])
 </head>
 
-<body class="min-h-screen bg-landing-bg font-sans text-landing-text antialiased">
+<body class="site-dark min-h-screen bg-landing-bg font-sans text-landing-text antialiased">
     @yield('content')
 </body>
 

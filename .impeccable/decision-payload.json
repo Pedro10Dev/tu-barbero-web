@@ -1,0 +1,132 @@
+{
+  "title": "El Mundo Visual de TuBarbero",
+  "question": "La tirada asignó El Salón de Azulejo. Quédatelo, toma un alterno, el canon, o relanza.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "El Salón de Azulejo",
+      "kicker": "THE ROLL",
+      "lineage": "La barbería de esquina con paredes de azulejo decorado, cromo y cuero: el interior que toda la audiencia conoce de verdad.",
+      "thesis": "Todo el viaje del cliente sucede dentro de un salón de azulejos: cada tramo del día es una serie de fichas cerámicas que se van tomando.",
+      "palette": ["#123b3f", "#e6ded0", "#c92f2a", "#1d1c1a"],
+      "materials": ["azulejo cerámico esmaltado", "cromo pulido", "cuero y vinilo", "neón del salón"],
+      "viewport": "Un salón visto de frente: el nombre en mosaico de azulejo a lo alto, el día como turnos en fichas cerámicas, y una sola silla cromada ocupando el centro; el botón de reserva es la silla, no un cartel.",
+      "risk": "Puede leer a 'retro de catálogo' si el azulejo se vuelve clip-art en vez de un sistema de rejilla real que gobierna cada sección.",
+      "raised": [
+        { "from": "challenger-coptic", "raise": "TRAZA — el día se encadena en un hilo visible que une las secciones y cuenta los turnos como una costura." },
+        { "from": "challenger-city", "raise": "LUMINARIA — de noche el salón se enciende desde dentro: resplandor ámbar interior contra el azul de la hora azul." },
+        { "from": "challenger-riso", "raise": "TINTA — disciplina de dos tintas: paleta limitada a dos tintas más un tercer color de solape verdadero, sin tonos sueltos." },
+        { "from": "challenger-emigre", "raise": "CUADRÍCULA — todo layout cabalga la rejilla del azulejo, fila por fila, como un tablero de cerámica real; nada flota fuera de la rejilla." },
+        { "from": "challenger-darkroom", "raise": "REVELADO — el ticket de confirmación aparece en una sola revelación fotográfica lenta." },
+        { "from": "challenger-ebru", "raise": "ELEVADO — confirmar es un solo gesto irreversible de un contacto; la silla queda tomada, sin teatro de deshacer." }
+      ]
+    },
+    {
+      "id": "model-pick",
+      "label": "El Aviso del Barrio",
+      "kicker": "IMPECCABLE'S PICK",
+      "lineage": "La rotulación a mano y el toldo a rayas de cada comercio del barrio latino.",
+      "thesis": "Todo el camino del cliente pasa por rótulos pintados a mano: el barrio mismo te guía hasta la silla.",
+      "palette": ["#1e3a5f", "#f0ead9", "#c92f2a", "#151515"],
+      "materials": ["esmalte sobre madera", "toldo a rayas", "letras de pincel", "cristal espejado"],
+      "viewport": "La fachada completa como página: letras de pincel a lo alto, ventana espejada con precios pintados, y la puerta (el botón de reserva) abierta de par en par.",
+      "risk": "Es el suelo firme donde casi todos los encargos de esta categoría aterrizan: familiar y legítimo, ejecutado aquí a plena rotulación, sin ironía."
+    },
+    {
+      "id": "challenger-darkroom",
+      "label": "El Cuarto Oscuro",
+      "verdict": "competitive",
+      "lineage": "El laboratorio fotográfico bajo luz ámbar, donde la imagen aparece lenta y deliberada.",
+      "thesis": "Reservar es revelar: el turno confirmado se imprime solo, como una fotografía apareciendo en el baño químico.",
+      "palette": ["#f0a53b", "#4a3620", "#171310", "#e8e0d2"],
+      "materials": ["luz ámbar de seguridad", "plata revelada", "tiras de prueba", "papel baritado"],
+      "viewport": "El calendario como tira de pruebas expuestas: cada hueco disponible aparece revelándose ante el visitante.",
+      "case": "Se fusiona con limpieza: el turno como imagen que emerge y el detalle de las tiras de prueba como disponibilidad. Pierde por poco en identificación de audiencia.",
+      "risk": "El mundo entero queda en ámbar y noche, lejos del día del barrio.",
+      "hero": "https://impeccable.style/worlds/cards/signals-instruments-darkroom-safelight-bay-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/signals-instruments-darkroom-safelight-bay.webp"
+    },
+    {
+      "id": "challenger-coptic",
+      "label": "Encuadernación Expuesta",
+      "verdict": "declined",
+      "thesis": "El salón como libro cosido a la vista: la costura es el único adorno.",
+      "lineage": "El libro copto con la encuadernación al descubierto en el lomo.",
+      "palette": ["#c8b490", "#5c4a33", "#171310", "#e8e0d2"],
+      "materials": ["hilo de lino", "tablas de madera", "papel crudo"],
+      "case": "No lo identifica la audiencia del barrio: pierde en ambas. La estructura abierta queda como disciplina.",
+      "kept": "TRAZA — el día se encadena en un hilo visible que une las secciones y cuenta los turnos como una costura.",
+      "hero": "https://impeccable.style/worlds/cards/craft-making-coptic-exposed-binding-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/craft-making-coptic-exposed-binding.webp"
+    },
+    {
+      "id": "challenger-city",
+      "label": "Nocturno de Lluvia",
+      "verdict": "declined",
+      "thesis": "La barbería como el único local encendido en la noche urbana.",
+      "lineage": "La ciudad pasando de la hora azul a la noche de lluvia.",
+      "palette": ["#0e1a2e", "#ffd25a", "#f0a53b", "#2c3e50"],
+      "materials": ["neón", "asfalto mojado", "reflejos doblados"],
+      "case": "El nocturno es universal, no venezolano, y no ancla la reserva: pierde en claridad.",
+      "kept": "LUMINARIA — de noche el salón se enciende desde dentro: resplandor ámbar interior contra el azul de la hora azul.",
+      "hero": "https://impeccable.style/worlds/cards/light-shadow-caustics-rain-night-cityscape-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/light-shadow-caustics-rain-night-cityscape.webp"
+    },
+    {
+      "id": "challenger-riso",
+      "label": "Zine a Dos Tintas",
+      "verdict": "declined",
+      "thesis": "El salón entero en dos tintas que se solapan en un tercer color que la máquina no puede hacer.",
+      "lineage": "La portada de zine en duplicadora risográfica con dos tintas desregistradas.",
+      "palette": ["#ff5f9e", "#2d7dd2", "#b34c8a", "#f3ead8"],
+      "materials": ["tinta riso", "papel prensa", "medios tonos abiertos"],
+      "case": "Dos tintas fluorescentes no son la audiencia del salón: pierde en identificación.",
+      "kept": "TINTA — disciplina de dos tintas: paleta limitada a dos tintas más un tercer color de solape verdadero.",
+      "hero": "https://impeccable.style/worlds/cards/posters-covers-sleeves-risograph-zine-cover-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/posters-covers-sleeves-risograph-zine-cover.webp"
+    },
+    {
+      "id": "challenger-emigre",
+      "label": "Bitmap Emigre",
+      "verdict": "declined",
+      "thesis": "La revista en letras de píxel a escala de cartel, y la baja resolución es la estética.",
+      "lineage": "La especimen de tipografía bitmap de Emigre.",
+      "palette": ["#f5f0e6", "#111111", "#1e3a5f", "#555555"],
+      "materials": ["píxel honesto", "medios tonos de punto", "tinta densa"],
+      "case": "El píxel burdo no habla al salón ni a la reserva: pierde en ambas.",
+      "kept": "CUADRÍCULA — todo layout cabalga la rejilla del azulejo, fila por fila, como un tablero de cerámica real.",
+      "hero": "https://impeccable.style/worlds/cards/emigre-bitmap-specimen-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/emigre-bitmap-specimen.webp"
+    },
+    {
+      "id": "challenger-ebru",
+      "label": "Pigmento Flotado",
+      "verdict": "declined",
+      "thesis": "Papel hecho en un solo contacto: cada marca empuja la anterior.",
+      "lineage": "El papel marmolado sobre agua espesa, levantado en un solo contacto.",
+      "palette": ["#c92f2a", "#123b3f", "#e8c14d", "#f3ead8"],
+      "materials": ["agua espesa", "pigmento flotante", "papel encolado"],
+      "case": "El papel hecho en un contacto no lo reconoce el cliente del barrio: pierde en identificación.",
+      "kept": "ELEVADO — confirmar es un solo gesto irreversible de un contacto; la silla queda tomada.",
+      "hero": "https://impeccable.style/worlds/cards/medium-native-ebru-floated-pigment-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/medium-native-ebru-floated-pigment.webp"
+    }
+  ],
+  "reroll": {
+    "registers": ["safer", "bolder"]
+  },
+  "canon": true,
+  "canonCard": {
+    "label": "La Barbería Premium Clásica",
+    "thesis": "Lo que esta categoría ya envía, ejecutado impecable: oscuro, dorado, serif.",
+    "palette": ["#111111", "#f5f0e6", "#c9a227"],
+    "materials": ["negro premium", "dorado", "serif display"],
+    "viewport": "El hero oscuro con serif de moda y botón dorado que ya ocupa la landing actual.",
+    "risk": "Indistinguible de la competencia por diseño."
+  },
+  "steer": true,
+  "buildPath": {
+    "value": "code",
+    "toggle": false
+  }
+}

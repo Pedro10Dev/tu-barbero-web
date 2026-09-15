@@ -1,7 +1,7 @@
 import { Head, useForm, usePage } from '@inertiajs/react';
 import React, { useState, useEffect } from 'react';
-import Footer from '@/components/footer';
-import Navbar from '@/components/navbar';
+import LandingFooter from '@/components/landing-footer';
+import LandingNavbar from '@/components/landing-navbar';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { formatTimeAMPM } from '@/lib/utils';
@@ -95,18 +95,18 @@ export default function BookingIndex() {
     };
 
     return (
-        <>
-            <Navbar />
-            <div className="min-h-screen bg-background px-4 py-12 text-foreground sm:px-6 lg:px-8">
+        <div className="dark bg-background text-foreground">
+            <LandingNavbar />
+            <div className="min-h-screen px-4 pt-32 pb-16 sm:px-6 lg:px-8">
                 <Head title="Reservar Cita - Barbería" />
 
                 <div className="mx-auto max-w-3xl">
                     {/* Header */}
                     <div className="mb-10 text-center">
                         <span className="text-xs font-bold tracking-widest text-muted-foreground uppercase">
-                            Barbería Studio
+                            TuBarbero
                         </span>
-                        <h1 className="mt-1 text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+                        <h1 className="mt-2 font-serif text-4xl tracking-tight text-foreground sm:text-5xl">
                             Reserva tu experiencia
                         </h1>
                         <p className="mt-2 text-sm text-muted-foreground">
@@ -131,7 +131,7 @@ export default function BookingIndex() {
                                     step === s.num
                                         ? 'text-foreground'
                                         : step > s.num
-                                          ? 'cursor-pointer text-emerald-400'
+                                          ? 'cursor-pointer text-landing-success'
                                           : 'cursor-not-allowed text-muted-foreground'
                                 }`}
                             >
@@ -140,7 +140,7 @@ export default function BookingIndex() {
                                         step === s.num
                                             ? 'bg-primary text-primary-foreground'
                                             : step > s.num
-                                              ? 'border border-emerald-500/20 bg-emerald-500/10 text-emerald-400'
+                                              ? 'border border-landing-success/20 bg-landing-success/10 text-landing-success'
                                               : 'border border-border bg-card text-muted-foreground'
                                     }`}
                                 >
@@ -156,8 +156,11 @@ export default function BookingIndex() {
                     <form onSubmit={handleSubmit}>
                         {/* PASO 1: SERVICIOS */}
                         {step === 1 && (
-                            <div className="space-y-4">
-                                <h2 className="mb-4 text-xl font-bold tracking-tight text-foreground">
+                            <div
+                                key="step-1"
+                                className="animate-in space-y-4 duration-300 ease-out fade-in slide-in-from-bottom-3"
+                            >
+                                <h2 className="mb-4 font-serif text-2xl tracking-tight text-foreground">
                                     Selecciona un servicio
                                 </h2>
                                 <div className="grid grid-cols-1 gap-3">
@@ -179,7 +182,7 @@ export default function BookingIndex() {
                                                 }}
                                                 className={`flex cursor-pointer items-center justify-between rounded-2xl border p-5 transition-all ${
                                                     isSelected
-                                                        ? 'border-primary bg-accent shadow-lg shadow-foreground/10'
+                                                        ? 'border-primary bg-accent shadow-sm'
                                                         : 'border-border bg-card hover:border-foreground/40 hover:bg-card'
                                                 }`}
                                             >
@@ -187,15 +190,20 @@ export default function BookingIndex() {
                                                     <h3 className="text-base font-semibold text-foreground">
                                                         {service.name}
                                                     </h3>
-                                                    <p className="mt-1 text-xs text-muted-foreground">
+                                                    <p className="tabular mt-1 font-mono text-xs text-muted-foreground">
                                                         {
                                                             service.duration_minutes
                                                         }{' '}
                                                         min de sesión
                                                     </p>
                                                 </div>
-                                                <div className="text-right">
-                                                    <span className="text-lg font-bold text-foreground">
+                                                <div className="flex items-center gap-3">
+                                                    {isSelected && (
+                                                        <span className="grid size-6 animate-in place-items-center rounded-full bg-landing-success text-[11px] font-bold text-landing-bg duration-200 zoom-in-50">
+                                                            ✓
+                                                        </span>
+                                                    )}
+                                                    <span className="tabular text-lg font-bold text-foreground">
                                                         ${service.price}
                                                     </span>
                                                 </div>
@@ -204,7 +212,7 @@ export default function BookingIndex() {
                                     })}
                                 </div>
                                 {errors.service_id && (
-                                    <p className="mt-2 text-xs text-destructive">
+                                    <p className="mt-2 text-xs font-medium text-foreground">
                                         {errors.service_id}
                                     </p>
                                 )}
@@ -224,8 +232,11 @@ export default function BookingIndex() {
 
                         {/* PASO 2: BARBEROS */}
                         {step === 2 && (
-                            <div className="space-y-4">
-                                <h2 className="mb-4 text-xl font-bold tracking-tight text-foreground">
+                            <div
+                                key="step-2"
+                                className="animate-in space-y-4 duration-300 ease-out fade-in slide-in-from-bottom-3"
+                            >
+                                <h2 className="mb-4 font-serif text-2xl tracking-tight text-foreground">
                                     Selecciona a tu barbero
                                 </h2>
                                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -247,14 +258,21 @@ export default function BookingIndex() {
                                                 }}
                                                 className={`cursor-pointer rounded-2xl border p-5 transition-all ${
                                                     isSelected
-                                                        ? 'border-primary bg-accent shadow-lg shadow-foreground/10'
+                                                        ? 'border-primary bg-accent shadow-sm'
                                                         : 'border-border bg-card hover:border-foreground/40 hover:bg-card'
                                                 }`}
                                             >
-                                                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full border border-border bg-muted text-sm font-bold text-muted-foreground">
-                                                    {barber.display_name
-                                                        .substring(0, 2)
-                                                        .toUpperCase()}
+                                                <div className="relative mb-3 h-10 w-10">
+                                                    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-muted text-sm font-bold text-muted-foreground">
+                                                        {barber.display_name
+                                                            .substring(0, 2)
+                                                            .toUpperCase()}
+                                                    </div>
+                                                    {isSelected && (
+                                                        <span className="absolute -right-1 -bottom-1 grid size-5 animate-in place-items-center rounded-full bg-landing-success text-[10px] font-bold text-landing-bg duration-200 zoom-in-50">
+                                                            ✓
+                                                        </span>
+                                                    )}
                                                 </div>
                                                 <h3 className="text-base font-semibold text-foreground">
                                                     {barber.display_name}
@@ -269,7 +287,7 @@ export default function BookingIndex() {
                                     })}
                                 </div>
                                 {errors.barber_profile_id && (
-                                    <p className="mt-2 text-xs text-destructive">
+                                    <p className="mt-2 text-xs font-medium text-foreground">
                                         {errors.barber_profile_id}
                                     </p>
                                 )}
@@ -296,8 +314,11 @@ export default function BookingIndex() {
 
                         {/* PASO 3: FECHA Y HORA */}
                         {step === 3 && (
-                            <div className="space-y-6">
-                                <h2 className="text-xl font-bold tracking-tight text-foreground">
+                            <div
+                                key="step-3"
+                                className="animate-in space-y-6 duration-300 ease-out fade-in slide-in-from-bottom-3"
+                            >
+                                <h2 className="font-serif text-2xl tracking-tight text-foreground">
                                     Elige fecha y hora
                                 </h2>
 
@@ -322,7 +343,7 @@ export default function BookingIndex() {
                                         className="w-full rounded-xl border border-border bg-card p-3.5 text-sm text-foreground focus:border-ring focus:outline-none sm:w-1/2"
                                     />
                                     {errors.date && (
-                                        <p className="mt-2 text-xs text-destructive">
+                                        <p className="mt-2 text-xs font-medium text-foreground">
                                             {errors.date}
                                         </p>
                                     )}
@@ -353,7 +374,7 @@ export default function BookingIndex() {
                                                                     slot,
                                                                 )
                                                             }
-                                                            className={`rounded-xl border p-3 text-center text-sm font-semibold transition-all ${
+                                                            className={`tabular rounded-xl border p-3 text-center font-mono text-sm font-semibold transition-all ${
                                                                 isSelected
                                                                     ? 'border-primary bg-primary text-primary-foreground shadow-md'
                                                                     : 'border-border bg-card text-muted-foreground hover:border-foreground/40'
@@ -367,14 +388,14 @@ export default function BookingIndex() {
                                                 })}
                                             </div>
                                         ) : (
-                                            <p className="rounded-xl border border-amber-500/20 bg-amber-500/10 p-4 text-xs text-amber-500">
+                                            <p className="rounded-xl border border-border bg-muted p-4 text-xs text-muted-foreground">
                                                 No existen turnos libres para
                                                 esta fecha. Intenta con otro
                                                 día.
                                             </p>
                                         )}
                                         {errors.time && (
-                                            <p className="mt-2 text-xs text-destructive">
+                                            <p className="mt-2 text-xs font-medium text-foreground">
                                                 {errors.time}
                                             </p>
                                         )}
@@ -403,8 +424,11 @@ export default function BookingIndex() {
 
                         {/* PASO 4: CONFIRMACIÓN Y DATOS DE CONTACTO */}
                         {step === 4 && (
-                            <div className="space-y-6">
-                                <h2 className="mb-2 text-xl font-bold tracking-tight text-foreground">
+                            <div
+                                key="step-4"
+                                className="animate-in space-y-6 duration-300 ease-out fade-in slide-in-from-bottom-3"
+                            >
+                                <h2 className="mb-2 font-serif text-2xl tracking-tight text-foreground">
                                     Tus Datos y Confirmación
                                 </h2>
 
@@ -439,7 +463,7 @@ export default function BookingIndex() {
                                         <span className="block text-xs tracking-wider text-muted-foreground uppercase">
                                             Total a pagar
                                         </span>
-                                        <span className="font-semibold text-emerald-400">
+                                        <span className="tabular font-semibold text-landing-success">
                                             ${selectedService?.price}
                                         </span>
                                     </div>
@@ -469,7 +493,7 @@ export default function BookingIndex() {
                                             }`}
                                         />
                                         {errors.client_name && (
-                                            <p className="mt-1 text-xs text-destructive">
+                                            <p className="mt-1 text-xs font-medium text-foreground">
                                                 {errors.client_name}
                                             </p>
                                         )}
@@ -498,7 +522,7 @@ export default function BookingIndex() {
                                                 }`}
                                             />
                                             {errors.client_email && (
-                                                <p className="mt-1 text-xs text-destructive">
+                                                <p className="mt-1 text-xs font-medium text-foreground">
                                                     {errors.client_email}
                                                 </p>
                                             )}
@@ -620,7 +644,7 @@ export default function BookingIndex() {
                                             )}
 
                                             {errors.client_phone && (
-                                                <p className="mt-1 text-xs text-destructive">
+                                                <p className="mt-1 text-xs font-medium text-foreground">
                                                     {errors.client_phone}
                                                 </p>
                                             )}
@@ -655,7 +679,7 @@ export default function BookingIndex() {
                                     <button
                                         type="submit"
                                         disabled={processing}
-                                        className="rounded-xl bg-primary px-8 py-3.5 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:bg-primary/90 disabled:opacity-50"
+                                        className="rounded-xl bg-primary px-8 py-3.5 text-sm font-bold text-primary-foreground shadow-sm transition-all hover:bg-primary/90 disabled:opacity-50"
                                     >
                                         {processing
                                             ? 'Procesando...'
@@ -667,7 +691,8 @@ export default function BookingIndex() {
                     </form>
                 </div>
             </div>
-            <Footer />
-        </>
+            <LandingFooter />
+            <div className="grain-overlay" aria-hidden="true" />
+        </div>
     );
 }

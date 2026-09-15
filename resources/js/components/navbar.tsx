@@ -50,11 +50,15 @@ export default function Navbar() {
                     </button>
 
                     <Link href="/" className="flex items-center gap-3">
-                        <span className="rounded-md bg-foreground px-2.5 py-1 text-sm font-bold text-background">
-                            B
+                        <span className="grid size-9 place-items-center rounded-lg border border-border bg-card">
+                            <img
+                                src="/favicon.png"
+                                alt=""
+                                className="size-5 object-contain"
+                            />
                         </span>
                         <span className="font-serif text-lg tracking-wider text-foreground">
-                            BARBERÍA STUDIO
+                            TuBarbero
                         </span>
                     </Link>
                 </div>
@@ -93,8 +97,8 @@ export default function Navbar() {
                         href={booking().url}
                         className="rounded-lg bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 sm:px-4"
                     >
-                        <span className="sm:hidden">Agendar</span>
-                        <span className="hidden sm:inline">Agendar cita</span>
+                        <span className="sm:hidden">Reservar</span>
+                        <span className="hidden sm:inline">Reservar cita</span>
                     </Link>
 
                     {auth?.user ? (
@@ -120,7 +124,7 @@ export default function Navbar() {
                             </button>
 
                             {dropdownOpen && (
-                                <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-xl border border-border bg-popover py-1 text-popover-foreground shadow-2xl ring-1 ring-ring/10 focus:outline-none">
+                                <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-xl border border-border bg-popover py-1 text-popover-foreground shadow-lg ring-1 ring-ring/10 focus:outline-none">
                                     {/* Si el usuario tiene el rol de cliente */}
                                     {auth.user?.roles?.includes('client') && (
                                         <Link

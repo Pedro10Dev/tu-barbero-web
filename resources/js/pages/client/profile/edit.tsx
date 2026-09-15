@@ -73,7 +73,7 @@ export default function ClientProfileEdit({ user }: Props) {
                                 className="h-11 rounded-xl border-border bg-muted/60 text-sm text-foreground transition-all focus:border-ring focus:ring-ring"
                             />
                             {errors.name && (
-                                <p className="text-xs text-red-400">
+                                <p className="text-xs font-medium text-foreground">
                                     {errors.name}
                                 </p>
                             )}
@@ -151,7 +151,7 @@ export default function ClientProfileEdit({ user }: Props) {
                             </div>
 
                             {errors.phone && (
-                                <p className="text-xs text-red-400">
+                                <p className="text-xs font-medium text-foreground">
                                     {errors.phone}
                                 </p>
                             )}

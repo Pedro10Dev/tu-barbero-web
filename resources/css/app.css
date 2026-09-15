@@ -13,6 +13,14 @@
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
         'Noto Color Emoji';
 
+    --font-serif:
+        'Instrument Serif', ui-serif, Georgia, Cambria, 'Times New Roman',
+        Times, serif;
+
+    --font-mono:
+        'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo,
+        Consolas, 'Liberation Mono', monospace;
+
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
     --radius-sm: calc(var(--radius) - 4px);
@@ -72,7 +80,7 @@
     --color-landing-border-strong: oklch(0.337 0 0);
     --color-landing-accent: oklch(0.985 0 0);
     --color-landing-accent-foreground: oklch(0.145 0 0);
-    --color-landing-success: oklch(0.696 0.17 162.48);
+    --color-landing-success: oklch(0.72 0.075 66);
 }
 
 :root {
@@ -153,5 +161,292 @@
 
     body {
         @apply bg-background text-foreground;
+    }
+}
+
+/* ==========================================================================
+   Sistema de la página pública (landing oscura + viaje de cliente)
+   Paleta: solo negros, blancos, grises y el acento maderoso landing-success.
+   ========================================================================== */
+
+/* Grano editorial tenue: tacto de impresión sobre el negro, sin bloquear clics */
+.grain-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
+
+/* Reveal al hacer scroll: oculto solo si JS confirmado (html.js) */
+.js .js-reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+        opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: calc(var(--reveal-delay, 0) * 1ms);
+    will-change: opacity, transform;
+}
+
+.js .js-reveal.is-in {
+    opacity: 1;
+    transform: none;
+}
+
+/* Entrada del hero: una sola coreografía, ligeramente más larga */
+.js .js-hero-rise {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+        opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--hero-delay, 0ms);
+    will-change: opacity, transform;
+}
+
+.js .js-hero-rise.is-in {
+    opacity: 1;
+    transform: none;
+}
+
+.js .js-hero-image {
+    opacity: 0;
+    transform: translateX(28px) scale(0.985);
+    filter: blur(6px);
+    transition:
+        opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: 150ms;
+    will-change: opacity, transform, filter;
+}
+
+.js .js-hero-image.is-in {
+    opacity: 1;
+    transform: none;
+    filter: none;
+}
+
+/* Marquee editorial */
+.marquee-mask {
+    overflow: hidden;
+}
+
+.marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee-scroll 32s linear infinite;
+}
+
+.marquee-track.paused {
+    animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+/* Sello de reserva confirmada: estampado de tinta con borde en eco */
+.seal {
+    animation: seal-hit 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.seal__echo {
+    opacity: 0.4;
+    animation: seal-echo 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+.seal__check {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+}
+
+.seal__check path {
+    animation: seal-check 0.3s cubic-bezier(0.16, 1, 0.3, 1) 0.42s forwards;
+}
+
+@keyframes seal-hit {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px) rotate(-6deg) scale(1.18);
+    }
+    58% {
+        opacity: 1;
+        transform: translateY(2px) rotate(2deg) scale(0.97);
+    }
+    76% {
+        transform: translateY(-1px) rotate(-1deg) scale(1.004);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) rotate(0) scale(1);
+    }
+}
+
+@keyframes seal-check {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes seal-echo {
+    to {
+        transform: scale(1.12);
+        opacity: 0;
+    }
+}
+
+/* Confirmación: una sola secuencia de texto, escalonada tras el sello */
+.confirm-enter {
+    opacity: 0;
+    animation: confirm-rise 0.42s cubic-bezier(0.16, 1, 0.3, 1)
+        var(--confirm-delay, 0s) both;
+}
+
+.confirm-enter--1 {
+    --confirm-delay: 0.38s;
+}
+
+.confirm-enter--2 {
+    --confirm-delay: 0.52s;
+}
+
+.confirm-enter--3 {
+    --confirm-delay: 0.66s;
+}
+
+@keyframes confirm-rise {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Barra de progreso de lectura (acento maderoso, arriba) */
+.js-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 95;
+    height: 2px;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+    pointer-events: none;
+    background: var(--color-landing-success);
+}
+
+/* Nav-scroll: menú activo y header scrolled */
+.site-dark a.spy-active {
+    color: var(--color-landing-text);
+}
+
+.site-dark a.spy-active::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: -5px;
+    left: 0;
+    height: 2px;
+    background: var(--color-landing-success);
+}
+
+.site-dark header.js-header.scrolled {
+    box-shadow: 0 12px 32px -16px rgb(0 0 0 / 0.6);
+}
+
+/* Superficies del navegador tematizadas (selection, caret, scrollbar) */
+.site-dark ::selection,
+.dark ::selection {
+    background: var(--color-landing-success);
+    color: var(--color-landing-bg);
+}
+
+.site-dark input,
+.site-dark textarea,
+.site-dark select,
+.dark input,
+.dark textarea,
+.dark select {
+    caret-color: var(--color-landing-success);
+}
+
+.site-dark ::-webkit-scrollbar,
+.dark ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+.site-dark ::-webkit-scrollbar-track,
+.dark ::-webkit-scrollbar-track {
+    background: oklch(0.145 0 0);
+}
+
+.site-dark ::-webkit-scrollbar-thumb,
+.dark ::-webkit-scrollbar-thumb {
+    background: oklch(0.337 0 0);
+    border-radius: 9999px;
+}
+
+.site-dark ::-webkit-scrollbar-thumb:hover,
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: oklch(0.556 0 0);
+}
+
+/* Figuras y datos en mono: alineación tabular */
+.tabular {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Reduced motion: menos y más suaves, nunca eliminar el estado */
+@media (prefers-reduced-motion: reduce) {
+    .js .js-reveal,
+    .js .js-hero-rise,
+    .js .js-hero-image {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        transition: none !important;
+    }
+
+    .marquee-track {
+        animation: none !important;
+    }
+
+    .marquee-mask {
+        overflow: visible;
+    }
+
+    .seal {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .seal__echo {
+        animation: none !important;
+        opacity: 0 !important;
+    }
+
+    .seal__check path {
+        stroke-dashoffset: 0 !important;
+        animation: none !important;
+    }
+
+    .confirm-enter {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
     }
 }
