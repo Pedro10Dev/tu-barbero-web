@@ -23,8 +23,9 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+  public function boot(): void
     {
+        $this->configureDefaults();
 
         Gate::before(function ($user, $ability) {
             return $user->hasRole('admin') ? true : null;
@@ -33,16 +34,6 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }
-
-        Password::defaults(function () {
-            return Password::min(8)
-                ->mixedCase()
-                ->letters()
-                ->numbers()
-                ->symbols()
-                ->uncompromised();
-        });
-
     }
 
     /**
