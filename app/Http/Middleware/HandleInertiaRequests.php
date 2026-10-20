@@ -48,7 +48,7 @@ class HandleInertiaRequests extends Middleware
                     'roles' => $user->getRoleNames(),
                 ] : null,
             ],
-            'sidebarOpen' => $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'sidebarOpen' => $request->cookie('sidebar_state') !== 'false',
         ]);
     }
 }

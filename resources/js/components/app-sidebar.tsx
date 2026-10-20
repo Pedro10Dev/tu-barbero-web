@@ -117,7 +117,7 @@ export function AppSidebar() {
     const isBarber = roles.includes('barber') || isAdmin;
 
     return (
-        <Sidebar collapsible="offcanvas" variant="sidebar">
+        <Sidebar collapsible="icon" variant="sidebar">
             <SidebarHeader className="border-b border-sidebar-border/50 pt-2 pb-3">
                 <SidebarMenu>
                     <SidebarMenuItem>
